@@ -1,0 +1,220 @@
+{
+  "meta": {
+    "title": "JavaScript 학습 가이드",
+    "description": "JavaScript 기초부터 고급까지 체계적으로 학습할 수 있는 웹 PPT",
+    "totalChapters": 24,
+    "version": "1.0.0",
+    "lastUpdated": "2024-06-18"
+  },
+  "chapters": [
+    {
+      "id": 1,
+      "title": "튜토리얼",
+      "icon": "📚",
+      "file": "01-tutorial.md",
+      "slides": [
+        {
+          "title": "JavaScript 학습 가이드에 오신 것을 환영합니다",
+          "content": "<h2>JavaScript 튜토리얼</h2><p>JavaScript 언어의 기본적인 구성요소를 이해하고 넘어갈 필요가 있습니다.</p><h3>코드의 실행</h3><p>JavaScript 코드는 세미콜론(;)으로 구분된 구문 단위로 위에서부터 차례대로 실행됩니다.</p><pre><code class=\"language-javascript\">const hello = 'Hello, World!';\nconsole.log(hello);</code></pre>",
+          "type": "intro"
+        },
+        {
+          "title": "기본 문법",
+          "content": "<h3>대소문자의 구분</h3><p>JavaScript는 모든 부분에서 대소문자를 구분합니다.</p><pre><code class=\"language-javascript\">// 이 둘은 완전히 다릅니다\nfunction myFunction() {}\nFunction myFunction() {} // 오류!</code></pre><h3>세미콜론</h3><p>JavaScript는 세미콜론(;)을 이용해서 각 구문을 구분합니다.</p><pre><code class=\"language-javascript\">const a = 1;\nconst b = 2;</code></pre>",
+          "type": "content"
+        },
+        {
+          "title": "주석",
+          "content": "<h3>주석(comment)</h3><p>주석은 실행되는 코드는 아니지만, 코드에 부가적인 설명을 넣고 싶을 때 사용합니다.</p><pre><code class=\"language-javascript\">// 한 줄 주석\n\n/* 여러 줄 주석 */\n\n/*\n여러\n줄\n주석\n*/</code></pre>",
+          "type": "content"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "JavaScript 소개",
+      "icon": "🌟",
+      "file": "02-javascript-intro.md",
+      "slides": [
+        {
+          "title": "JavaScript의 역사",
+          "content": "<h3>JavaScript 탄생</h3><p>JavaScript는 1995년 Netscape Navigator 웹 브라우저에 처음 탑재되어 세상에 공개되었습니다.</p><blockquote><strong>\"Java와 JavaScript 사이의 관계는 햄과 햄스터 사이의 관계와 같다\"</strong></blockquote><p>이는 JavaScript와 Java가 전혀 다른 언어임을 강조하는 유명한 농담입니다.</p>",
+          "type": "content"
+        },
+        {
+          "title": "언어와 구동 환경",
+          "content": "<h3>JavaScript 언어 vs 구동 환경</h3><p>JavaScript 언어 자체에는 코드 실행 관련 기능만 포함되어 있습니다.</p><p><strong>구동 환경</strong>에서 입출력 관련 기능을 제공합니다:</p><ul><li>웹 브라우저</li><li>Node.js (서버)</li><li>게임 엔진</li><li>포토샵</li></ul>",
+          "type": "list"
+        },
+        {
+          "title": "ECMAScript와 표준",
+          "content": "<h3>ECMAScript 표준</h3><p>JavaScript의 표준 명세는 <strong>ECMAScript</strong>라는 이름을 가지고 있습니다.</p><h4>주요 버전들</h4><ul><li><strong>ES3 (1999)</strong> - 초기 표준화</li><li><strong>ES5 (2009)</strong> - 현대적 기능 추가</li><li><strong>ES2015 (ES6)</strong> - 대폭적인 개선</li><li><strong>ES2016+</strong> - 매년 새 버전 출시</li></ul>",
+          "type": "content"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "값, 변수, 타입",
+      "icon": "🔢",
+      "file": "03-value-variable-type.md",
+      "slides": [
+        {
+          "title": "값과 리터럴",
+          "content": "<h3>값(value)과 리터럴(literal)</h3><p>프로그래밍은 근본적으로 '값'을 다루는 행위입니다.</p><pre><code class=\"language-javascript\">1; // 정수 리터럴\n2.5; // 부동 소수점 리터럴\n'hello'; // 문자열 리터럴\ntrue; // 진리값 리터럴\nnull; // null 리터럴\nundefined; // undefined</code></pre>",
+          "type": "code"
+        },
+        {
+          "title": "변수 선언",
+          "content": "<h3>let과 const</h3><p>ES2015에서 도입된 새로운 변수 선언 방법입니다.</p><pre><code class=\"language-javascript\">// let - 재대입 가능\nlet variable = 1;\nvariable = 2; // OK\n\n// const - 재대입 불가능\nconst constant = 1;\n// constant = 2; // 에러!</code></pre><p><strong>권장사항:</strong> 항상 const를 우선 사용하고, 재대입이 필요한 경우에만 let을 사용하세요.</p>",
+          "type": "code"
+        },
+        {
+          "title": "식별자와 명명 규칙",
+          "content": "<h3>식별자(Identifier) 규칙</h3><ul><li>숫자, 알파벳, 달러 문자($), 언더스코어(_) 포함 가능</li><li>숫자로 시작할 수 없음</li><li>예약어는 사용 불가</li></ul><h4>Camel Case 관례</h4><pre><code class=\"language-javascript\">// 좋은 예\nlet userName = 'John';\nconst maxRetryCount = 3;\nfunction calculateTotal() {}</code></pre>",
+          "type": "content"
+        },
+        {
+          "title": "타입 확인",
+          "content": "<h3>typeof 연산자</h3><p>값의 타입을 확인할 수 있습니다.</p><pre><code class=\"language-javascript\ntypeof 1; // 'number'\ntypeof 'hello'; // 'string'\ntypeof true; // 'boolean'\ntypeof undefined; // 'undefined'\ntypeof null; // 'object' (특이사항!)\ntypeof {}; // 'object'\ntypeof []; // 'object'\ntypeof function() {}; // 'function'</code></pre>",
+          "type": "code"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Number 타입",
+      "icon": "🔢",
+      "file": "04-number-type.md",
+      "slides": [
+        {
+          "title": "Number 타입 리터럴",
+          "content": "<h3>다양한 Number 리터럴</h3><pre><code class=\"language-javascript\">7; // 정수\n2.5; // 부동 소수점\n0b111; // 2진수 (7)\n0o777; // 8진수 (511)\n0xf5; // 16진수 (245)\n10_000; // 숫자 구분 기호</code></pre><h4>정수 vs 실수 판별</h4><pre><code class=\"language-javascript\">Number.isInteger(1); // true\nNumber.isInteger(0.1); // false</code></pre>",
+          "type": "code"
+        },
+        {
+          "title": "Number 연산",
+          "content": "<h3>산술 연산자</h3><pre><code class=\"language-javascript\">1 + 2; // 3 (더하기)\n3 - 4; // -1 (빼기)\n5 * 6; // 30 (곱하기)\n7 / 8; // 0.875 (나누기)\n14 % 3; // 2 (나머지)\n2 ** 3; // 8 (거듭제곱)</code></pre><h3>비교 연산자</h3><pre><code class=\"language-javascript\">1 < 2; // true\n3 > 4; // false\n5 <= 5; // true\n6 >= 7; // false\n8 === 8; // true\n8 !== 9; // true</code></pre>",
+          "type": "code"
+        },
+        {
+          "title": "특이한 Number 값들",
+          "content": "<h3>특별한 Number 값들</h3><pre><code class=\"language-javascript\">// NaN (Not a Number)\n0 / 0; // NaN\n1 * 'hello'; // NaN\nNaN === NaN; // false (주의!)\nNumber.isNaN(NaN); // true\n\n// Infinity\n1 / 0; // Infinity\n-1 / 0; // -Infinity\n\n// -0\n-0 === 0; // true\nObject.is(-0, 0); // false</code></pre>",
+          "type": "code"
+        },
+        {
+          "title": "부동 소수점 주의사항",
+          "content": "<h3>부동 소수점 오차</h3><p>컴퓨터는 10진수 소수를 정확히 표현할 수 없습니다.</p><pre><code class=\"language-javascript\">0.1 + 0.2; // 0.30000000000000004\n0.1 + 0.2 === 0.3; // false\n\n// 해결 방법\nMath.abs((0.1 + 0.2) - 0.3) < Number.EPSILON; // true\n\n// 또는 정수로 계산 후 나누기\n(1 + 2) / 10; // 0.3</code></pre>",
+          "type": "code"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "String 타입",
+      "icon": "📝",
+      "file": "05-string-type.md",
+      "slides": [
+        {
+          "title": "문자열 리터럴",
+          "content": "<h3>문자열 생성 방법</h3><pre><code class=\"language-javascript\">'hello' // 작은따옴표\n\"hello\" // 큰따옴표\n`hello` // 백틱 (템플릿 리터럴)</code></pre><h3>템플릿 리터럴의 장점</h3><pre><code class=\"language-javascript\">const name = 'JavaScript';\nconst greeting = `Hello, ${name}!`;\nconsole.log(greeting); // Hello, JavaScript!\n\n// 여러 줄 문자열\nconst multiline = `첫 번째 줄\n두 번째 줄\n세 번째 줄`;</code></pre>",
+          "type": "code"
+        },
+        {
+          "title": "이스케이프 시퀀스",
+          "content": "<h3>특수 문자 표현</h3><pre><code class=\"language-javascript\">console.log('lorem \\'ipsum\\''); // lorem 'ipsum'\nconsole.log('line\\nfeed'); // 줄바꿈\nconsole.log('tab\\there'); // 탭\nconsole.log('\\\\backslash'); // 백슬래시\n\n// 유니코드\nconsole.log('\\uD55C\\uAE00'); // 한글\nconsole.log('\\u{1F435}'); // 🐵</code></pre>",
+          "type": "code"
+        },
+        {
+          "title": "문자열 연산",
+          "content": "<h3>문자열 연산자</h3><pre><code class=\"language-javascript\">// 문자열 연결\n'hello' + ' ' + 'world'; // 'hello world'\n\n// 비교 연산\n'hello' === 'hello'; // true\n'a' < 'b'; // true (유니코드 순서)\n'aaa' < 'abc'; // true\n\n// 길이\n'hello'.length; // 5</code></pre>",
+          "type": "code"
+        },
+        {
+          "title": "문자열 메소드",
+          "content": "<h3>유용한 String 메소드들</h3><pre><code class=\"language-javascript\">const str = 'Hello JavaScript';\n\n// 검색\nstr.includes('Java'); // true\nstr.startsWith('Hello'); // true\nstr.endsWith('Script'); // true\nstr.indexOf('Script'); // 10\n\n// 변환\nstr.toUpperCase(); // 'HELLO JAVASCRIPT'\nstr.toLowerCase(); // 'hello javascript'\nstr.replace('JavaScript', 'World'); // 'Hello World'\n\n// 자르기\nstr.slice(0, 5); // 'Hello'\nstr.substring(6); // 'JavaScript'\n\n// 공백 제거\n'  hello  '.trim(); // 'hello'</code></pre>",
+          "type": "code"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Boolean 타입",
+      "icon": "✅",
+      "file": "06-boolean-type.md",
+      "slides": [
+        {
+          "title": "Boolean 기본",
+          "content": "<h3>Boolean 타입</h3><p>오직 두 개의 값만 존재합니다: <code>true</code>와 <code>false</code></p><pre><code class=\"language-javascript\">1 < 2; // true\n1 > 2; // false\n3 === 3; // true\n3 !== 3; // false</code></pre>",
+          "type": "code"
+        },
+        {
+          "title": "논리 연산자",
+          "content": "<h3>논리 연산자</h3><pre><code class=\"language-javascript\">// 논리 부정 (NOT)\n!true; // false\n!false; // true\n\n// 논리곱 (AND)\ntrue && true; // true\ntrue && false; // false\nfalse && true; // false\n\n// 논리합 (OR)\ntrue || false; // true\nfalse || false; // false\n\n// 삼항 연산자\ntrue ? 'yes' : 'no'; // 'yes'\nfalse ? 'yes' : 'no'; // 'no'</code></pre>",
+          "type": "code"
+        },
+        {
+          "title": "Truthy와 Falsy",
+          "content": "<h3>JavaScript의 Falsy 값들</h3><p>다음 값들은 조건문에서 <code>false</code>로 취급됩니다:</p><ul><li><code>false</code></li><li><code>0</code></li><li><code>''</code> (빈 문자열)</li><li><code>null</code></li><li><code>undefined</code></li><li><code>NaN</code></li></ul><pre><code class=\"language-javascript\">if (0) {\n  console.log('실행되지 않음');\n}\n\nif ('hello') {\n  console.log('실행됨!'); // Truthy\n}</code></pre>",
+          "type": "content"
+        },
+        {
+          "title": "Boolean 변환",
+          "content": "<h3>명시적 Boolean 변환</h3><pre><code class=\"language-javascript\">// Boolean() 함수 사용\nBoolean('hello'); // true\nBoolean(''); // false\nBoolean(1); // true\nBoolean(0); // false\n\n// !! 연산자 사용\n!!'hello'; // true\n!!''; // false\n!!1; // true\n!!0; // false\n\n// 조건문에서 자동 변환\nif ('hello') { /* true */ }\nif (0) { /* false */ }</code></pre>",
+          "type": "code"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "null과 undefined",
+      "icon": "❓",
+      "file": "07-null-undefined.md",
+      "slides": [
+        {
+          "title": "null vs undefined",
+          "content": "<h3>'없음'을 나타내는 두 가지 값</h3><pre><code class=\"language-javascript\">let foo;\nconsole.log(foo); // undefined\n\nconst obj = {};\nconsole.log(obj.prop); // undefined\n\nconst data = null; // 명시적으로 '없음'\nconsole.log(typeof null); // 'object' (JavaScript의 버그)\nconsole.log(typeof undefined); // 'undefined'</code></pre>",
+          "type": "code"
+        },
+        {
+          "title": "Null Check",
+          "content": "<h3>null과 undefined 확인하기</h3><pre><code class=\"language-javascript\">function printIfNotNull(input) {\n  // 엄격한 확인\n  if (input !== null && input !== undefined) {\n    console.log(input);\n  }\n  \n  // 간편한 확인 (== 사용)\n  if (input != null) {\n    console.log(input);\n  }\n  \n  // Nullish coalescing (ES2020)\n  console.log(input ?? '기본값');\n}</code></pre>",
+          "type": "code"
+        },
+        {
+          "title": "실용적인 사용법",
+          "content": "<h3>null과 undefined 활용</h3><pre><code class=\"language-javascript\">// API 응답에서 null 사용\nconst user = {\n  name: 'John',\n  email: 'john@example.com',\n  avatar: null // 아바타 이미지가 없음을 명시\n};\n\n// 기본값 설정\nfunction greet(name) {\n  name = name ?? 'Anonymous';\n  console.log(`Hello, ${name}!`);\n}\n\n// Optional chaining (ES2020)\nconst avatar = user?.profile?.avatar ?? 'default.png';</code></pre>",
+          "type": "code"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "함수",
+      "icon": "⚡",
+      "file": "08-function.md",
+      "slides": [
+        {
+          "title": "함수 기본",
+          "content": "<h3>함수의 정의와 호출</h3><pre><code class=\"language-javascript\">// 함수 정의\nfunction add(x, y) {\n  const result = x + y;\n  return result;\n}\n\n// 함수 호출\nconst sum = add(2, 3); // 5\nconsole.log(sum);</code></pre><p><strong>구성 요소:</strong></p><ul><li><code>add</code> - 함수 이름</li><li><code>x, y</code> - 매개변수(parameter)</li><li><code>2, 3</code> - 인수(argument)</li><li><code>result</code> - 반환값(return value)</li></ul>",
+          "type": "code"
+        },
+        {
+          "title": "스코프",
+          "content": "<h3>스코프(Scope)</h3><p>변수가 유효한 코드 상의 범위를 의미합니다.</p><pre><code class=\"language-javascript\">const globalVar = 'global'; // 전역 스코프\n\nfunction outer() {\n  const outerVar = 'outer'; // 함수 스코프\n  \n  function inner() {\n    const innerVar = 'inner'; // 함수 스코프\n    console.log(globalVar); // 접근 가능\n    console.log(outerVar);  // 접근 가능\n    console.log(innerVar);  // 접근 가능\n  }\n  \n  // console.log(innerVar); // 에러!\n}\n\n// console.log(outerVar); // 에러!</code></pre>",
+          "type": "code"
+        },
+        {
+          "title": "함수 표현식",
+          "content": "<h3>다양한 함수 정의 방법</h3><pre><code class=\"language-javascript\">// 함수 선언문\nfunction declaration() {\n  return 'function declaration';\n}\n\n// 함수 표현식\nconst expression = function() {\n  return 'function expression';\n};\n\n// 화살표 함수 (ES2015)\nconst arrow = () => {\n  return 'arrow function';\n};\n\n// 화살표 함수 (간단한 형태)\nconst simple = () => 'simple arrow function';</code></pre>",
+          "type": "code"
+        },
+        {
+          "title": "값으로서의 함수",
+          "content": "<h3>JavaScript에서 함수는 값입니다</h3><pre><code class=\"language-javascript\">// 함수를 변수에 저장\nconst myFunc = function(x) {\n  return x * 2;\n};\n\n// 함수를 다른 함수의 인수로 전달\nfunction callTwice(func, arg) {\n  return func(func(arg));\n}\n\nconst result = callTwice(myFunc, 5); // 20\n\n// 함수를 반환하는 함수\nfunction createMultiplier(factor) {\n  return function(x) {\n    return x * factor;\n  };\n}\n\nconst double = createMultiplier(2);\ndouble(5); // 10</code></pre>",
+          "type": "code"
+        }
+      ]
+    }
+  ]
+}

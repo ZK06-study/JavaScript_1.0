@@ -1,0 +1,392 @@
+/* CSS Custom Properties for Theming */
+
+/* Light Theme (Default) */
+:root {
+    /* Primary Colors */
+    --primary-color: #3b82f6;
+    --primary-dark: #2563eb;
+    --primary-light: #dbeafe;
+    
+    /* Secondary Colors */
+    --secondary-color: #6b7280;
+    --secondary-dark: #4b5563;
+    
+    /* Background Colors */
+    --bg-color: #ffffff;
+    --header-bg: rgba(255, 255, 255, 0.95);
+    --sidebar-bg: #f8fafc;
+    --footer-bg: #f8fafc;
+    --hover-bg: #f1f5f9;
+    --quote-bg: #f0f9ff;
+    
+    /* Text Colors */
+    --text-color: #1f2937;
+    --text-secondary: #6b7280;
+    --heading-color: #111827;
+    
+    /* Code Colors */
+    --code-bg: #f8fafc;
+    --inline-code-bg: #e2e8f0;
+    --code-color: #dc2626;
+    
+    /* Border & UI */
+    --border-color: #e2e8f0;
+    --button-bg: #ffffff;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+    /* Primary Colors */
+    --primary-color: #60a5fa;
+    --primary-dark: #3b82f6;
+    --primary-light: #1e3a8a;
+    
+    /* Secondary Colors */
+    --secondary-color: #9ca3af;
+    --secondary-dark: #6b7280;
+    
+    /* Background Colors */
+    --bg-color: #0f172a;
+    --header-bg: rgba(15, 23, 42, 0.95);
+    --sidebar-bg: #1e293b;
+    --footer-bg: #1e293b;
+    --hover-bg: #334155;
+    --quote-bg: #1e3a8a;
+    
+    /* Text Colors */
+    --text-color: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --heading-color: #ffffff;
+    
+    /* Code Colors */
+    --code-bg: #1e293b;
+    --inline-code-bg: #334155;
+    --code-color: #fbbf24;
+    
+    /* Border & UI */
+    --border-color: #334155;
+    --button-bg: #1e293b;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+/* High Contrast Theme */
+[data-theme="high-contrast"] {
+    /* Primary Colors */
+    --primary-color: #000000;
+    --primary-dark: #000000;
+    --primary-light: #f0f0f0;
+    
+    /* Secondary Colors */
+    --secondary-color: #666666;
+    --secondary-dark: #333333;
+    
+    /* Background Colors */
+    --bg-color: #ffffff;
+    --header-bg: #ffffff;
+    --sidebar-bg: #f5f5f5;
+    --footer-bg: #f5f5f5;
+    --hover-bg: #e0e0e0;
+    --quote-bg: #f0f0f0;
+    
+    /* Text Colors */
+    --text-color: #000000;
+    --text-secondary: #333333;
+    --heading-color: #000000;
+    
+    /* Code Colors */
+    --code-bg: #f5f5f5;
+    --inline-code-bg: #e0e0e0;
+    --code-color: #000000;
+    
+    /* Border & UI */
+    --border-color: #000000;
+    --button-bg: #ffffff;
+}
+
+/* Blue Theme */
+[data-theme="blue"] {
+    /* Primary Colors */
+    --primary-color: #1e40af;
+    --primary-dark: #1d4ed8;
+    --primary-light: #dbeafe;
+    
+    /* Secondary Colors */
+    --secondary-color: #64748b;
+    --secondary-dark: #475569;
+    
+    /* Background Colors */
+    --bg-color: #f8fafc;
+    --header-bg: rgba(248, 250, 252, 0.95);
+    --sidebar-bg: #f1f5f9;
+    --footer-bg: #f1f5f9;
+    --hover-bg: #e2e8f0;
+    --quote-bg: #eff6ff;
+    
+    /* Text Colors */
+    --text-color: #0f172a;
+    --text-secondary: #64748b;
+    --heading-color: #1e293b;
+    
+    /* Code Colors */
+    --code-bg: #f1f5f9;
+    --inline-code-bg: #e2e8f0;
+    --code-color: #be123c;
+    
+    /* Border & UI */
+    --border-color: #cbd5e1;
+    --button-bg: #ffffff;
+}
+
+/* Green Theme */
+[data-theme="green"] {
+    /* Primary Colors */
+    --primary-color: #059669;
+    --primary-dark: #047857;
+    --primary-light: #d1fae5;
+    
+    /* Secondary Colors */
+    --secondary-color: #6b7280;
+    --secondary-dark: #4b5563;
+    
+    /* Background Colors */
+    --bg-color: #f9fafb;
+    --header-bg: rgba(249, 250, 251, 0.95);
+    --sidebar-bg: #f3f4f6;
+    --footer-bg: #f3f4f6;
+    --hover-bg: #e5e7eb;
+    --quote-bg: #ecfdf5;
+    
+    /* Text Colors */
+    --text-color: #111827;
+    --text-secondary: #6b7280;
+    --heading-color: #1f2937;
+    
+    /* Code Colors */
+    --code-bg: #f3f4f6;
+    --inline-code-bg: #e5e7eb;
+    --code-color: #dc2626;
+    
+    /* Border & UI */
+    --border-color: #d1d5db;
+    --button-bg: #ffffff;
+}
+
+/* Purple Theme */
+[data-theme="purple"] {
+    /* Primary Colors */
+    --primary-color: #7c3aed;
+    --primary-dark: #6d28d9;
+    --primary-light: #ede9fe;
+    
+    /* Secondary Colors */
+    --secondary-color: #6b7280;
+    --secondary-dark: #4b5563;
+    
+    /* Background Colors */
+    --bg-color: #fefbff;
+    --header-bg: rgba(254, 251, 255, 0.95);
+    --sidebar-bg: #faf5ff;
+    --footer-bg: #faf5ff;
+    --hover-bg: #f3e8ff;
+    --quote-bg: #f5f3ff;
+    
+    /* Text Colors */
+    --text-color: #1f2937;
+    --text-secondary: #6b7280;
+    --heading-color: #111827;
+    
+    /* Code Colors */
+    --code-bg: #faf5ff;
+    --inline-code-bg: #f3e8ff;
+    --code-color: #dc2626;
+    
+    /* Border & UI */
+    --border-color: #e9d5ff;
+    --button-bg: #ffffff;
+}
+
+/* Animation Preferences */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .header,
+    .sidebar,
+    .footer,
+    .modal {
+        display: none !important;
+    }
+    
+    .main-container {
+        max-width: none;
+        margin: 0;
+    }
+    
+    .slide-container {
+        padding: 0;
+        height: auto;
+    }
+    
+    .slide {
+        page-break-after: always;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+    
+    .slide:last-child {
+        page-break-after: avoid;
+    }
+    
+    body {
+        font-size: 12pt;
+        line-height: 1.4;
+        color: #000;
+        background: #fff;
+    }
+}
+
+/* Focus Styles for Accessibility */
+:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+button:focus-visible,
+.btn:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Loading Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.4s ease;
+}
+
+/* Slide Transition Effects */
+.slide-enter {
+    opacity: 0;
+    transform: translateX(100px);
+}
+
+.slide-enter-active {
+    opacity: 1;
+    transform: translateX(0);
+    transition: all 0.4s ease;
+}
+
+.slide-exit {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.slide-exit-active {
+    opacity: 0;
+    transform: translateX(-100px);
+    transition: all 0.4s ease;
+}
+
+/* Syntax Highlighting Override for Themes */
+[data-theme="dark"] .token.comment,
+[data-theme="dark"] .token.prolog,
+[data-theme="dark"] .token.doctype,
+[data-theme="dark"] .token.cdata {
+    color: #6b7280;
+}
+
+[data-theme="dark"] .token.keyword,
+[data-theme="dark"] .token.selector,
+[data-theme="dark"] .token.important,
+[data-theme="dark"] .token.atrule {
+    color: #ec4899;
+}
+
+[data-theme="dark"] .token.string,
+[data-theme="dark"] .token.char,
+[data-theme="dark"] .token.attr-value,
+[data-theme="dark"] .token.regex,
+[data-theme="dark"] .token.variable {
+    color: #10b981;
+}
+
+[data-theme="dark"] .token.number,
+[data-theme="dark"] .token.boolean,
+[data-theme="dark"] .token.entity,
+[data-theme="dark"] .token.url {
+    color: #f59e0b;
+}
+
+[data-theme="dark"] .token.function {
+    color: #60a5fa;
+}
+
+/* Fullscreen Styles */
+.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    background: var(--bg-color);
+}
+
+.fullscreen .header,
+.fullscreen .footer,
+.fullscreen .sidebar {
+    display: none;
+}
+
+.fullscreen .main-container {
+    max-width: none;
+    width: 100%;
+    height: 100%;
+}
+
+.fullscreen .slide-container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
+}
+
+.fullscreen .slide {
+    max-width: 1000px;
+    width: 100%;
+}
+
+.fullscreen .slide-title {
+    font-size: 3rem;
+    text-align: center;
+}
+
+.fullscreen .slide-content {
+    font-size: 1.25rem;
+    text-align: center;
+}

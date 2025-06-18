@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript 학습 가이드 - 웹 PPT</title>
+    
+    <!-- External CDN Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.2/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    
+    <!-- Local Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/themes.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">JavaScript 학습 가이드</h1>
+            <div class="header-controls">
+                <button class="btn-icon notes-toggle" aria-label="메모" data-tooltip="메모 (N)">📝</button>
+                <button class="btn-icon bookmark-toggle" aria-label="북마크" data-tooltip="북마크 (B)">⭐</button>
+                <button class="btn-icon live-code-toggle" aria-label="라이브 코딩" data-tooltip="라이브 코딩 (L)">💻</button>
+                <button class="btn-icon theme-toggle" aria-label="테마 전환" data-tooltip="테마 전환 (T)">🌙</button>
+                <button class="btn-icon fullscreen-toggle" aria-label="전체화면 전환" data-tooltip="전체화면 (F)">⛶</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <nav class="chapter-nav">
+                <ul class="chapter-list">
+                    <!-- Chapters will be populated by JavaScript -->
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Slide Container -->
+        <section class="slide-container">
+            <article class="slide active" id="slide-content">
+                <div class="slide-header">
+                    <h2 class="slide-title">JavaScript 학습 가이드에 오신 것을 환영합니다</h2>
+                    <div class="slide-meta">
+                        <span class="slide-number">1 / 24</span>
+                        <div class="slide-actions">
+                            <button class="btn-small try-it-btn" id="try-example">🧪 예제 체험</button>
+                            <button class="btn-small quiz-btn" id="quick-quiz">❓ 퀴즈</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="slide-content">
+                    <div class="loading-message">
+                        <div class="spinner"></div>
+                        <p>슬라이드를 불러오는 중...</p>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Live Coding Panel -->
+        <aside class="live-coding-panel" id="live-coding-panel">
+            <div class="panel-header">
+                <h3>💻 라이브 코딩</h3>
+                <div class="panel-controls">
+                    <button class="btn-small clear-btn" id="clear-live-code">🗑️ 지우기</button>
+                    <button class="btn-small close-panel" id="close-live-panel">✕</button>
+                </div>
+            </div>
+            <div class="panel-content">
+                <div class="code-editor-live">
+                    <textarea id="live-code-input" placeholder="JavaScript 코드를 입력하고 실시간으로 결과를 확인하세요...
+// 예시:
+console.log('Hello, World!');
+let x = 10;
+console.log(x * 2);"></textarea>
+                    <div class="editor-toolbar">
+                        <button class="btn-small run-live" id="run-live-code">▶ 실행 (Ctrl+Enter)</button>
+                        <button class="btn-small format-code" id="format-live-code">🎨 정리</button>
+                        <select class="font-size-select" id="editor-font-size">
+                            <option value="12">12px</option>
+                            <option value="14" selected>14px</option>
+                            <option value="16">16px</option>
+                            <option value="18">18px</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="live-output">
+                    <div class="output-header">
+                        <span>📋 실행 결과</span>
+                        <button class="btn-small clear-output" id="clear-live-output">지우기</button>
+                    </div>
+                    <div class="output-content" id="live-output-content">
+                        <div class="output-placeholder">코드를 실행하면 여기에 결과가 나타납니다.</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Footer Controls -->
+    <footer class="footer">
+        <div class="slide-controls">
+            <button class="btn btn-secondary" id="prev-slide" aria-label="이전 슬라이드">
+                ← 이전
+            </button>
+            <div class="slide-info">
+                <span class="current-chapter">Chapter 1</span>
+                <span class="chapter-title">튜토리얼</span>
+            </div>
+            <button class="btn btn-primary" id="next-slide" aria-label="다음 슬라이드">
+                다음 →
+            </button>
+        </div>
+    </footer>
+
+    <!-- Notes Panel -->
+    <div class="side-panel notes-panel" id="notes-panel">
+        <div class="panel-header">
+            <h3>📝 메모</h3>
+            <button class="btn-small close-panel" id="close-notes-panel">✕</button>
+        </div>
+        <div class="panel-content">
+            <div class="notes-header">
+                <input type="text" id="note-title" placeholder="메모 제목..." class="note-title-input">
+                <button class="btn-small save-note" id="save-note">💾 저장</button>
+            </div>
+            <textarea id="notes-textarea" placeholder="여기에 메모를 작성하세요...
+
+💡 팁:
+- Ctrl+S로 빠른 저장
+- 슬라이드별로 자동 분류
+- 과외 내용을 정리해보세요"></textarea>
+            <div class="notes-list">
+                <h4>저장된 메모</h4>
+                <div class="saved-notes" id="saved-notes">
+                    <!-- 저장된 메모들이 여기에 표시됩니다 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bookmarks Panel -->
+    <div class="side-panel bookmarks-panel" id="bookmarks-panel">
+        <div class="panel-header">
+            <h3>⭐ 북마크</h3>
+            <button class="btn-small close-panel" id="close-bookmarks-panel">✕</button>
+        </div>
+        <div class="panel-content">
+            <div class="bookmark-actions">
+                <button class="btn-small add-bookmark" id="add-bookmark">➕ 현재 슬라이드 북마크</button>
+                <button class="btn-small clear-bookmarks" id="clear-bookmarks">🗑️ 전체 삭제</button>
+            </div>
+            <div class="bookmarks-list" id="bookmarks-list">
+                <!-- 북마크된 슬라이드들이 여기에 표시됩니다 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Quiz Modal -->
+    <div class="modal quiz-modal" id="quiz-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>❓ 빠른 퀴즈</h3>
+                <button class="modal-close" aria-label="닫기">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="quiz-content" id="quiz-content">
+                    <!-- 퀴즈 내용이 동적으로 생성됩니다 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Code Modal -->
+    <div class="modal code-modal" id="code-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💻 코드 실행 환경</h3>
+                <div class="modal-controls">
+                    <button class="btn-small copy-code" id="copy-code">📋 복사</button>
+                    <button class="btn-small save-snippet" id="save-snippet">💾 저장</button>
+                    <button class="modal-close" aria-label="닫기">×</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="code-editor-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <span>코드 편집기</span>
+                            <div class="editor-options">
+                                <label>
+                                    <input type="checkbox" id="auto-run" checked> 자동 실행
+                                </label>
+                                <select id="run-mode">
+                                    <option value="immediate">즉시 실행</option>
+                                    <option value="manual">수동 실행</option>
+                                </select>
+                            </div>
+                        </div>
+                        <textarea id="code-input" placeholder="JavaScript 코드를 입력하세요..."></textarea>
+                        <div class="editor-footer">
+                            <button class="btn btn-primary" id="run-code">▶ 실행 (Ctrl+Enter)</button>
+                            <button class="btn btn-secondary" id="clear-code">🗑️ 지우기</button>
+                            <button class="btn btn-secondary" id="format-code">🎨 코드 정리</button>
+                        </div>
+                    </div>
+                    <div class="code-output">
+                        <div class="output-header">
+                            <h4>📋 실행 결과</h4>
+                            <div class="output-controls">
+                                <button class="btn-small clear-output" id="clear-output">지우기</button>
+                                <button class="btn-small copy-output" id="copy-output">복사</button>
+                            </div>
+                        </div>
+                        <div class="output-container">
+                            <div class="output-tabs">
+                                <button class="tab-btn active" data-tab="console">Console</button>
+                                <button class="tab-btn" data-tab="result">Result</button>
+                                <button class="tab-btn" data-tab="errors">Errors</button>
+                            </div>
+                            <div class="output-content">
+                                <div class="tab-content active" id="console-output">
+                                    <pre id="output-result"></pre>
+                                </div>
+                                <div class="tab-content" id="result-output">
+                                    <pre id="return-result"></pre>
+                                </div>
+                                <div class="tab-content" id="error-output">
+                                    <pre id="error-result"></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/parser.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/codeRunner.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
