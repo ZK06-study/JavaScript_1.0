@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript 학습 가이드</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <button id="menu-toggle">☰</button>
+        <aside id="sidebar">
+            <h2>목차</h2>
+            <ul id="toc">
+                <!-- Table of Contents will be generated here by JS -->
+            </ul>
+        </aside>
+
+        <main id="presentation">
+            <div id="slides-container">
+
+                <!-- Slide 0: Title -->
+                <section class="slide title-slide" id="title">
+                    <div class="slide-content">
+                        <h1>JavaScript 학습 가이드</h1>
+                        <h2>웹 개발의 핵심 언어 마스터하기</h2>
+                        <p style="margin-top: 50px;">사이드바 또는 키보드 방향키를 사용하여 탐색하세요.</p>
+                    </div>
+                </section>
+                
+                <!-- Slide 1: 01-tutorial 튜토리얼: 기본 문법 -->
+                <section class="slide" id="tutorial-basic">
+                    <div class="slide-content">
+                        <h1>튜토리얼: 기본 문법</h1>
+                        <h3>기본 규칙</h3>
+                        <table>
+                            <tr><th>규칙</th><th>설명</th><th>예제</th></tr>
+                            <tr>
+                                <td><strong>대소문자 구분</strong></td>
+                                <td>모든 부분에서 대소문자를 구분함</td>
+                                <td><code>function</code>과 <code>Function</code>은 다름</td>
+                            </tr>
+                            <tr>
+                                <td><strong>세미콜론</strong></td>
+                                <td>구문을 구분하는 구분자. 줄바꿈으로 대체 가능하지만 명시적 사용을 권장.</td>
+                                <td><code>const a = 1;</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>공백</strong></td>
+                                <td>공백 수는 실행에 영향 없음 (가독성을 위해 사용)</td>
+                                <td><code>const x = 1;</code></td>
+                            </tr>
+                        </table>
+                        
+                        <h3>주석 (Comment)</h3>
+                        <pre><code class="language-javascript">
+// 이것은 한 줄 주석입니다.
+
+/*
+이것은
+여러 줄에 걸친
+주석입니다.
+*/
+                        </code></pre>
+                        
+                        <h3>값(value)과 리터럴(literal)</h3>
+                        <p>리터럴은 코드에 값을 직접 표현하는 방식입니다.</p>
+                        <pre><code class="language-javascript">
+1 // 정수 리터럴
+2.5 // 부동소수점 실수 리터럴
+'hello world' // 작은 따옴표 문자열 리터럴
+"JavaScript" // 큰 따옴표 문자열 리터럴
+true // 참(true)을 나타내는 진리값 리터럴
+false // 거짓(false)을 나타내는 진리값 리터럴
+null // '존재하지 않음'을 나타내는 값
+undefined // '정의된 적 없음'을 나타내는 값
+                        </code></pre>
+                    </div>
+                </section>
+                
+                <!-- Slide 2: 02-javascript-intro JavaScript 소개 -->
+                <section class="slide" id="intro">
+                    <div class="slide-content">
+                        <h1>JavaScript 소개</h1>
+                        <h3>JavaScript의 탄생과 역사</h3>
+                        <table>
+                            <tr>
+                                <th>연도</th>
+                                <th>사건</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td><strong>1995년</strong></td>
+                                <td>JavaScript 탄생</td>
+                                <td>Netscape Navigator에 최초 탑재</td>
+                            </tr>
+                            <tr>
+                                <td><strong>마케팅</strong></td>
+                                <td>Java와 유사한 이름</td>
+                                <td>실제로는 Java와 다른 언어, "햄과 햄스터의 관계"</td>
+                            </tr>
+                        </table>
+
+                        <h3>언어 vs 구동 환경</h3>
+                        <table>
+                            <tr><th>구분</th><th>역할</th><th>예시</th></tr>
+                            <tr>
+                                <td><strong>JavaScript 언어</strong></td>
+                                <td>코드 실행 관련 기능</td>
+                                <td>변수, 함수, 객체 등</td>
+                            </tr>
+                            <tr>
+                                <td><strong>구동 환경</strong></td>
+                                <td>입출력 관련 기능</td>
+                                <td>브라우저(alert), Node.js(fs), 게임 엔진</td>
+                            </tr>
+                        </table>
+                        
+                        <h3>ECMAScript와 브라우저 호환성</h3>
+                        <p>JavaScript의 표준 명세를 <strong>ECMAScript</strong>라고 합니다. 브라우저 제조사들은 이 표준을 따라 기능을 구현합니다.</p>
+                        <ul>
+                            <li><strong>ES5 (2009)</strong>: 브라우저 호환성 개선</li>
+                            <li><strong>ES2015 (ES6)</strong>: 클래스, 모듈, 화살표 함수 등 대규모 업데이트</li>
+                            <li><strong>ES2016+</strong>: 매년 새로운 기능 추가</li>
+                        </ul>
+                        
+                        <h3>트랜스파일러와 폴리필</h3>
+                        <ul>
+                            <li><strong>트랜스파일러 (Transpiler)</strong>: 최신 문법을 구형 브라우저가 이해할 수 있는 코드로 변환 (예: Babel)</li>
+                            <li><strong>폴리필 (Polyfill)</strong>: 구형 브라우저에 없는 새로운 기능을 구현한 코드 조각 (예: `Array.prototype.includes`)</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- Slide 3: 03-value-variable-type 튜토리얼: 변수와 타입 -->
+                <section class="slide" id="tutorial-vars">
+                    <div class="slide-content">
+                        <h1>튜토리얼: 변수와 타입</h1>
+                        <h3>변수 (Variable)</h3>
+                        <p>값을 재사용하기 위해 이름(식별자)을 붙여 저장하는 공간입니다.</p>
+                        <table>
+                            <tr><th>키워드</th><th>설명</th><th>재할당</th><th>권장사항</th></tr>
+                            <tr><td><strong><code>const</code></strong></td><td>변경 불가능한 상수</td><td>❌</td><td>기본적으로 사용</td></tr>
+                            <tr><td><strong><code>let</code></strong></td><td>변경 가능한 변수</td><td>⭕</td><td>재할당이 필요한 경우에만 사용</td></tr>
+                        </table>
+                        <pre><code class="language-javascript">
+// 변수 선언과 할당
+const PI = 3.14;
+let score = 90;
+
+score = 95; // let은 재할당 가능
+// PI = 3.14159; // 에러! const는 재할당 불가
+                        </code></pre>
+                        
+                        <h3>값의 타입(type)</h3>
+                        <p><code>typeof</code> 연산자로 값의 타입을 확인할 수 있습니다.</p>
+                        <pre><code class="language-javascript">
+typeof 1;          // 'number'
+typeof 'hello';    // 'string'
+typeof true;       // 'boolean'
+typeof undefined;  // 'undefined'
+typeof null;       // 'object' (언어의 오래된 버그)
+typeof {};         // 'object'
+typeof [];         // 'object'
+typeof function(){}; // 'function'
+                        </code></pre>
+                    </div>
+                </section>
+
+                <!-- Slide 4: 04-number-type Number 타입 -->
+                <section class="slide" id="number">
+                    <div class="slide-content">
+                        <h1>Number 타입</h1>
+                        <h3>숫자 리터럴</h3>
+                        <table>
+                            <tr><th>진법</th><th>표기법</th><th>예시</th><th>설명</th></tr>
+                            <tr><td><strong>10진법</strong></td><td>그대로</td><td><code>123, 3.14</code></td><td>일반적인 숫자 표기</td></tr>
+                            <tr><td><strong>2진법</strong></td><td><code>0b</code> 또는 <code>0B</code></td><td><code>0b1010</code></td><td>2진수 (ES6)</td></tr>
+                            <tr><td><strong>8진법</strong></td><td><code>0o</code> 또는 <code>0O</code></td><td><code>0o777</code></td><td>8진수 (ES6)</td></tr>
+                            <tr><td><strong>16진법</strong></td><td><code>0x</code> 또는 <code>0X</code></td><td><code>0xFF</code></td><td>16진수</td></tr>
+                        </table>
+                        
+                        <h3>산술 연산자</h3>
+                        <p><code>+</code> (덧셈), <code>-</code> (뺄셈), <code>*</code> (곱셈), <code>/</code> (나눗셈), <code>%</code> (나머지), <code>**</code> (거듭제곱)</p>
+                        
+                        <h3>부동 소수점 문제</h3>
+                        <p>컴퓨터는 2진법으로 소수를 표현하기 때문에 10진수 소수 계산에 미세한 오차가 발생할 수 있습니다.</p>
+                        <pre><code class="language-javascript">
+0.1 + 0.2; // 결과: 0.30000000000000004
+0.1 + 0.2 === 0.3; // false
+                        </code></pre>
+
+                        <h3>특수한 숫자 값</h3>
+                        <ul>
+                            <li><strong><code>Infinity</code></strong>: 양의 무한대 (예: <code>1 / 0</code>)</li>
+                            <li><strong><code>-Infinity</code></strong>: 음의 무한대 (예: <code>-1 / 0</code>)</li>
+                            <li><strong><code>NaN</code></strong>: Not a Number (숫자가 아님). 계산 불가능한 연산의 결과. (예: <code>'a' * 2</code>)</li>
+                        </ul>
+                        <p><strong>주의:</strong> <code>NaN</code>은 자기 자신과도 같지 않습니다 (<code>NaN === NaN</code>은 <code>false</code>). <code>Number.isNaN()</code>을 사용해 확인해야 합니다.</p>
+                    </div>
+                </section>
+
+                <!-- Slide 5: 05-string-type String 타입 -->
+                <section class="slide" id="string">
+                    <div class="slide-content">
+                        <h1>String 타입</h1>
+                        <h3>문자열 생성</h3>
+                        <p>작은따옴표(<code>'</code>), 큰따옴표(<code>"</code>), 백틱(<code>`</code>)으로 문자열을 만들 수 있습니다.</p>
+                        
+                        <h3>템플릿 리터럴 (Template Literal)</h3>
+                        <p>백틱(<code>`</code>)을 사용하여 문자열 내부에 변수나 표현식을 쉽게 삽입할 수 있습니다.</p>
+                        <pre><code class="language-javascript">
+const name = 'JavaScript';
+const greeting = `Hello, ${name}!`; // "Hello, JavaScript!"
+
+const multiLine = `이것은
+여러 줄에 걸친
+문자열입니다.`;
+                        </code></pre>
+                        
+                        <h3>주요 메소드</h3>
+                        <table>
+                            <tr><th>메소드</th><th>설명</th><th>예제</th></tr>
+                            <tr><td><code>.length</code></td><td>문자열 길이</td><td><code>'hello'.length // 5</code></td></tr>
+                            <tr><td><code>.toUpperCase()</code></td><td>대문자로 변환</td><td><code>'js'.toUpperCase() // 'JS'</code></td></tr>
+                            <tr><td><code>.toLowerCase()</code></td><td>소문자로 변환</td><td><code>'JS'.toLowerCase() // 'js'</code></td></tr>
+                            <tr><td><code>.includes('sub')</code></td><td>부분 문자열 포함 여부</td><td><code>'abc'.includes('b') // true</code></td></tr>
+                            <tr><td><code>.slice(start, end)</code></td><td>문자열 자르기</td><td><code>'abcde'.slice(1, 3) // 'bc'</code></td></tr>
+                            <tr><td><code>.replace('a', 'b')</code></td><td>문자열 치환 (첫 번째)</td><td><code>'hello'.replace('l', 'x') // 'hexlo'</code></td></tr>
+                            <tr><td><code>.split('sep')</code></td><td>문자열을 배열로 분리</td><td><code>'a,b,c'.split(',') // ['a', 'b', 'c']</code></td></tr>
+                            <tr><td><code>.trim()</code></td><td>양쪽 공백 제거</td><td><code>'  hi  '.trim() // 'hi'</code></td></tr>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Slide 6: 06-boolean-type Boolean 타입 -->
+                <section class="slide" id="boolean">
+                    <div class="slide-content">
+                        <h1>Boolean 타입</h1>
+                        <p>참(<code>true</code>) 또는 거짓(<code>false</code>)을 나타내는 타입입니다.</p>
+                        
+                        <h3>논리 연산자</h3>
+                        <table>
+                            <tr><th>연산자</th><th>이름</th><th>설명</th><th>예제</th></tr>
+                            <tr><td><strong><code>&&</code></strong></td><td>논리곱 (AND)</td><td>모두 참일 때만 참</td><td><code>true && false // false</code></td></tr>
+                            <tr><td><strong><code>||</code></strong></td><td>논리합 (OR)</td><td>하나라도 참이면 참</td><td><code>true || false // true</code></td></tr>
+                            <tr><td><strong><code>!</code></strong></td><td>논리부정 (NOT)</td><td>참과 거짓을 뒤바꿈</td><td><code>!true // false</code></td></tr>
+                        </table>
+                        
+                        <h3>Truthy와 Falsy</h3>
+                        <p>JavaScript에서는 <code>if</code>문 등에서 불린 값이 아니더라도 참 또는 거짓으로 평가될 수 있습니다.</p>
+                        
+                        <h4>Falsy (거짓으로 취급되는 값)</h4>
+                        <ul>
+                            <li><code>false</code></li>
+                            <li><code>0</code>, <code>-0</code>, <code>0n</code></li>
+                            <li><code>""</code> (빈 문자열)</li>
+                            <li><code>null</code></li>
+                            <li><code>undefined</code></li>
+                            <li><code>NaN</code></li>
+                        </ul>
+                        <p><strong>이 외의 모든 값은 Truthy(참으로 취급)입니다.</strong> (예: <code>[]</code>, <code>{}</code>, <code>'false'</code>)</p>
+                        
+                        <h3>단축 평가 (Short-circuit Evaluation)</h3>
+                        <p>논리 연산은 왼쪽부터 평가하며, 결과가 확정되면 오른쪽은 평가하지 않습니다.</p>
+                        <pre><code class="language-javascript">
+// user가 존재할 때만 user.name을 출력
+user && console.log(user.name);
+
+// name이 falsy(빈 문자열 등)일 경우 'Guest'를 할당
+const displayName = name || 'Guest';
+                        </code></pre>
+                    </div>
+                </section>
+
+                <!-- Slide 7: 07-null-undefined null과 undefined -->
+                <section class="slide" id="null-undefined">
+                    <div class="slide-content">
+                        <h1>null과 undefined</h1>
+                        <p>두 값 모두 '값이 없음'을 나타내지만, 미묘한 차이가 있습니다.</p>
+                        
+                        <h3>undefined</h3>
+                        <ul>
+                            <li>시스템이 자동으로 부여하는 값</li>
+                            <li>변수를 선언만 하고 값을 할당하지 않은 경우</li>
+                            <li>객체에 존재하지 않는 속성에 접근하려는 경우</li>
+                            <li>함수가 아무것도 반환하지 않을 때</li>
+                        </ul>
+                        <pre><code class="language-javascript">
+let a;
+console.log(a); // undefined
+
+const obj = {};
+console.log(obj.nonExistent); // undefined
+                        </code></pre>
+                        
+                        <h3>null</h3>
+                        <ul>
+                            <li>개발자가 의도적으로 '값이 없음'을 명시할 때 사용</li>
+                            <li>'비어있는 객체'를 의도적으로 나타낼 때 주로 사용</li>
+                        </ul>
+                        <pre><code class="language-javascript">
+let b = null;
+console.log(b); // null
+                        </code></pre>
+
+                        <h3>비교와 Null Check</h3>
+                        <table>
+                            <tr><th>비교</th><th>결과</th><th>설명</th></tr>
+                            <tr><td><code>null == undefined</code></td><td><code>true</code></td><td>동등 연산자(<code>==</code>)는 타입을 변환하여 비교하므로 같다고 판단.</td></tr>
+                            <tr><td><code>null === undefined</code></td><td><code>false</code></td><td>일치 연산자(<code>===</code>)는 타입까지 비교하므로 다르다고 판단.</td></tr>
+                        </table>
+                        
+                        <p>값이 <code>null</code> 또는 <code>undefined</code> 인지 확인할 때 (Null Check) <code>==</code> 연산자가 유용하게 쓰일 수 있습니다.</p>
+                        <pre><code class="language-javascript">
+function printValue(value) {
+  // value가 null이거나 undefined가 아닐 때만 출력
+  if (value != null) {
+    console.log(value);
+  }
+}
+                        </code></pre>
+                    </div>
+                </section>
+
+                <!-- Slide 8: 08-function 튜토리얼: 함수, 객체, 배열 -->
+                <section class="slide" id="tutorial-func-obj-arr">
+                    <div class="slide-content">
+                        <h1>튜토리얼: 함수, 객체, 배열</h1>
+                        <h3>함수 (Function)</h3>
+                        <p>코드 뭉치에 이름을 붙여 재사용하는 기능 단위입니다.</p>
+                        <pre><code class="language-javascript">
+// 함수 선언
+function add(x, y) {
+  return x + y;
+}
+
+// 화살표 함수 (ES2015)
+const multiply = (x, y) => x * y;
+
+// 함수 호출
+console.log(add(3, 5));      // 8
+console.log(multiply(3, 5)); // 15
+                        </code></pre>
+                        
+                        <h3>객체 (Object)</h3>
+                        <p>이름(key)과 값(value)으로 구성된 속성(property)들의 집합입니다.</p>
+                        <pre><code class="language-javascript">
+const person = {
+  name: '김개발',
+  age: 28,
+  greet() {
+    return `안녕하세요, ${this.name}입니다!`;
+  }
+};
+console.log(person.name); // '김개발'
+console.log(person.greet()); // "안녕하세요, 김개발입니다!"
+                        </code></pre>
+                        
+                        <h3>배열 (Array)</h3>
+                        <p>순서가 있는 값들의 목록입니다. 인덱스는 0부터 시작합니다.</p>
+                        <pre><code class="language-javascript">
+const fruits = ['apple', 'banana', 'orange'];
+console.log(fruits[0]); // 'apple'
+console.log(fruits.length); // 3
+
+fruits.push('grape'); // 끝에 요소 추가
+console.log(fruits); // ['apple', 'banana', 'orange', 'grape']
+                        </code></pre>
+                    </div>
+                </section>
+
+                <!-- Slide 9: 09-control-statement 튜토리얼: 제어 흐름 -->
+                <section class="slide" id="tutorial-control">
+                    <div class="slide-content">
+                        <h1>튜토리얼: 제어 흐름</h1>
+                        <h3>조건문 (if...else)</h3>
+                        <p>특정 조건을 만족할 때만 코드를 실행합니다.</p>
+                        <pre><code class="language-javascript">
+const score = 85;
+if (score >= 90) {
+  console.log('A 학점');
+} else if (score >= 80) {
+  console.log('B 학점');
+} else {
+  console.log('C 학점 이하');
+}
+                        </code></pre>
+                        
+                        <h3>반복문 (while, for)</h3>
+                        <p>코드를 여러 번 반복해서 실행합니다.</p>
+                        <pre><code class="language-javascript">
+// for 반복문 (횟수 기반)
+for (let i = 0; i < 3; i++) {
+  console.log(`${i + 1}번째 실행`);
+}
+
+// while 반복문 (조건 기반)
+let count = 0;
+while (count < 3) {
+  console.log(`반복 ${count}`);
+  count++;
+}
+                        </code></pre>
+                    </div>
+                </section>
+
+                <!-- Slide 10: 10-object 객체 -->
+                <section class="slide" id="data-types">
+                    <div class="slide-content">
+                        <h1>JavaScript 데이터 타입</h1>
+                        <h3>원시 타입 (Primitive Types)</h3>
+                        <table>
+                            <tr><th>타입</th><th>설명</th><th>예제</th></tr>
+                            <tr><td><code>string</code></td><td>문자열</td><td><code>'Hello', "World", `Template`</code></td></tr>
+                            <tr><td><code>number</code></td><td>숫자 (정수, 실수)</td><td><code>42, 3.14, NaN, Infinity</code></td></tr>
+                            <tr><td><code>boolean</code></td><td>참/거짓</td><td><code>true, false</code></td></tr>
+                            <tr><td><code>undefined</code></td><td>값이 할당되지 않음</td><td><code>let x; // x는 undefined</code></td></tr>
+                            <tr><td><code>null</code></td><td>의도적인 빈 값</td><td><code>let data = null;</code></td></tr>
+                            <tr><td><code>symbol</code></td><td>고유한 식별자</td><td><code>Symbol('id')</code></td></tr>
+                            <tr><td><code>bigint</code></td><td>큰 정수</td><td><code>123n, BigInt(123)</code></td></tr>
+                        </table>
+                        
+                        <h3>참조 타입 (Reference Type)</h3>
+                        <pre><code class="language-javascript">
+// 객체 (Object)
+const person = {
+  name: '김개발',
+  age: 30,
+  isEmployed: true
+};
+
+// 배열 (Array)
+const numbers = [1, 2, 3, 4, 5];
+const mixed = ['문자열', 42, true, null];
+
+// 함수 (Function)
+function greet(name) {
+  return `안녕하세요, ${name}님!`;
+}
+
+// 날짜 (Date)
+const now = new Date();
+const birthday = new Date('1990-01-01');
+                        </code></pre>
+                        
+                        <h3>타입 확인 방법</h3>
+                        <pre><code class="language-javascript">
+// typeof 연산자
+console.log(typeof 'hello'); // 'string'
+console.log(typeof 42); // 'number'
+console.log(typeof true); // 'boolean'
+console.log(typeof undefined); // 'undefined'
+console.log(typeof null); // 'object' (주의!)
+console.log(typeof []); // 'object'
+console.log(typeof {}); // 'object'
+
+// 더 정확한 타입 확인
+console.log(Array.isArray([])); // true
+console.log(Object.prototype.toString.call(null)); // '[object Null]'
+                        </code></pre>
+                        
+                        <h3>타입 변환</h3>
+                        <pre><code class="language-javascript">
+// 명시적 변환
+String(123); // '123'
+Number('123'); // 123
+Boolean(0); // false
+
+// 암시적 변환
+'5' + 3; // '53' (문자열 연결)
+'5' - 3; // 2 (숫자 계산)
+!!'hello'; // true (불린 변환)
+                        </code></pre>
+                    </div>
+                </section>
+
+                <!-- Slide 11: 11-array 배열과 유용한 메서드 -->
+                <section class="slide" id="arrays">
+                    <div class="slide-content">
+                        <h1>배열과 유용한 메서드</h1>
+                        <h3>배열 기본 메서드</h3>
+                        <table>
+                            <tr><th>메서드</th><th>설명</th><th>반환값</th></tr>
+                            <tr><td><code>push()</code></td><td>끝에 요소 추가</td><td>새로운 length</td></tr>
+                            <tr><td><code>pop()</code></td><td>끝 요소 제거</td><td>제거된 요소</td></tr>
+                            <tr><td><code>shift()</code></td><td>첫 요소 제거</td><td>제거된 요소</td></tr>
+                            <tr><td><code>unshift()</code></td><td>앞에 요소 추가</td><td>새로운 length</td></tr>
+                        </table>
+                        
+                        <h3>고차 함수 메서드</h3>
+                        <pre><code class="language-javascript">
+const numbers = [1, 2, 3, 4, 5];
+
+// map: 각 요소를 변환
+const doubled = numbers.map(n => n * 2); 
+console.log(doubled); // [2, 4, 6, 8, 10]
+
+// filter: 조건에 맞는 요소만으로 새 배열 생성
+const evens = numbers.filter(n => n % 2 === 0);
+console.log(evens); // [2, 4]
+
+// reduce: 누적 계산
+const sum = numbers.reduce((acc, n) => acc + n, 0);
+console.log(sum); // 15
+
+// find: 조건에 맞는 첫 번째 요소
+const found = numbers.find(n => n > 3);
+console.log(found); // 4
+
+// some: 하나라도 조건을 만족하는지
+const hasEven = numbers.some(n => n % 2 === 0);
+console.log(hasEven); // true
+
+// every: 모든 요소가 조건을 만족하는지
+const allPositive = numbers.every(n => n > 0);
+console.log(allPositive); // true
+                        </code></pre>
+                        
+                        <h3>실용적인 예제</h3>
+                        <pre><code class="language-javascript">
+const users = [
+  { name: '김철수', age: 25, city: '서울' },
+  { name: '이영희', age: 30, city: '부산' },
+  { name: '박민수', age: 35, city: '서울' }
+];
+
+// 서울 거주자만 필터링
+const seoulUsers = users.filter(user => user.city === '서울');
+
+// 이름만 추출
+const names = users.map(user => user.name);
+
+// 평균 나이 계산
+const avgAge = users.reduce((sum, user) => sum + user.age, 0) / users.length;
+
+// 30세 이상인 사용자 찾기
+const over30 = users.find(user => user.age >= 30);
+
+// 배열 정렬
+const sortedByAge = users.sort((a, b) => a.age - b.age);
+                        </code></pre>
+                        
+                        <h3>ES6+ 배열 메서드</h3>
+                        <pre><code class="language-javascript">
+// flatMap: map + flat
+const nested = [[1, 2], [3, 4], [5, 6]];
+const flattened = nested.flatMap(arr => arr);
+console.log(flattened); // [1, 2, 3, 4, 5, 6]
+
+// includes: 요소 포함 여부
+console.log(numbers.includes(3)); // true
+
+// Array.from: 유사 배열을 배열로 변환
+const arrayLike = { 0: 'a', 1: 'b', length: 2 };
+const realArray = Array.from(arrayLike);
+console.log(realArray); // ['a', 'b']
+                        </code></pre>
+                    </div>
+                </section>
+
+                <!-- Slide 12: 12-control-statement 제어문 심화 -->
+                <section class="slide" id="control-advanced">
+                    <div class="slide-content">
+                        <h1>제어문 심화</h1>
+                        <h3>switch 문</h3>
+                        <p>하나의 변수에 대해 많은 경우의 수가 있을 때 <code>if...else</code>보다 깔끔하게 작성할 수 있습니다.</p>
+                        <pre><code class="language-javascript">
+function getDayType(day) {
+  switch (day) {
+    case 'Monday':
+    case 'Tuesday':
+    case 'Wednesday':
+    case 'Thursday':
+    case 'Friday':
+      return '평일';
+    case 'Saturday':
+    case 'Sunday':
+      return '주말';
+    default:
+      return '잘못된 요일';
+  }
+}
+                        </code></pre>
+                        
+                        <h3>반복문의 종류</h3>
+                        <table>
+                            <tr><th>반복문</th><th>사용 목적</th><th>예제</th></tr>
+                            <tr><td><code>for</code></td><td>횟수 기반 반복</td><td><code>for (let i = 0; i < 5; i++)</code></td></tr>
+                            <tr><td><code>while</code></td><td>조건 기반 반복</td><td><code>while (condition)</code></td></tr>
+                            <tr><td><code>for...in</code></td><td>객체 속성 순회</td><td><code>for (let key in obj)</code></td></tr>
+                            <tr><td><code>for...of</code></td><td>이터러블 순회</td><td><code>for (let item of array)</code></td></tr>
+                        </table>
+                        
+                        <h3>break와 continue</h3>
+                        <pre><code class="language-javascript">
+// break: 반복문 완전히 빠져나감
+for (let i = 0; i < 10; i++) {
+  if (i === 5) break;
+  console.log(i); // 0, 1, 2, 3, 4
+}
+
+// continue: 현재 반복만 건너뛰고 계속
+for (let i = 0; i < 5; i++) {
+  if (i === 2) continue;
+  console.log(i); // 0, 1, 3, 4
+}
+                        </code></pre>
+                    </div>
+                </section>
+
+                <!-- Slide 13: 13-error-handling 예외 처리 -->
+                <section class="slide" id="error-handling">
+                    <div class="slide-content">
+                        <h1>예외 처리</h1>
+                        <h3>try...catch...finally</h3>
+                        <p>JavaScript에서 에러를 처리하는 핵심 메커니즘입니다.</p>
+                        <pre><code class="language-javascript">
+function parseJSON(jsonString) {
+  try {
+    const data = JSON.parse(jsonString);
+    console.log('파싱 성공:', data);
+    return data;
+  } catch (error) {
+    console.error('JSON 파싱 오류:', error.message);
+    return null;
+  } finally {
+    console.log('JSON 파싱 시도 완료');
+  }
+}
+
+// 사용 예제
+parseJSON('{"name": "Alice"}'); // 성공
+parseJSON('invalid json'); // 실패
+                        </code></pre>
+                        
+                        <h3>사용자 정의 에러</h3>
+                        <p>의도적으로 에러를 발생시키거나 커스텀 에러 클래스를 만들 수 있습니다.</p>
+                        <pre><code class="language-javascript">
+class ValidationError extends Error {
+  constructor(message, field) {
+    super(message);
+    this.name = 'ValidationError';
+    this.field = field;
+  }
+}
+
+function validateAge(age) {
+  if (typeof age !== 'number') {
+    throw new ValidationError('나이는 숫자여야 합니다', 'age');
+  }
+  if (age < 0 || age > 150) {
+    throw new ValidationError('나이는 0-150 사이여야 합니다', 'age');
+  }
+  return true;
+}
+
+try {
+  validateAge(-5);
+} catch (error) {
+  if (error instanceof ValidationError) {
+    console.log(`유효성 검증 실패 (${error.field}): ${error.message}`);
+  }
+}
+                        </code></pre>
+                        
+                        <h3>Promise 에러 처리</h3>
+                        <pre><code class="language-javascript">
+async function fetchUserData(userId) {
+  try {
+    const response = await fetch(`/api/users/${userId}`);
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+    const userData = await response.json();
+    return userData;
+  } catch (error) {
+    console.error('사용자 데이터 가져오기 실패:', error.message);
+    throw error; // 에러를 다시 던져서 호출자가 처리하도록
+  }
+}
+                        </code></pre>
+                    </div>
+                </section>
+
+                <!-- Slide 14: 14-module 모듈 시스템 -->
+                <section class="slide" id="module">
+                    <div class="slide-content">
+                        <h1>모듈 시스템 (ES2015)</h1>
+                        <p>코드를 여러 파일로 분리하여 재사용성과 유지보수성을 높이는 시스템입니다.</p>
+                        
+                        <h3>export (내보내기)</h3>
+                        <p>다른 파일에서 사용할 변수, 함수, 클래스를 지정합니다.</p>
+                        <pre><code class="language-javascript">
+// math.js
+
+// 이름 지정 내보내기 (Named Export)
+export const PI = 3.14;
+export function add(a, b) {
+  return a + b;
+}
+
+// 기본 내보내기 (Default Export, 파일당 하나만 가능)
+export default class Calculator {
+  // ...
+}
+                        </code></pre>
+
+                        <h3>import (가져오기)</h3>
+                        <p>다른 모듈에서 내보낸 기능들을 현재 파일로 가져옵니다.</p>
+                        <pre><code class="language-javascript">
+// main.js
+
+// 이름 지정 가져오기 (중괄호 사용)
+import { PI, add } from './math.js';
+
+// 기본 가져오기 (원하는 이름으로)
+import MyCalculator from './math.js';
+
+// 전체 가져오기
+import * as math from './math.js';
+console.log(math.PI);
+                        </code></pre>
+
+                        <h3>모듈의 특징</h3>
+                        <ul>
+                            <li><strong>모듈 스코프:</strong> 모듈 내 최상위 변수는 전역 변수가 아닙니다.</li>
+                            <li><strong>엄격 모드(Strict Mode):</strong> 자동으로 활성화됩니다.</li>
+                            <li><strong>단 한 번만 실행:</strong> 같은 모듈을 여러 번 <code>import</code>해도 코드는 한 번만 실행됩니다.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Slide 15: 15-operators 연산자 심화 -->
+                <section class="slide" id="operators">
+                    <div class="slide-content">
+                        <h1>연산자 심화</h1>
+                        <h3>단축 평가 (Short-circuit Evaluation)</h3>
+                        <p>논리 연산자들은 양쪽 피연산자를 모두 평가하지 않아도 결과를 결정할 수 있는 경우, 불필요한 평가를 생략합니다.</p>
+                        <table>
+                            <tr><th>연산자</th><th>동작</th><th>예제</th></tr>
+                            <tr><td><code>&&</code></td><td>왼쪽이 falsy면 왼쪽 값 반환, 아니면 오른쪽 값 반환</td><td><code>false && expression</code></td></tr>
+                            <tr><td><code>||</code></td><td>왼쪽이 truthy면 왼쪽 값 반환, 아니면 오른쪽 값 반환</td><td><code>true || expression</code></td></tr>
+                            <tr><td><code>??</code></td><td>왼쪽이 null/undefined가 아니면 왼쪽 값 반환</td><td><code>null ?? 'default'</code></td></tr>
+                        </table>
+                        
+                        <h3>실용적인 활용 예제</h3>
+                        <pre><code class="language-javascript">
+// if문을 대신하는 단축 평가
+user && console.log(user.name);
+
+// 기본값 설정
+const displayName = name || 'Guest';
+const username = user?.name ?? 'Anonymous';
+
+// 옵셔널 체이닝 (ES2020)
+const address = user?.profile?.address?.street;
+                        </code></pre>
+                        
+                        <h3>Optional Chaining (?.) 연산자</h3>
+                        <p>중첩된 객체의 속성에 안전하게 접근할 수 있게 해주는 ES2020 문법입니다.</p>
+                        <pre><code class="language-javascript">
+const person = {
+  name: '김개발',
+  company: {
+    name: 'Tech Corp'
+    // office 정보가 없음
+  }
+};
+
+// 안전한 접근 (에러 없이 undefined 반환)
+const officeAddress = person.company?.office?.address;
+console.log(officeAddress); // undefined
+
+// 기본값과 함께 사용
+const address = person.company?.office?.address ?? '주소 정보 없음';
+                        </code></pre>
+                    </div>
+                </section>
+
+                <!-- Slide 16: 16-final Final -->
+                <section class="slide title-slide" id="final">
+                    <div class="slide-content">
+                        <h1>학습을 마치며</h1>
+                        <h2>꾸준함이 최고의 실력입니다.</h2>
+                        <p style="margin-top: 50px;">지금까지 JavaScript의 핵심 개념들을 살펴보았습니다.<br>이제 실제 프로젝트에 적용하며 깊이를 더해보세요!</p>
+                    </div>
+                </section>
+                
+            </div>
+            <div id="progress-bar">
+                <div id="progress-indicator"></div>
+            </div>
+        </main>
+    </div>
+
+    <div id="controls">
+        <button id="prev-btn">이전</button>
+        <button id="next-btn">다음</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
