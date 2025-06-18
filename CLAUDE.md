@@ -4,51 +4,116 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a JavaScript educational documentation repository written in Korean. It contains comprehensive tutorial materials covering JavaScript fundamentals from basic concepts to advanced topics.
+This is a JavaScript educational documentation repository written in Korean. It contains comprehensive tutorial materials covering JavaScript fundamentals from basic concepts to advanced topics, delivered through multiple formats including interactive presentations, detailed documentation, quizzes, and study materials.
 
 ## Architecture
 
-The documentation is structured as numbered chapters in the `docs/` directory:
+### Core Components
 
-- **01-tutorial.md** - Introduction and basic syntax
-- **02-javascript-intro.md** - JavaScript language introduction
-- **03-value-variable-type.md** - Values, variables, and types
-- **04-number-type.md** - Number type in detail
-- **05-string-type.md** - String type and operations
-- **06-boolean-type.md** - Boolean logic and truthy/falsy
-- **07-null-undefined.md** - Null and undefined values
-- **08-function.md** - Functions and scope
-- **09-control-statement.md** - Conditional and loop statements
-- **10-object.md** - Objects and methods
-- **11-array.md** - Arrays and array methods
-- **12-value-in-depth.md** - Advanced value concepts
-- **13-function-in-depth.md** - Advanced function concepts
-- **14-object-in-depth.md** - Advanced object concepts
-- **15-operator-in-depth.md** - Operators in detail
-- **16-builtins.md** - Built-in objects and methods
-- **17-fp.md** - Functional programming concepts
-- **18-iteration.md** - Iteration methods
-- **19-class.md** - Classes and object-oriented programming
-- **20-data-structures.md** - Data structures
-- **21-async.md** - Asynchronous programming
-- **22-exception.md** - Error handling
-- **23-module.md** - Modules and imports
-- **24-misc.md** - Miscellaneous topics
-- **javascript-guide.md** - Comprehensive guide combining all topics
+1. **Interactive Presentation (`docs/`)** - Main learning interface
+   - `index.html` - 25-slide presentation covering basic to advanced JavaScript
+   - `script.js` - Navigation logic, slide management, keyboard/touch controls
+   - `styles.css` - Dark theme responsive design with syntax highlighting
 
-## Content Guidelines
+2. **Documentation (`document/`)** - Detailed learning materials
+   - 24 numbered markdown files (01-tutorial.md through 24-misc.md)
+   - `javascript-guide.md` - Comprehensive guide combining all topics
+   - Progressive curriculum from basics to advanced concepts
+
+3. **Assessment (`quiz/`)** - Interactive learning verification
+   - Quizzes for topics 01-11 covering fundamental concepts
+   - Multiple choice and code-based questions
+
+4. **Study Materials (`study_paper/`)** - Condensed reference materials
+   - Summary documents corresponding to main chapters
+   - Quick reference and review materials
+
+### Technology Stack
+
+- **Frontend**: Pure HTML5, CSS3, Vanilla JavaScript (ES2015+)
+- **External Dependencies**: highlight.js for syntax highlighting
+- **Fonts**: Noto Sans KR (Korean), Fira Code (monospace)
+- **Language**: Korean (all content and UI)
+
+## Common Development Tasks
+
+### Running the Interactive Presentation
+
+```bash
+# Using Python 3
+cd docs
+python -m http.server 8000
+
+# Using Node.js
+npx serve docs
+
+# Using VS Code Live Server
+# Right-click index.html → "Open with Live Server"
+```
+
+### Adding New Slides to Presentation
+
+1. Add HTML section in `docs/index.html`:
+```html
+<section class="slide" id="new-topic">
+    <div class="slide-content">
+        <h1>새로운 주제</h1>
+        <!-- Content here -->
+    </div>
+</section>
+```
+
+2. Update table of contents generation in `docs/script.js`
+3. Test keyboard navigation (←/→ arrows, space, home/end)
+4. Verify mobile touch navigation
+
+### Documentation Standards
+
+Follow the established Korean documentation style:
+- Use consistent technical terminology (변수/Variable, 함수/Function, 객체/Object)
+- Include executable code examples with comments
+- Structure: 학습 목표 → 설명 → 예제 → 핵심 정리
+- Difficulty levels: 🟢 기초, 🟡 중급, 🟠 고급
+- Use proper emoji conventions for sections (📋 목차, 🎯 목표, 💡 정리)
+
+### Code Style Guidelines
+
+From `.cursor/rules/`:
+
+**JavaScript Code:**
+- Use modern ES2015+ syntax
+- Include Korean comments explaining concepts
+- Provide executable examples with expected output
+- Follow functional programming patterns where appropriate
+
+**HTML/CSS:**
+- Semantic HTML5 structure
+- CSS custom properties for theming
+- Mobile-first responsive design
+- Dark theme as default
+
+### File Organization
+
+- **`document/`**: Detailed chapter-by-chapter learning materials
+- **`docs/`**: Interactive web presentation (main learning interface)  
+- **`quiz/`**: Assessment materials for knowledge verification
+- **`study_paper/`**: Condensed reference and review materials
+- **`.cursor/rules/`**: Development guidelines and project standards
+
+### Browser Compatibility
+
+Target modern browsers supporting:
+- ES2015+ JavaScript features
+- CSS Grid and Flexbox
+- CSS Custom Properties
+- Touch events for mobile navigation
+
+### Content Guidelines
 
 - All documentation is written in Korean
 - Examples use modern JavaScript (ES2015+) syntax
 - Code examples include both basic and practical use cases
 - Each chapter builds upon previous concepts
 - Tutorial format with progressive difficulty
-
-## Working with Documentation
-
-When editing these files:
-- Maintain the Korean language throughout
-- Follow the existing code example format with proper syntax highlighting
-- Use consistent terminology matching the established Korean technical vocabulary
-- Ensure code examples are executable and accurate
-- Maintain the progressive learning structure
+- Interactive presentation serves as primary learning interface
+- Documentation provides detailed reference material
