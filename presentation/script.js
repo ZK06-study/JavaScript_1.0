@@ -16,7 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const li = document.createElement('li');
         const a = document.createElement('a');
         a.href = `#${slide.id}`;
-        a.textContent = title;
+        if (index === 0) {
+            a.textContent = title;
+        } else {
+            a.textContent = `${index}. ${title}`;
+        }
         a.addEventListener('click', (e) => {
             e.preventDefault();
             showSlide(index);
