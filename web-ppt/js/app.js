@@ -31,8 +31,8 @@ class JavaScriptLearningApp {
             // Load settings from localStorage
             this.loadSettings();
             
-            // Apply initial theme
-            this.applyTheme(this.settings.theme);
+            // Apply initial theme (default to dark for tutoring)
+            this.applyTheme(this.settings.theme || 'dark');
             
             // Initialize parser
             this.parser = new MarkdownParser();
@@ -45,19 +45,33 @@ class JavaScriptLearningApp {
             // Initialize navigation
             this.navigation = new NavigationController(this.parser);
             
-            // Initialize code runner
+            // Initialize enhanced code runner
             this.codeRunner = new CodeRunner();
             window.codeRunner = this.codeRunner; // Make globally available
             
+            // Initialize live code runner for tutoring
+            this.liveCodeRunner = new LiveCodeRunner();
+            window.liveCodeRunner = this.liveCodeRunner; // Make globally available
+            
+            // Initialize tutor features (notes, bookmarks, quizzes)
+            this.tutorFeatures = new TutorFeatures(this.parser, this.navigation);
+            window.tutorFeatures = this.tutorFeatures; // Make globally available
+            
             // Setup UI event listeners
             this.setupUIEventListeners();
+            
+            // Setup tutor-specific features
+            this.setupTutorFeatures();
             
             // Hide loading state
             this.hideLoadingState();
             
             this.isInitialized = true;
             
-            console.log('JavaScript Learning PPT initialized successfully');
+            // Show welcome message for tutoring
+            this.showWelcomeMessage();
+            
+            console.log('JavaScript Learning PPT (Tutor Edition) initialized successfully');
             
         } catch (error) {
             console.error('Failed to initialize application:', error);
@@ -546,14 +560,195 @@ JavaScript 학습 PPT 키보드 단축키:
     }
 
     /**
-     * Get application state
+     * Setup tutor-specific features
+     */
+    setupTutorFeatures() {
+        // Enhanced keyboard shortcuts for tutoring
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            
+            switch (e.key.toLowerCase()) {
+                case 'l':
+                    if (e.ctrlKey) {
+                        e.preventDefault();
+                        this.liveCodeRunner?.toggleLivePanel();
+                    }
+                    break;
+                case 'e':
+                    if (e.ctrlKey) {
+                        e.preventDefault();
+                        this.tutorFeatures?.tryCurrentExample();
+                    }
+                    break;
+                case '?':
+                    if (e.shiftKey) {
+                        e.preventDefault();
+                        this.showTutorHelp();
+                    }
+                    break;
+            }
+        });
+
+        // Auto-save intervals
+        setInterval(() => {
+            this.autoSaveProgress();
+        }, 30000); // Every 30 seconds
+    }
+
+    /**
+     * Show welcome message for tutoring session
+     */
+    showWelcomeMessage() {
+        if (localStorage.getItem('js-tutor-welcome-shown')) return;
+        
+        setTimeout(() => {
+            if (this.tutorFeatures) {
+                this.tutorFeatures.showToast(
+                    '🎓 과외용 JavaScript 학습 PPT에 오신 것을 환영합니다! 우측 상단의 도구들을 활용해보세요.',
+                    'info'
+                );
+                localStorage.setItem('js-tutor-welcome-shown', 'true');
+            }
+        }, 2000);
+    }
+
+    /**
+     * Show tutor help dialog
+     */
+    showTutorHelp() {
+        const helpContent = `
+🎓 JavaScript 과외용 PPT 가이드
+
+📚 네비게이션:
+• 스페이스바 / → : 다음 슬라이드
+• ← : 이전 슬라이드
+• Home/End : 처음/마지막 슬라이드
+
+💻 라이브 코딩:
+• Ctrl+L : 라이브 코딩 패널 열기/닫기
+• Ctrl+Enter : 코드 실행 (패널 내)
+• 🧪 예제 체험 : 현재 슬라이드 코드 실행
+
+📝 메모 & 북마크:
+• Ctrl+N : 메모 패널 열기/닫기
+• Ctrl+B : 북마크 패널 열기/닫기
+• Ctrl+S : 메모 저장
+
+❓ 퀴즈 & 학습:
+• Ctrl+Q : 퀴즈 실행
+• Ctrl+E : 예제 코드 체험
+• F : 전체화면 모드
+
+🎨 기타:
+• T : 테마 변경
+• Shift+? : 이 도움말
+• F1 : 전체 키보드 단축키
+        `;
+
+        alert(helpContent);
+    }
+
+    /**
+     * Auto-save progress and session data
+     */
+    autoSaveProgress() {
+        if (!this.navigation) return;
+
+        const progressData = {
+            currentChapter: this.navigation.currentChapter,
+            currentSlide: this.navigation.currentSlide,
+            timestamp: Date.now(),
+            sessionTime: Date.now() - this.sessionStartTime,
+            settings: this.settings
+        };
+
+        localStorage.setItem('js-tutor-progress', JSON.stringify(progressData));
+    }
+
+    /**
+     * Load saved progress
+     */
+    loadSavedProgress() {
+        try {
+            const savedProgress = localStorage.getItem('js-tutor-progress');
+            if (savedProgress) {
+                const progress = JSON.parse(savedProgress);
+                
+                // Ask user if they want to resume
+                if (confirm(`이전 세션을 계속하시겠습니까?\n마지막 위치: Chapter ${progress.currentChapter} - Slide ${progress.currentSlide + 1}`)) {
+                    setTimeout(() => {
+                        this.navigation?.goToSlide(progress.currentChapter, progress.currentSlide);
+                    }, 1000);
+                }
+            }
+        } catch (error) {
+            console.warn('Failed to load saved progress:', error);
+        }
+    }
+
+    /**
+     * Enhanced theme toggle for tutoring
+     */
+    toggleTheme() {
+        // Cycle through tutor-friendly themes
+        const tutorThemes = ['dark', 'blue', 'purple', 'green', 'light'];
+        const currentIndex = tutorThemes.indexOf(this.settings.theme);
+        const nextIndex = (currentIndex + 1) % tutorThemes.length;
+        const newTheme = tutorThemes[nextIndex];
+        
+        this.applyTheme(newTheme);
+        this.settings.theme = newTheme;
+        this.saveSettings();
+        
+        if (this.tutorFeatures) {
+            this.tutorFeatures.showToast(`테마가 ${newTheme}로 변경되었습니다.`, 'info');
+        }
+    }
+
+    /**
+     * Export tutoring session data
+     */
+    exportTutoringSession() {
+        const sessionData = {
+            progress: this.getState(),
+            tutorData: this.tutorFeatures?.exportData(),
+            liveCodeHistory: this.liveCodeRunner?.getState(),
+            exportedAt: new Date().toISOString(),
+            sessionDuration: Date.now() - this.sessionStartTime
+        };
+
+        const blob = new Blob([JSON.stringify(sessionData, null, 2)], {
+            type: 'application/json'
+        });
+        
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `js-tutor-session-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        
+        URL.revokeObjectURL(url);
+        
+        if (this.tutorFeatures) {
+            this.tutorFeatures.showToast('세션 데이터가 다운로드되었습니다.', 'success');
+        }
+    }
+
+    /**
+     * Get application state with tutoring data
      */
     getState() {
         return {
             isInitialized: this.isInitialized,
             currentSlide: this.navigation ? this.navigation.getCurrentState() : null,
             settings: this.settings,
-            theme: this.theme
+            theme: this.theme,
+            tutorFeatures: this.tutorFeatures ? {
+                notesCount: this.tutorFeatures.notes.length,
+                bookmarksCount: this.tutorFeatures.bookmarks.length
+            } : null,
+            liveCodeSession: this.liveCodeRunner ? this.liveCodeRunner.getState() : null,
+            sessionStartTime: this.sessionStartTime
         };
     }
 
