@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>코드 실행 테스트</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-btn { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin: 10px; }
+        .test-btn:hover { background: #0056b3; }
+        .code-block { background: #f8f9fa; padding: 10px; border-radius: 5px; font-family: monospace; margin: 10px 0; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; }
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 10px; width: 80%; max-width: 800px; max-height: 80%; overflow: auto; }
+        .modal-header { display: flex; justify-content: between; align-items: center; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 20px; }
+        .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; }
+        .code-editor textarea { width: 100%; height: 200px; font-family: monospace; }
+        .output-tabs { display: flex; border-bottom: 1px solid #ddd; margin-bottom: 10px; }
+        .tab-btn { background: none; border: none; padding: 10px 20px; cursor: pointer; }
+        .tab-btn.active { background: #007bff; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tab-content pre { background: #f8f9fa; padding: 10px; border-radius: 5px; font-family: monospace; white-space: pre-wrap; }
+        .btn { background: #007bff; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
+        .btn-secondary { background: #6c757d; }
+        .btn-small { padding: 4px 8px; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <h1>JavaScript 코드 실행 테스트</h1>
+    
+    <h2>테스트 케이스들</h2>
+    
+    <div class="code-block">
+        <h3>1. 기본 콘솔 출력</h3>
+        <code>console.log('Hello, World!');</code>
+        <button class="test-btn" onclick="testCode1()">실행</button>
+    </div>
+    
+    <div class="code-block">
+        <h3>2. 계산과 반환값</h3>
+        <code>let result = 5 + 3; console.log('계산 결과:', result); return result;</code>
+        <button class="test-btn" onclick="testCode2()">실행</button>
+    </div>
+    
+    <div class="code-block">
+        <h3>3. 오류 발생</h3>
+        <code>let x = undefinedVariable; console.log(x);</code>
+        <button class="test-btn" onclick="testCode3()">실행</button>
+    </div>
+    
+    <div class="code-block">
+        <h3>4. 배열과 객체</h3>
+        <code>let arr = [1, 2, 3]; let obj = {name: 'JavaScript', version: 'ES6'}; console.log('배열:', arr); console.log('객체:', obj); return {arr, obj};</code>
+        <button class="test-btn" onclick="testCode4()">실행</button>
+    </div>
+
+    <!-- 코드 실행 모달 -->
+    <div class="modal" id="code-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💻 코드 실행 환경</h3>
+                <div class="modal-controls">
+                    <button class="btn-small" id="copy-output">📋 복사</button>
+                    <button class="modal-close" aria-label="닫기">×</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="code-editor-container">
+                    <div class="code-editor">
+                        <div class="editor-header">
+                            <span>코드 편집기</span>
+                        </div>
+                        <textarea id="code-input" placeholder="JavaScript 코드를 입력하세요..."></textarea>
+                        <div class="editor-footer">
+                            <button class="btn btn-primary" id="run-code">▶ 실행 (Ctrl+Enter)</button>
+                            <button class="btn btn-secondary" id="clear-code">🗑️ 지우기</button>
+                            <button class="btn btn-secondary" id="clear-output">📄 출력 지우기</button>
+                        </div>
+                    </div>
+                    <div class="code-output">
+                        <div class="output-header">
+                            <h4>📋 실행 결과</h4>
+                        </div>
+                        <div class="output-container">
+                            <div class="output-tabs">
+                                <button class="tab-btn active" data-tab="console">Console</button>
+                                <button class="tab-btn" data-tab="result">Result</button>
+                                <button class="tab-btn" data-tab="errors">Errors</button>
+                            </div>
+                            <div class="output-content">
+                                <div class="tab-content active" id="console-output">
+                                    <pre id="output-result"></pre>
+                                </div>
+                                <div class="tab-content" id="result-output">
+                                    <pre id="return-result"></pre>
+                                </div>
+                                <div class="tab-content" id="error-output">
+                                    <pre id="error-result"></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/codeRunner.js"></script>
+    <script>
+        // CodeRunner 인스턴스 생성
+        const codeRunner = new CodeRunner();
+        window.codeRunner = codeRunner;
+
+        // 테스트 함수들
+        function testCode1() {
+            codeRunner.executeCode("console.log('Hello, World!');");
+        }
+
+        function testCode2() {
+            codeRunner.executeCode("let result = 5 + 3;\nconsole.log('계산 결과:', result);\nreturn result;");
+        }
+
+        function testCode3() {
+            codeRunner.executeCode("let x = undefinedVariable;\nconsole.log(x);");
+        }
+
+        function testCode4() {
+            codeRunner.executeCode("let arr = [1, 2, 3];\nlet obj = {name: 'JavaScript', version: 'ES6'};\nconsole.log('배열:', arr);\nconsole.log('객체:', obj);\nreturn {arr, obj};");
+        }
+
+        // Clear code 버튼 이벤트
+        document.getElementById('clear-code').addEventListener('click', () => {
+            document.getElementById('code-input').value = '';
+        });
+    </script>
+</body>
+</html>

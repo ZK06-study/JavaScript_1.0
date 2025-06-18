@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>코드 실행기 디버그 테스트</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #1a1a2e;
+            color: white;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-btn { 
+            background: #007bff; 
+            color: white; 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            margin: 10px; 
+        }
+        .test-btn:hover { background: #0056b3; }
+        .code-block { 
+            background: #2a2a3e; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin: 15px 0; 
+            border: 1px solid #444;
+        }
+        .modal { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.8); 
+            z-index: 1000; 
+        }
+        .modal.active { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        .modal-content { 
+            background: #1e1e2e; 
+            padding: 20px; 
+            border-radius: 10px; 
+            width: 90%; 
+            max-width: 1000px; 
+            max-height: 90%; 
+            overflow: auto; 
+            border: 1px solid #444;
+        }
+        .modal-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 1px solid #444; 
+            padding-bottom: 10px; 
+            margin-bottom: 20px; 
+        }
+        .modal-close { 
+            background: none; 
+            border: none; 
+            font-size: 24px; 
+            cursor: pointer; 
+            color: #ccc;
+        }
+        .code-editor-container {
+            display: flex;
+            gap: 20px;
+        }
+        .code-editor { 
+            flex: 1;
+        }
+        .code-editor textarea { 
+            width: 100%; 
+            height: 200px; 
+            font-family: 'Courier New', monospace; 
+            background: #2a2a3e;
+            color: #fff;
+            border: 1px solid #444;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .code-output {
+            flex: 1;
+        }
+        .output-tabs { 
+            display: flex; 
+            border-bottom: 1px solid #444; 
+            margin-bottom: 10px; 
+        }
+        .tab-btn { 
+            background: none; 
+            border: none; 
+            padding: 10px 20px; 
+            cursor: pointer; 
+            color: #ccc;
+            border-bottom: 2px solid transparent;
+        }
+        .tab-btn.active { 
+            background: #007bff; 
+            color: white; 
+            border-bottom-color: #007bff;
+        }
+        .tab-content { 
+            display: none; 
+        }
+        .tab-content.active { 
+            display: block; 
+        }
+        .tab-content pre { 
+            background: #2a2a3e; 
+            padding: 10px; 
+            border-radius: 5px; 
+            font-family: 'Courier New', monospace; 
+            white-space: pre-wrap; 
+            border: 1px solid #444;
+            min-height: 100px;
+        }
+        .btn { 
+            background: #007bff; 
+            color: white; 
+            padding: 8px 16px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            margin: 5px; 
+        }
+        .btn-secondary { 
+            background: #6c757d; 
+        }
+        .btn-small { 
+            padding: 4px 8px; 
+            font-size: 12px; 
+        }
+        .debug-info {
+            background: #2a2a3e;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid #444;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🐛 CodeRunner 디버그 테스트</h1>
+        
+        <div class="debug-info">
+            <h3>디버그 정보</h3>
+            <p>브라우저 개발자 도구 콘솔을 열어서 로그를 확인하세요 (F12)</p>
+        </div>
+        
+        <div class="code-block">
+            <h3>1. 기본 산술 연산</h3>
+            <code>1 + 1;</code>
+            <button class="test-btn" onclick="testCode('1 + 1;')">실행</button>
+        </div>
+        
+        <div class="code-block">
+            <h3>2. 콘솔 출력</h3>
+            <code>console.log('Hello, World!');</code>
+            <button class="test-btn" onclick="testCode('console.log(\'Hello, World!\');')">실행</button>
+        </div>
+        
+        <div class="code-block">
+            <h3>3. 변수와 계산</h3>
+            <code>let x = 5; let y = 3; console.log('Result:', x + y); return x + y;</code>
+            <button class="test-btn" onclick="testCode('let x = 5; let y = 3; console.log(\'Result:\', x + y); return x + y;')">실행</button>
+        </div>
+
+        <!-- 코드 실행 모달 -->
+        <div class="modal" id="code-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>💻 코드 실행 환경</h3>
+                    <div class="modal-controls">
+                        <button class="btn-small" id="copy-output">📋 복사</button>
+                        <button class="modal-close" aria-label="닫기">×</button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="code-editor-container">
+                        <div class="code-editor">
+                            <div class="editor-header">
+                                <span>코드 편집기</span>
+                            </div>
+                            <textarea id="code-input" placeholder="JavaScript 코드를 입력하세요..."></textarea>
+                            <div class="editor-footer">
+                                <button class="btn btn-primary" id="run-code">▶ 실행 (Ctrl+Enter)</button>
+                                <button class="btn btn-secondary" id="clear-code">🗑️ 지우기</button>
+                                <button class="btn btn-secondary" id="clear-output">📄 출력 지우기</button>
+                            </div>
+                        </div>
+                        <div class="code-output">
+                            <div class="output-header">
+                                <h4>📋 실행 결과</h4>
+                            </div>
+                            <div class="output-container">
+                                <div class="output-tabs">
+                                    <button class="tab-btn active" data-tab="console">Console</button>
+                                    <button class="tab-btn" data-tab="result">Result</button>
+                                    <button class="tab-btn" data-tab="errors">Errors</button>
+                                </div>
+                                <div class="output-content">
+                                    <div class="tab-content active" id="console-output">
+                                        <pre id="output-result"></pre>
+                                    </div>
+                                    <div class="tab-content" id="result-output">
+                                        <pre id="return-result"></pre>
+                                    </div>
+                                    <div class="tab-content" id="error-output">
+                                        <pre id="error-result"></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/codeRunner.js"></script>
+    <script>
+        // CodeRunner 인스턴스 생성
+        let codeRunner;
+        
+        // 페이지 로드 후 CodeRunner 초기화
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 페이지 로드됨, CodeRunner 초기화 시작');
+            codeRunner = new CodeRunner();
+            window.codeRunner = codeRunner;
+            console.log('✅ CodeRunner 초기화 완료:', codeRunner);
+        });
+
+        // 테스트 함수
+        function testCode(code) {
+            console.log('🧪 테스트 코드 실행:', code);
+            if (codeRunner) {
+                codeRunner.executeCode(code);
+            } else {
+                console.error('❌ CodeRunner가 초기화되지 않았습니다');
+                alert('CodeRunner가 초기화되지 않았습니다. 페이지를 새로고침해주세요.');
+            }
+        }
+
+        // Clear code 버튼 이벤트
+        document.addEventListener('DOMContentLoaded', () => {
+            const clearCodeBtn = document.getElementById('clear-code');
+            if (clearCodeBtn) {
+                clearCodeBtn.addEventListener('click', () => {
+                    const codeInput = document.getElementById('code-input');
+                    if (codeInput) {
+                        codeInput.value = '';
+                    }
+                });
+            }
+
+            // 모달 닫기 이벤트
+            const modalClose = document.querySelector('.modal-close');
+            if (modalClose) {
+                modalClose.addEventListener('click', () => {
+                    const modal = document.getElementById('code-modal');
+                    if (modal) {
+                        modal.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html> 
