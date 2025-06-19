@@ -277,6 +277,121 @@ function reverseArray(arr) {
 **입출력 예 #3**
 전체 배열 [5,4,-1,7,8]의 합이 23으로 최댓값
 
+---
+
+## 실습 코딩 정답
+
+### 문제 1: 배열 회전
+
+```js
+function rotateArray(arr, k) {
+  const len = arr.length;
+  // k가 배열 길이보다 클 경우 나머지 연산 사용
+  k = k % len;
+  
+  // k가 0이면 원본 배열 그대로 반환
+  if (k === 0) {
+    return [...arr];
+  }
+  
+  // slice를 이용한 회전
+  return [...arr.slice(-k), ...arr.slice(0, -k)];
+}
+
+// 또는 더 직관적인 방법
+function rotateArray(arr, k) {
+  const len = arr.length;
+  k = k % len;
+  
+  const result = [...arr];
+  for (let i = 0; i < k; i++) {
+    result.unshift(result.pop());
+  }
+  return result;
+}
+
+// 해설:
+// - k % len으로 불필요한 회전 제거 (배열 길이만큼 회전하면 원래대로)
+// - slice(-k)로 뒤의 k개 요소, slice(0, -k)로 앞의 나머지 요소 분리
+// - 스프레드 문법으로 두 부분을 합쳐서 새 배열 생성
+```
+
+### 문제 2: 배열에서 두 번째로 큰 수 찾기
+
+```js
+function findSecondLargest(numbers) {
+  // 중복 제거 후 내림차순 정렬
+  const uniqueSorted = [...new Set(numbers)].sort((a, b) => b - a);
+  return uniqueSorted[1];
+}
+
+// 또는 한 번의 순회로 해결
+function findSecondLargest(numbers) {
+  let first = -Infinity;
+  let second = -Infinity;
+  
+  for (const num of numbers) {
+    if (num > first) {
+      second = first;
+      first = num;
+    } else if (num > second && num < first) {
+      second = num;
+    }
+  }
+  
+  return second;
+}
+
+// 해설:
+// - 방법 1: Set으로 중복 제거 후 정렬하여 두 번째 요소 반환
+// - 방법 2: 한 번의 순회로 첫 번째, 두 번째 큰 수를 찾음 (더 효율적)
+// - 문제에서 중복되지 않는다고 했으므로 방법 1이 더 간단
+```
+
+### 문제 3: 부분 배열의 최대 합 (카데인 알고리즘)
+
+```js
+function maxSubarraySum(nums) {
+  let maxSum = nums[0];
+  let currentSum = nums[0];
+  
+  for (let i = 1; i < nums.length; i++) {
+    // 현재까지의 합에 현재 요소를 더할지, 
+    // 아니면 현재 요소부터 새로 시작할지 결정
+    currentSum = Math.max(nums[i], currentSum + nums[i]);
+    maxSum = Math.max(maxSum, currentSum);
+  }
+  
+  return maxSum;
+}
+
+// 더 직관적인 버전
+function maxSubarraySum(nums) {
+  let maxSum = nums[0];
+  let currentSum = nums[0];
+  
+  for (let i = 1; i < nums.length; i++) {
+    // 이전 합계가 음수면 버리고 새로 시작
+    if (currentSum < 0) {
+      currentSum = nums[i];
+    } else {
+      currentSum += nums[i];
+    }
+    
+    // 최댓값 갱신
+    maxSum = Math.max(maxSum, currentSum);
+  }
+  
+  return maxSum;
+}
+
+// 해설:
+// - 카데인 알고리즘: 동적 계획법의 대표적인 예시
+// - 각 위치에서 현재 요소를 포함한 최대 부분합을 계산
+// - 이전 합계가 음수면 버리고 현재 요소부터 새로 시작
+// - 시간 복잡도 O(n), 공간 복잡도 O(1)로 매우 효율적
+```
+
 ### 응용 정답
 18.
 ```js

@@ -268,3 +268,102 @@ const result = highlight`Hello ${name} World!`;
 
 **입출력 예 #2**
 공백을 제거하고 소문자로 변환하면 "amanaplanacanalpanama"로 팰린드롬입니다.
+
+---
+
+## 실습 코딩 정답
+
+### 문제 1: 문자열 뒤집기
+
+```js
+function solution(s) {
+  return s.split('').reverse().join('');
+}
+
+// 또는 for 루프 사용
+function solution(s) {
+  let result = '';
+  for (let i = s.length - 1; i >= 0; i--) {
+    result += s[i];
+  }
+  return result;
+}
+
+// 또는 배열 메소드 없이
+function solution(s) {
+  let result = '';
+  for (const char of s) {
+    result = char + result; // 앞에 추가
+  }
+  return result;
+}
+
+// 해설:
+// - 방법 1: split()으로 문자 배열 만들기 → reverse()로 뒤집기 → join()으로 합치기
+// - 방법 2: 뒤에서부터 앞으로 순회하며 새 문자열 만들기
+// - 방법 3: 각 문자를 결과 문자열의 앞에 계속 추가하기
+```
+
+### 문제 2: 특정 문자 개수 세기
+
+```js
+function solution(str, char) {
+  let count = 0;
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === char) {
+      count++;
+    }
+  }
+  return count;
+}
+
+// 또는 정규식 사용
+function solution(str, char) {
+  const regex = new RegExp(char, 'g');
+  const matches = str.match(regex);
+  return matches ? matches.length : 0;
+}
+
+// 또는 배열 메소드 사용
+function solution(str, char) {
+  return str.split('').filter(c => c === char).length;
+}
+
+// 해설:
+// - 방법 1: for 루프로 각 문자를 확인하며 카운트 증가
+// - 방법 2: 정규식으로 모든 일치 항목을 찾아 개수 반환
+// - 방법 3: 문자열을 배열로 변환 후 filter()로 해당 문자만 필터링
+```
+
+### 문제 3: 팰린드롬 검사
+
+```js
+function solution(s) {
+  // 공백 제거하고 소문자로 변환
+  const cleaned = s.replace(/\s/g, '').toLowerCase();
+  
+  // 뒤집은 문자열과 비교
+  const reversed = cleaned.split('').reverse().join('');
+  
+  return cleaned === reversed;
+}
+
+// 또는 양 끝에서 비교하는 방법
+function solution(s) {
+  const cleaned = s.replace(/\s/g, '').toLowerCase();
+  const len = cleaned.length;
+  
+  for (let i = 0; i < len / 2; i++) {
+    if (cleaned[i] !== cleaned[len - 1 - i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// 해설:
+// - 방법 1: 전처리 후 문자열을 뒤집어서 원본과 비교
+// - 방법 2: 양 끝에서부터 중앙으로 비교해가며 확인 (더 효율적)
+// - replace(/\s/g, '')로 모든 공백 제거
+// - toLowerCase()로 대소문자 통일
+```

@@ -311,3 +311,90 @@ double(3) = 6, addOne(6) = 7
 
 **입출력 예 #2**
 double(5) = 10, addOne(10) = 11
+
+---
+
+## 실습 코딩 정답
+
+### 문제 1: 팩토리얼 계산
+
+```js
+function factorial(n) {
+  if (n === 0 || n === 1) {
+    return 1;
+  }
+  
+  let result = 1;
+  for (let i = 2; i <= n; i++) {
+    result *= i;
+  }
+  return result;
+}
+
+// 또는 재귀 함수로
+function factorial(n) {
+  if (n === 0 || n === 1) {
+    return 1;
+  }
+  return n * factorial(n - 1);
+}
+
+// 해설:
+// - 0! = 1, 1! = 1로 기본 사례 처리
+// - 방법 1: 반복문으로 2부터 n까지 곱하기
+// - 방법 2: 재귀 호출로 n × (n-1)! 계산
+// - 재귀 방법은 우아하지만 큰 수에서는 스택 오버플로 가능성
+```
+
+### 문제 2: 클로저를 이용한 카운터
+
+```js
+function createCounter(initialValue) {
+  let count = initialValue;
+  
+  return function() {
+    const current = count;
+    count++;
+    return current;
+  };
+}
+
+// 또는 화살표 함수로
+const createCounter = (initialValue) => {
+  let count = initialValue;
+  return () => count++;
+};
+
+// 해설:
+// - 클로저를 이용하여 private 변수 count 유지
+// - 반환되는 함수가 외부 스코프의 count 변수에 접근
+// - 호출할 때마다 현재 값을 반환하고 1 증가
+// - 각 카운터는 독립적인 count 변수를 가짐
+```
+
+### 문제 3: 함수 조합 (Function Composition)
+
+```js
+function compose(f, g) {
+  return function(x) {
+    return f(g(x));
+  };
+}
+
+// 또는 화살표 함수로
+const compose = (f, g) => x => f(g(x));
+
+// 사용 예시
+const double = x => x * 2;
+const addOne = x => x + 1;
+const doubleThenAddOne = compose(addOne, double);
+
+console.log(doubleThenAddOne(3)); // 7 (double(3) = 6, addOne(6) = 7)
+console.log(doubleThenAddOne(5)); // 11 (double(5) = 10, addOne(10) = 11)
+
+// 해설:
+// - 함수 합성은 두 함수를 결합하여 새로운 함수를 만드는 것
+// - compose(f, g)(x)는 f(g(x))와 같음 (오른쪽부터 적용)
+// - 클로저를 이용하여 f, g 함수에 접근
+// - 함수형 프로그래밍의 핵심 개념 중 하나
+```
