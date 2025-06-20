@@ -62,66 +62,14 @@ console.log(x);
 
 ### 10. 1급 함수(first-class function)의 의미는?
 
-## 서술형 문제
-
-### 11. 스코프 연쇄(scope chain)의 동작 원리를 설명하시오.
-
-### 12. 어휘적 스코핑(lexical scoping)이 무엇인지 설명하고, 함수 호출과 스코프의 관계를 서술하시오.
-
-### 13. 함수를 값으로 사용할 수 있는 방법들을 나열하고 각각의 예제를 제시하시오.
 
 ## 코딩 문제
 
-### 14. 세 개의 숫자 중 가장 큰 값을 반환하는 함수를 작성하시오.
+### 11. 두 숫자를 더하는 함수를 작성하시오.
 
-### 15. 다음 요구사항에 따라 함수를 작성하시오.
-- 이름: `calculator`
-- 매개변수: 두 숫자와 연산자 문자열 ('+', '-', '*', '/')
-- 반환값: 계산 결과
+### 12. 이름을 매개변수로 받아 인사말을 반환하는 함수를 작성하시오.
 
-### 16. 화살표 함수를 사용하여 배열의 모든 요소를 제곱하는 함수를 작성하시오.
-
-### 17. 함수를 반환하는 함수(고차 함수)를 작성하시오.
-```js
-// 사용 예시
-const addTen = createAdder(10);
-console.log(addTen(5)); // 15
-```
-
-## 응용 문제
-
-### 18. 다음 코드의 실행 결과를 예상하고 스코프 관점에서 설명하시오.
-```js
-const global = 'I am global';
-
-function outer() {
-  const outerVar = 'I am outer';
-  
-  function inner() {
-    const innerVar = 'I am inner';
-    console.log(global);
-    console.log(outerVar);
-    console.log(innerVar);
-  }
-  
-  inner();
-}
-
-outer();
-```
-
-### 19. 콜백 함수의 개념을 설명하고 간단한 예제를 작성하시오.
-
-### 20. 다음 두 함수의 차이점을 설명하시오.
-```js
-// 함수 1
-function regularFunction() {
-  return 'regular';
-}
-
-// 함수 2  
-const arrowFunction = () => 'arrow';
-```
+### 13. 화살표 함수를 사용하여 숫자를 제곱하는 함수를 작성하시오.
 
 ---
 
@@ -141,260 +89,22 @@ const arrowFunction = () => 'arrow';
 9. 함수 리터럴(function literal)
 10. 값으로 사용할 수 있는 함수
 
-### 서술형 정답
-11. 식별자에 도달하면 현재 스코프에서 변수를 찾고, 없으면 바깥쪽 스코프로 계속 올라가며 찾는 과정이다. 전역 스코프까지 찾아도 없으면 에러가 발생한다.
-
-12. 어휘적 스코핑은 스코프가 코드가 작성된 구조에 의해 결정되는 것이다. 함수가 어디서 호출되는지가 아니라 어디서 정의되었는지에 따라 스코프가 결정된다.
-
-13. 
-- 변수에 할당: `const fn = function() {}`
-- 배열 요소: `[function() {}]`
-- 객체 속성: `{method: function() {}}`
-- 인수로 전달: `array.map(function() {})`
-- 반환값: `return function() {}`
-
 ### 코딩 정답
-14.
+11.
 ```js
-function getMax(a, b, c) {
-  return Math.max(a, b, c);
-}
-
-// 또는
-function getMax(a, b, c) {
-  if (a >= b && a >= c) return a;
-  if (b >= a && b >= c) return b;
-  return c;
+function add(a, b) {
+  return a + b;
 }
 ```
 
-15.
+12.
 ```js
-function calculator(a, b, operator) {
-  switch (operator) {
-    case '+': return a + b;
-    case '-': return a - b;
-    case '*': return a * b;
-    case '/': return a / b;
-    default: return 'Invalid operator';
-  }
+function greet(name) {
+  return '안녕하세요, ' + name + '님!';
 }
 ```
 
-16.
+13.
 ```js
-const square = arr => arr.map(x => x * x);
-
-// 또는
-const squareArray = (arr) => {
-  return arr.map(num => num * num);
-};
-```
-
-17.
-```js
-function createAdder(x) {
-  return function(y) {
-    return x + y;
-  };
-}
-
-// 화살표 함수 버전
-const createAdder = x => y => x + y;
-```
-
-### 응용 정답
-18.
-```js
-// 출력 결과:
-// I am global
-// I am outer  
-// I am inner
-```
-`inner` 함수에서 스코프 연쇄를 통해 자신의 스코프 → `outer` 함수 스코프 → 전역 스코프 순으로 변수를 찾는다.
-
-19.
-콜백 함수는 다른 함수의 인수로 전달되어 특정 시점에 호출되는 함수이다.
-```js
-function processData(data, callback) {
-  const result = data * 2;
-  callback(result);
-}
-
-processData(5, function(result) {
-  console.log('결과:', result); // 결과: 10
-});
-```
-
-20.
-- 문법: `function` 키워드 vs 화살표(`=>`) 문법
-- 호이스팅: 함수 선언은 호이스팅되지만 화살표 함수는 변수 호이스팅 규칙을 따름
-- `this` 바인딩: 화살표 함수는 `this`를 바인딩하지 않음
-- 생성자 사용: 화살표 함수는 생성자로 사용할 수 없음
-
-## 실습 코딩 문제
-
-### 문제 1: 팩토리얼 계산
-
-**문제 설명**
-양의 정수 n을 입력받아 n!를 계산하는 factorial 함수를 작성하세요.
-팩토리얼이란 1부터 n까지의 모든 양의 정수의 곱입니다.
-
-**제한사항**
-- n은 0 이상 12 이하의 정수
-- 0! = 1로 정의
-
-**입출력 예**
-| n | result |
-|---|--------|
-| 5 | 120 |
-| 0 | 1 |
-| 3 | 6 |
-
-**입출력 예 설명**
-
-**입출력 예 #1**
-5! = 5 × 4 × 3 × 2 × 1 = 120
-
-**입출력 예 #2**
-0! = 1 (정의에 의해)
-
----
-
-### 문제 2: 클로저를 이용한 카운터
-
-**문제 설명**
-초기값을 받아서 호출할 때마다 1씩 증가하는 카운터 함수를 반환하는 createCounter 함수를 작성하세요.
-
-**제한사항**
-- 초기값은 0 이상의 정수
-- 반환되는 함수는 호출할 때마다 현재 값을 반환하고 1 증가
-
-**입출력 예**
-```javascript
-const counter1 = createCounter(0);
-console.log(counter1()); // 0
-console.log(counter1()); // 1
-console.log(counter1()); // 2
-
-const counter2 = createCounter(10);
-console.log(counter2()); // 10
-console.log(counter2()); // 11
-```
-
----
-
-### 문제 3: 함수 조합 (Function Composition)
-
-**문제 설명**
-두 개의 함수를 받아서 합성 함수를 반환하는 compose 함수를 작성하세요.
-compose(f, g)(x)는 f(g(x))와 같은 결과를 반환해야 합니다.
-
-**제한사항**
-- 입력 함수들은 모두 하나의 매개변수를 받는 함수
-- 반환되는 함수도 하나의 매개변수를 받음
-
-**입출력 예**
-```javascript
-const double = x => x * 2;
-const addOne = x => x + 1;
-const doubleThenAddOne = compose(addOne, double);
-
-console.log(doubleThenAddOne(3)); // 7 (3 * 2 + 1)
-console.log(doubleThenAddOne(5)); // 11 (5 * 2 + 1)
-```
-
-**입출력 예 설명**
-
-**입출력 예 #1**
-double(3) = 6, addOne(6) = 7
-
-**입출력 예 #2**
-double(5) = 10, addOne(10) = 11
-
----
-
-## 실습 코딩 정답
-
-### 문제 1: 팩토리얼 계산
-
-```js
-function factorial(n) {
-  if (n === 0 || n === 1) {
-    return 1;
-  }
-  
-  let result = 1;
-  for (let i = 2; i <= n; i++) {
-    result *= i;
-  }
-  return result;
-}
-
-// 또는 재귀 함수로
-function factorial(n) {
-  if (n === 0 || n === 1) {
-    return 1;
-  }
-  return n * factorial(n - 1);
-}
-
-// 해설:
-// - 0! = 1, 1! = 1로 기본 사례 처리
-// - 방법 1: 반복문으로 2부터 n까지 곱하기
-// - 방법 2: 재귀 호출로 n × (n-1)! 계산
-// - 재귀 방법은 우아하지만 큰 수에서는 스택 오버플로 가능성
-```
-
-### 문제 2: 클로저를 이용한 카운터
-
-```js
-function createCounter(initialValue) {
-  let count = initialValue;
-  
-  return function() {
-    const current = count;
-    count++;
-    return current;
-  };
-}
-
-// 또는 화살표 함수로
-const createCounter = (initialValue) => {
-  let count = initialValue;
-  return () => count++;
-};
-
-// 해설:
-// - 클로저를 이용하여 private 변수 count 유지
-// - 반환되는 함수가 외부 스코프의 count 변수에 접근
-// - 호출할 때마다 현재 값을 반환하고 1 증가
-// - 각 카운터는 독립적인 count 변수를 가짐
-```
-
-### 문제 3: 함수 조합 (Function Composition)
-
-```js
-function compose(f, g) {
-  return function(x) {
-    return f(g(x));
-  };
-}
-
-// 또는 화살표 함수로
-const compose = (f, g) => x => f(g(x));
-
-// 사용 예시
-const double = x => x * 2;
-const addOne = x => x + 1;
-const doubleThenAddOne = compose(addOne, double);
-
-console.log(doubleThenAddOne(3)); // 7 (double(3) = 6, addOne(6) = 7)
-console.log(doubleThenAddOne(5)); // 11 (double(5) = 10, addOne(10) = 11)
-
-// 해설:
-// - 함수 합성은 두 함수를 결합하여 새로운 함수를 만드는 것
-// - compose(f, g)(x)는 f(g(x))와 같음 (오른쪽부터 적용)
-// - 클로저를 이용하여 f, g 함수에 접근
-// - 함수형 프로그래밍의 핵심 개념 중 하나
+const square = x => x * x;
 ```

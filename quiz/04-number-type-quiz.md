@@ -48,17 +48,9 @@ d) 에러 발생
 
 ### 10. `1 / 0`의 결과를 쓰시오.
 
-## 서술형 문제
-
-### 11. JavaScript에서 정수와 실수를 구분하지 않는 이유와 이를 판별하는 방법을 설명하시오.
-
-### 12. 부동소수점과 고정소수점의 차이점을 설명하고, JavaScript가 부동소수점을 사용하는 이유를 서술하시오.
-
-### 13. BigInt가 도입된 이유와 일반 number 타입과의 차이점을 설명하시오.
-
 ## 코딩 문제
 
-### 14. 다음 연산의 결과를 예상하고 실제 결과를 확인하는 코드를 작성하시오.
+### 11. 다음 연산의 결과를 예상하고 실제 결과를 확인하는 코드를 작성하시오.
 ```js
 let x = 5;
 console.log(++x);
@@ -66,19 +58,22 @@ console.log(x++);
 console.log(x);
 ```
 
-### 15. 두 number 값이 같은지 비교하되, `NaN`의 경우도 올바르게 처리하는 함수를 작성하시오.
-
-### 16. 사용자로부터 문자열로 입력받은 숫자를 number 타입으로 변환하고, 유효하지 않은 경우 에러 메시지를 출력하는 코드를 작성하시오.
-
-## 응용 문제
-
-### 17. 다음 코드의 실행 결과를 예상하고 설명하시오.
+### 12. 다음 코드의 실행 결과를 쓰시오.
 ```js
-console.log(0.1 + 0.2 === 0.3);
-console.log(0.1 + 0.2);
+const a = 0.1;
+const b = 0.2;
+const result = a + b;
+console.log(result);
+console.log(result === 0.3);
 ```
 
-### 18. 금융 애플리케이션에서 소수점 계산 오차를 해결하기 위한 방법들을 제시하시오.
+### 13. 다음 코드에서 올바른 결과가 나오도록 빈 칸을 채우시오.
+```js
+const bigNumber = 9007199254740991n;
+const regularNumber = 42;
+// BigInt와 일반 숫자를 더하기 위해 변환
+const result = bigNumber + _______(regularNumber);
+```
 
 ---
 
@@ -98,15 +93,8 @@ console.log(0.1 + 0.2);
 9. `6`
 10. `Infinity`
 
-### 서술형 정답
-11. JavaScript는 모든 숫자를 IEEE 754 부동소수점 방식으로 처리하여 별도의 정수 타입을 두지 않는다. 정수 여부는 `Number.isInteger()` 메소드로 판별할 수 있다.
-
-12. 부동소수점은 소수점의 위치가 고정되지 않아 넓은 범위의 수를 표현할 수 있고, 고정소수점은 소수점 위치가 고정되어 있다. JavaScript는 계산 상의 효율성을 위해 부동소수점을 사용한다.
-
-13. BigInt는 기존 number 타입으로 표현할 수 없는 큰 정수를 정확하게 다루기 위해 도입되었다. number 타입과 달리 임의의 정밀도를 가지며, "bigint" 타입으로 구분된다.
-
 ### 코딩 정답
-14.
+11.
 ```js
 let x = 5;
 console.log(++x); // 6 (먼저 증가, 증가된 값 반환)
@@ -114,193 +102,17 @@ console.log(x++); // 6 (현재 값 반환 후 증가)
 console.log(x);   // 7 (최종 값)
 ```
 
-15.
+12.
 ```js
-function isEqual(a, b) {
-  if (Number.isNaN(a) && Number.isNaN(b)) {
-    return true;
-  }
-  return a === b;
-}
-// 또는 Object.is(a, b) 사용
+const a = 0.1;
+const b = 0.2;
+const result = a + b;
+console.log(result);        // 0.30000000000000004
+console.log(result === 0.3); // false
 ```
 
-16.
+13.
 ```js
-const input = prompt('숫자를 입력하세요');
-const num = parseInt(input);
-if (Number.isNaN(num)) {
-  console.log('유효하지 않은 숫자입니다.');
-} else {
-  console.log('입력된 숫자:', num);
-}
+const result = bigNumber + BigInt(regularNumber);
 ```
 
-### 응용 정답
-17.
-```js
-console.log(0.1 + 0.2 === 0.3); // false
-console.log(0.1 + 0.2); // 0.30000000000000004
-```
-부동소수점 표현 방식의 반올림 오차로 인해 0.3과 정확히 일치하지 않는다.
-
-18. 
-- 전용 라이브러리 사용 (decimal.js, big.js 등)
-- 정수로 변환하여 계산 후 다시 소수로 변환
-- 반올림 함수를 이용한 적절한 처리
-- BigInt 사용 (정수 계산의 경우)
-
-## 실습 코딩 문제
-
-### 문제 1: 자릿수 더하기
-
-**문제 설명**
-자연수 N이 주어지면, N의 각 자릿수의 합을 구해서 return 하는 solution 함수를 만들어 주세요.
-예를 들어 N = 123이면 1 + 2 + 3 = 6을 return 하면 됩니다.
-
-**제한사항**
-- N의 범위: 100,000,000 이하의 자연수
-
-**입출력 예**
-| N | answer |
-|---|--------|
-| 123 | 6 |
-| 987 | 24 |
-
-**입출력 예 설명**
-
-**입출력 예 #1**
-문제의 예시와 같습니다.
-
-**입출력 예 #2**
-9 + 8 + 7 = 24이므로 24를 return 하면 됩니다.
-
----
-
-### 문제 2: 정수 제곱근 판별
-
-**문제 설명**
-임의의 양의 정수 n에 대해, n이 어떤 양의 정수 x의 제곱인지 아닌지 판단하는 함수를 작성하세요.
-n이 양의 정수 x의 제곱이라면 x+1의 제곱을 리턴하고, n이 양의 정수 x의 제곱이 아니라면 -1을 리턴하세요.
-
-**제한사항**
-- n은 1이상, 50000000000000 이하인 양의 정수입니다.
-
-**입출력 예**
-| n | result |
-|---|--------|
-| 121 | 144 |
-| 3 | -1 |
-
-**입출력 예 설명**
-
-**입출력 예 #1**
-121은 11의 제곱이므로, (11+1)의 제곱인 144를 리턴합니다.
-
-**입출력 예 #2**
-3은 양의 정수의 제곱이 아니므로, -1을 리턴합니다.
-
----
-
-### 문제 3: 소수점 정확도 검사
-
-**문제 설명**
-두 개의 소수를 더한 결과가 예상 값과 정확히 일치하는지 확인하는 함수를 작성하세요.
-부동소수점 오차를 고려하여 작은 오차 범위 내에서는 같은 것으로 판단합니다.
-
-**제한사항**
-- 입력값은 0.0 이상 1.0 이하의 소수
-- 오차 허용 범위: 0.0000001
-
-**입출력 예**
-| a | b | expected | result |
-|---|---|----------|--------|
-| 0.1 | 0.2 | 0.3 | true |
-| 0.1 | 0.1 | 0.2 | true |
-| 0.7 | 0.1 | 0.9 | false |
-
----
-
-## 실습 코딩 정답
-
-### 문제 1: 자릿수 더하기
-
-```js
-function solution(n) {
-  return n.toString()
-    .split('')
-    .map(Number)
-    .reduce((sum, digit) => sum + digit, 0);
-}
-
-// 또는 더 간단한 방법
-function solution(n) {
-  let sum = 0;
-  while (n > 0) {
-    sum += n % 10; // 마지막 자릿수 추출
-    n = Math.floor(n / 10); // 마지막 자릿수 제거
-  }
-  return sum;
-}
-
-// 해설:
-// - 방법 1: 숫자를 문자열로 변환 후 각 자릿수를 분리하여 더함
-// - 방법 2: 나머지 연산과 나눗셈을 이용해 각 자릿수를 추출하여 더함
-// - 두 방법 모두 유효하며, 방법 2가 더 수학적 접근법
-```
-
-### 문제 2: 정수 제곱근 판별
-
-```js
-function solution(n) {
-  const sqrt = Math.sqrt(n);
-  
-  // 제곱근이 정수인지 확인
-  if (Number.isInteger(sqrt)) {
-    return (sqrt + 1) ** 2;
-  } else {
-    return -1;
-  }
-}
-
-// 또는 더 엄밀한 검사
-function solution(n) {
-  const sqrt = Math.sqrt(n);
-  const intSqrt = Math.floor(sqrt);
-  
-  // 정수 제곱근의 제곱이 n과 같은지 확인
-  if (intSqrt * intSqrt === n) {
-    return (intSqrt + 1) ** 2;
-  } else {
-    return -1;
-  }
-}
-
-// 해설:
-// - Math.sqrt()로 제곱근을 구하고 Number.isInteger()로 정수 여부 확인
-// - 또는 Math.floor()로 정수 부분만 추출하여 다시 제곱해서 원래 값과 비교
-// - 조건을 만족하면 (제곱근 + 1)의 제곱을 반환, 아니면 -1 반환
-```
-
-### 문제 3: 소수점 정확도 검사
-
-```js
-function solution(a, b, expected) {
-  const result = a + b;
-  const epsilon = 0.0000001; // 허용 오차
-  
-  return Math.abs(result - expected) < epsilon;
-}
-
-// 또는 Number.EPSILON 사용
-function solution(a, b, expected) {
-  const result = a + b;
-  return Math.abs(result - expected) < Number.EPSILON * 10;
-}
-
-// 해설:
-// - 부동소수점 연산의 오차를 고려하여 절댓값 차이로 비교
-// - Math.abs()로 절댓값 차이를 구하고 허용 오차보다 작으면 true
-// - Number.EPSILON은 JavaScript에서 가장 작은 부동소수점 단위
-// - 실제 계산 결과와 예상 값의 차이가 허용 범위 내에 있는지 확인
-```

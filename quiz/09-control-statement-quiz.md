@@ -60,52 +60,22 @@ while (i < 5) {
 
 ### 10. 조건문에서 여러 조건을 연결할 때 사용하는 논리 연산자는?
 
-## 서술형 문제
-
-### 11. `if...else if...else` 구문의 실행 순서와 조건 평가 방식을 설명하시오.
-
-### 12. `for` 루프의 세 부분(초기화, 조건, 증감)의 역할을 각각 설명하시오.
-
-### 13. `for...in`과 `for...of`의 차이점을 설명하고 각각의 사용 사례를 제시하시오.
 
 ## 코딩 문제
 
-### 14. 1부터 10까지의 숫자 중 짝수만 출력하는 `for` 루프를 작성하시오.
+### 11. 1부터 5까지 출력하는 `for` 루프를 작성하시오.
 
-### 15. 다음 요구사항에 따라 함수를 작성하시오.
-- 숫자를 입력받아 1부터 해당 숫자까지의 합을 반환
-- `while` 루프 사용
+### 12. 숫자가 짝수인지 홀수인지 판별하는 `if` 문을 작성하시오.
 
-### 16. 학점을 입력받아 등급을 반환하는 함수를 `switch` 문으로 작성하시오.
-- 90 이상: A
-- 80 이상: B  
-- 70 이상: C
-- 60 이상: D
-- 그 외: F
-
-### 17. 배열에서 특정 값을 찾아 인덱스를 반환하는 함수를 작성하시오. (찾지 못하면 -1 반환)
-
-## 응용 문제
-
-### 18. 다음 코드의 실행 결과를 예상하고 설명하시오.
+### 13. 다음 코드의 실행 결과를 쓰시오.
 ```js
-for (let i = 0; i < 5; i++) {
-  if (i === 2) {
+for (let i = 0; i < 3; i++) {
+  if (i === 1) {
     continue;
-  }
-  if (i === 4) {
-    break;
   }
   console.log(i);
 }
 ```
-
-### 19. 중첩된 루프에서 바깥쪽 루프를 종료하는 방법을 제시하시오.
-
-### 20. 다음 요구사항을 만족하는 코드를 작성하시오.
-- 사용자가 'quit'을 입력할 때까지 계속 입력받기
-- 입력받은 숫자들의 합계 출력
-- 숫자가 아닌 값은 무시
 
 ---
 
@@ -133,128 +103,25 @@ for (let i = 0; i < 5; i++) {
 
 10. `&&` (AND), `||` (OR)
 
-### 서술형 정답
-11. `if` 조건부터 순차적으로 평가하여 처음으로 `true`인 조건의 블록을 실행하고 나머지는 건너뛴다. 모든 조건이 `false`면 `else` 블록이 실행된다.
-
-12. 초기화: 루프 변수를 초기값으로 설정, 조건: 루프 계속 여부를 결정하는 boolean 표현식, 증감: 각 반복 후 루프 변수를 변경
-
-13. `for...in`은 객체의 열거 가능한 속성 이름을 반복하고, `for...of`는 이터러블 객체의 값을 반복한다. `for...in`은 객체 속성 순회, `for...of`는 배열이나 문자열 순회에 사용한다.
-
 ### 코딩 정답
-14.
+11.
 ```js
-for (let i = 1; i <= 10; i++) {
-  if (i % 2 === 0) {
-    console.log(i);
-  }
-}
-
-// 또는
-for (let i = 2; i <= 10; i += 2) {
+for (let i = 1; i <= 5; i++) {
   console.log(i);
 }
 ```
 
-15.
+12.
 ```js
-function sum(n) {
-  let total = 0;
-  let i = 1;
-  while (i <= n) {
-    total += i;
-    i++;
-  }
-  return total;
+if (number % 2 === 0) {
+  console.log('짝수');
+} else {
+  console.log('홀수');
 }
 ```
 
-16.
-```js
-function getGrade(score) {
-  switch (Math.floor(score / 10)) {
-    case 10:
-    case 9:
-      return 'A';
-    case 8:
-      return 'B';
-    case 7:
-      return 'C';
-    case 6:
-      return 'D';
-    default:
-      return 'F';
-  }
-}
-```
-
-17.
-```js
-function findIndex(arr, target) {
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i] === target) {
-      return i;
-    }
-  }
-  return -1;
-}
-```
-
-### 응용 정답
-18.
+13.
 ```
 0
-1
-3
-```
-i=0,1: 정상 출력, i=2: continue로 건너뜀, i=3: 정상 출력, i=4: break로 루프 종료
-
-19.
-```js
-// 방법 1: 레이블 사용
-outer: for (let i = 0; i < 3; i++) {
-  for (let j = 0; j < 3; j++) {
-    if (condition) break outer;
-  }
-}
-
-// 방법 2: 플래그 변수
-let shouldBreak = false;
-for (let i = 0; i < 3 && !shouldBreak; i++) {
-  for (let j = 0; j < 3; j++) {
-    if (condition) {
-      shouldBreak = true;
-      break;
-    }
-  }
-}
-
-// 방법 3: 함수로 분리
-function processMatrix() {
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 3; j++) {
-      if (condition) return;
-    }
-  }
-}
-```
-
-20.
-```js
-let sum = 0;
-let input;
-
-while (true) {
-  input = prompt('숫자를 입력하세요 (종료: quit)');
-  
-  if (input === 'quit') {
-    break;
-  }
-  
-  const num = parseFloat(input);
-  if (!isNaN(num)) {
-    sum += num;
-  }
-}
-
-console.log('합계:', sum);
+2
 ```
