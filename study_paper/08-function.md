@@ -41,39 +41,17 @@ let add = (a, b) => a + b;
 
 | 패턴 | 설명 | 예시 |
 |------|------|------|
-| **기본 매개변수** | 값이 없을 때 기본값 사용 | function greet(name = '손님') |
-| **나머지 매개변수** | 여러 인수를 배열로 받음 | function sum(...numbers) |
-| **구조 분해** | 객체나 배열을 분해하여 받음 | function({name, age}) |
+| **기본값 처리** | 값이 없을 때 기본값 사용 | if (name === undefined) name = '기본값' |
 
 ```javascript
-// 기본 매개변수 (ES6)
-function greet(name = '손님', message = '안녕하세요') {
-    return `${message}, ${name}님!`;
+// 기본 매개변수 사용
+function greet(name, message) {
+    if (name === undefined) name = '손님';
+    if (message === undefined) message = '안녕하세요';
+    return message + ', ' + name + '님!';
 }
 console.log(greet());           // '안녕하세요, 손님님!'
 console.log(greet('김철수'));    // '안녕하세요, 김철수님!'
-
-// 나머지 매개변수 (ES6)
-function sum(...numbers) {
-    return numbers.reduce((total, num) => total + num, 0);
-}
-console.log(sum(1, 2, 3, 4, 5)); // 15
-
-// 구조 분해 매개변수
-function introduce({name, age, city = '서울'}) {
-    return `${name}(${age}세, ${city})`;
-}
-let person = {name: '김철수', age: 30};
-console.log(introduce(person)); // '김철수(30세, 서울)'
-
-// arguments 객체 (화살표 함수에서는 사용 불가)
-function oldSum() {
-    let total = 0;
-    for (let i = 0; i < arguments.length; i++) {
-        total += arguments[i];
-    }
-    return total;
-}
 ```
 
 ## 3. 반환값
@@ -111,9 +89,11 @@ function getUserInfo() {
     };
 }
 
-// 구조 분해로 받기
-let [name, age] = getNameAndAge();
-let {name: userName, city} = getUserInfo();
+// 반환된 값 사용하기
+let nameAndAge = getNameAndAge();
+let userInfo = getUserInfo();
+console.log(nameAndAge[0]); // '김철수'
+console.log(userInfo.name); // '김철수'
 ```
 
 ## 4. 스코프와 스코프 체인

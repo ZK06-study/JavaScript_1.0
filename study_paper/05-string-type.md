@@ -146,82 +146,26 @@ console.log(text.trim());             // 'Hello World'
 // replace (첫 번째만 치환)
 console.log('hello world'.replace('l', 'x')); // 'hexlo world'
 
-// replaceAll (모든 문자 치환, ES2021)
-console.log('hello world'.replaceAll('l', 'x')); // 'hexxo worxd'
 
 // split
 let csv = 'apple,banana,orange';
 console.log(csv.split(','));          // ['apple', 'banana', 'orange']
 ```
 
-## 6. 정규식과 함께 사용
-
-| 메소드 | 설명 | 예시 |
-|--------|------|------|
-| **match()** | 패턴 매칭 | 'abc123'.match(/\d+/) |
-| **search()** | 패턴 검색 | 'abc123'.search(/\d/) |
-| **replace()** | 패턴 치환 | 'abc123'.replace(/\d/g, 'X') |
-
-```javascript
-let text = 'My phone number is 010-1234-5678';
-
-// 숫자만 추출
-console.log(text.match(/\d+/g));      // ['010', '1234', '5678']
-
-// 전화번호 패턴 검색
-console.log(text.search(/\d{3}-\d{4}-\d{4}/)); // 19
-
-// 숫자를 X로 치환
-console.log(text.replace(/\d/g, 'X')); // 'My phone number is XXX-XXXX-XXXX'
-```
-
-## 7. 문자열과 배열 변환
+## 6. 문자열과 배열 변환
 
 ```javascript
 // 문자열 → 배열
 let str = 'Hello';
-let arr1 = str.split('');     // ['H','e','l','l','o']
-let arr2 = Array.from(str);   // ['H','e','l','l','o']
-let arr3 = [...str];          // ['H','e','l','l','o'] (ES6)
+let arr = str.split('');     // ['H','e','l','l','o']
 
-// 배열 → 문자열
+// 배열 → 문자열  
 let fruits = ['apple', 'banana', 'orange'];
 let str1 = fruits.join();     // 'apple,banana,orange'
 let str2 = fruits.join(' ');  // 'apple banana orange'
-let str3 = fruits.join('');   // 'applebananaorange'
 ```
 
-## 8. 실용 예제
-
-```javascript
-// 이메일 유효성 검사
-function isValidEmail(email) {
-    return email.includes('@') && email.includes('.');
-}
-
-// 이름 형식 변환
-function formatName(fullName) {
-    return fullName.toLowerCase()
-                   .split(' ')
-                   .map(name => name.charAt(0).toUpperCase() + name.slice(1))
-                   .join(' ');
-}
-console.log(formatName('KIM CHUL SOO')); // 'Kim Chul Soo'
-
-// URL에서 파일명 추출
-function getFileName(url) {
-    return url.split('/').pop();
-}
-console.log(getFileName('https://example.com/images/photo.jpg')); // 'photo.jpg'
-
-// 문자열 뒤집기
-function reverseString(str) {
-    return str.split('').reverse().join('');
-}
-console.log(reverseString('Hello')); // 'olleH'
-```
-
-## 9. 학습 체크리스트
+## 7. 학습 체크리스트
 
 - [ ] 세 가지 문자열 생성 방법을 사용할 수 있다
 - [ ] 이스케이프 시퀀스를 활용할 수 있다
