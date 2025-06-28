@@ -1,6 +1,7 @@
-const name = "Alice";
-console.log(`Hello, ${name}!`);
 
-let age = 20;
-age += 1;
-console.log("Next year, age is", age);
+let a = 1;
+console.log(a--);
+console.log(a);
+
+
+a = 1;

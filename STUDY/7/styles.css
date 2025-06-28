@@ -1,0 +1,1130 @@
+/* ==================== CSS 변수 정의 ==================== */
+:root {
+    /* 다크 모드 컬러 팔레트 */
+    --bg-dark: #0a0a0a;
+    --bg-dark-secondary: #111111;
+    --bg-card: #1a1a1a;
+    --bg-card-hover: #242424;
+    --text-primary: #e8e8e8;
+    --text-secondary: #a8a8a8;
+    --text-muted: #6b7280;
+    --accent-blue: #3b82f6;
+    --accent-blue-light: #60a5fa;
+    --accent-purple: #8b5cf6;
+    --accent-green: #10b981;
+    --accent-red: #ef4444;
+    --accent-orange: #f59e0b;
+    --border-color: #2d2d2d;
+    --border-hover: #404040;
+    
+    /* null/undefined 특화 컬러 */
+    --undefined-color: #8b5cf6;
+    --undefined-bg: rgba(139, 92, 246, 0.1);
+    --null-color: #ef4444;
+    --null-bg: rgba(239, 68, 68, 0.1);
+    --comparison-bg: #1e293b;
+    
+    /* 스페이싱 */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    
+    /* 타이포그래피 */
+    --font-family-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-family-mono: 'JetBrains Mono', 'Monaco', 'Consolas', monospace;
+    
+    /* 그림자 */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+    
+    /* 전환 효과 */
+    --transition-fast: 0.15s ease-out;
+    --transition-normal: 0.3s ease-out;
+    --transition-slow: 0.5s ease-out;
+}
+
+/* ==================== 기본 스타일 ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family-sans);
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow: hidden;
+    user-select: none;
+}
+
+/* ==================== 헤더 스타일 ==================== */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: rgba(26, 26, 26, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--spacing-xl);
+    z-index: 1000;
+}
+
+.progress-container {
+    flex: 1;
+    height: 4px;
+    background: var(--bg-card);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-right: var(--spacing-lg);
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+    border-radius: 2px;
+    transition: width var(--transition-normal);
+    width: 0%;
+}
+
+.slide-counter {
+    font-family: var(--font-family-mono);
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* ==================== 프레젠테이션 컨테이너 ==================== */
+.presentation-container {
+    height: 100vh;
+    padding: 60px 0 80px;
+    overflow: hidden;
+}
+
+.slide {
+    display: none;
+    height: 100%;
+    padding: var(--spacing-2xl);
+    opacity: 0;
+    transform: translateX(30px);
+    transition: all var(--transition-slow);
+}
+
+.slide.active {
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.slide h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-xl);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.slide h2 i {
+    color: var(--accent-blue);
+}
+
+/* ==================== 제목 슬라이드 ==================== */
+.title-slide {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+}
+
+.title-slide h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-lg);
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+
+.title-slide h1 i {
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-2xl);
+    font-weight: 400;
+}
+
+.author-info {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+/* ==================== 카드 스타일 ==================== */
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-fast);
+}
+
+.card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.card h3 i {
+    color: var(--accent-blue);
+}
+
+.card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* ==================== 그리드 레이아웃 ==================== */
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    flex: 1;
+}
+
+.content-layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    flex: 1;
+}
+
+/* ==================== 코드 블록 ==================== */
+.code-block {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: var(--spacing-md);
+    margin: var(--spacing-md) 0;
+    overflow-x: auto;
+}
+
+.code-block pre {
+    margin: 0;
+    font-family: var(--font-family-mono);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #e6edf3;
+}
+
+.code-block code {
+    font-family: var(--font-family-mono);
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    color: inherit;
+}
+
+/* ==================== 문제 제기 슬라이드 ==================== */
+.problem-presentation {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    flex: 1;
+}
+
+.problem-card {
+    background: var(--bg-card);
+    border: 1px solid var(--accent-orange);
+    border-radius: 12px;
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-lg);
+}
+
+.problem-card h3 {
+    color: var(--accent-orange);
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.confusion-animation {
+    height: 200px;
+    background: var(--bg-card);
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* ==================== 시나리오 그리드 ==================== */
+.scenarios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+}
+
+.scenario-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: var(--spacing-lg);
+    transition: all var(--transition-fast);
+}
+
+.scenario-card:hover {
+    border-color: var(--accent-blue);
+    box-shadow: var(--shadow-lg);
+}
+
+.scenario-card h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+    color: var(--accent-blue);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.definition-card {
+    background: linear-gradient(135deg, var(--bg-card), var(--comparison-bg));
+    border: 1px solid var(--accent-blue);
+    border-radius: 12px;
+    padding: var(--spacing-xl);
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+}
+
+.definition-card h3 {
+    font-size: 1.5rem;
+    color: var(--accent-blue);
+    margin-bottom: var(--spacing-md);
+}
+
+/* ==================== 비교 레이아웃 ==================== */
+.comparison-layout {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: var(--spacing-xl);
+    align-items: start;
+    flex: 1;
+}
+
+.comparison-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.undefined-title {
+    color: var(--undefined-color) !important;
+    background: var(--undefined-bg);
+    padding: var(--spacing-md);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.null-title {
+    color: var(--null-color) !important;
+    background: var(--null-bg);
+    padding: var(--spacing-md);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.vs-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    background: var(--bg-card);
+    border: 2px solid var(--accent-blue);
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    align-self: center;
+}
+
+.comparison-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.feature {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.feature:last-child {
+    border-bottom: none;
+}
+
+.feature .label {
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.feature .value {
+    font-family: var(--font-family-mono);
+    color: var(--accent-blue);
+    font-weight: 500;
+}
+
+.comparison-animation {
+    grid-column: 1 / -1;
+    height: 150px;
+    background: var(--bg-card);
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    margin-top: var(--spacing-lg);
+}
+
+/* ==================== typeof 데모 ==================== */
+.typeof-demo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    flex: 1;
+}
+
+.typeof-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+.typeof-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: var(--spacing-xl);
+    text-align: center;
+    transition: all var(--transition-fast);
+}
+
+.typeof-card[data-type="undefined"] {
+    border-color: var(--undefined-color);
+    background: var(--undefined-bg);
+}
+
+.typeof-card[data-type="null"] {
+    border-color: var(--null-color);
+    background: var(--null-bg);
+}
+
+.typeof-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-lg);
+    color: var(--text-primary);
+}
+
+.result-arrow {
+    font-size: 2rem;
+    color: var(--accent-blue);
+    margin: var(--spacing-lg) 0;
+}
+
+.result-value {
+    font-family: var(--font-family-mono);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent-green);
+    background: var(--bg-dark);
+    padding: var(--spacing-md);
+    border-radius: 8px;
+    margin-bottom: var(--spacing-md);
+}
+
+.result-note {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.typeof-explanation {
+    margin-top: var(--spacing-lg);
+}
+
+/* ==================== 동등성 비교 데모 ==================== */
+.equality-demo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    flex: 1;
+}
+
+.comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--spacing-xl);
+}
+
+.equality-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: var(--spacing-lg);
+}
+
+.equality-section h3 {
+    font-size: 1.3rem;
+    margin-bottom: var(--spacing-lg);
+    color: var(--accent-blue);
+    text-align: center;
+}
+
+.comparison-results {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.comparison-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+    background: var(--bg-dark);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.comparison-item .code {
+    font-family: var(--font-family-mono);
+    color: var(--text-primary);
+}
+
+.comparison-item .result {
+    font-family: var(--font-family-mono);
+    font-weight: 600;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 4px;
+}
+
+.result.true {
+    color: var(--accent-green);
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.result.false {
+    color: var(--accent-red);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.equality-animation {
+    height: 150px;
+    background: var(--bg-card);
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+}
+
+.key-insight {
+    background: linear-gradient(135deg, var(--bg-card), var(--comparison-bg));
+    border: 1px solid var(--accent-blue);
+    border-radius: 12px;
+    padding: var(--spacing-lg);
+}
+
+.key-insight h4 {
+    color: var(--accent-blue);
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+/* ==================== null check 방법 ==================== */
+.nullcheck-methods {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    flex: 1;
+}
+
+.method-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: var(--spacing-lg);
+    transition: all var(--transition-fast);
+}
+
+.method-card.recommended {
+    border-color: var(--accent-green);
+    background: rgba(16, 185, 129, 0.05);
+}
+
+.method-card.modern {
+    border-color: var(--accent-purple);
+    background: rgba(139, 92, 246, 0.05);
+}
+
+.method-card h3 {
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.method-card.recommended h3 {
+    color: var(--accent-green);
+}
+
+.method-card.modern h3 {
+    color: var(--accent-purple);
+}
+
+.benefit {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-top: var(--spacing-sm);
+}
+
+.nullcheck-flowchart {
+    height: 200px;
+    background: var(--bg-card);
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    margin-top: var(--spacing-lg);
+}
+
+/* ==================== 권장사항 ==================== */
+.recommendations {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--spacing-xl);
+    flex: 1;
+}
+
+.recommendation-card {
+    border-radius: 12px;
+    padding: var(--spacing-xl);
+    transition: all var(--transition-fast);
+}
+
+.recommendation-card.good {
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px solid var(--accent-green);
+}
+
+.recommendation-card.bad {
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px solid var(--accent-red);
+}
+
+.recommendation-card h3 {
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.recommendation-card.good h3 {
+    color: var(--accent-green);
+}
+
+.recommendation-card.bad h3 {
+    color: var(--accent-red);
+}
+
+.recommendation-card ul {
+    list-style: none;
+    margin-bottom: var(--spacing-lg);
+}
+
+.recommendation-card li {
+    padding: var(--spacing-sm) 0;
+    display: flex;
+    align-items: start;
+    gap: var(--spacing-sm);
+}
+
+.recommendation-card li::before {
+    content: '•';
+    color: var(--accent-blue);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* ==================== Before & After 개선 ==================== */
+.improvement-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--spacing-xl);
+    flex: 1;
+}
+
+.improvement-section {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: var(--spacing-lg);
+    border: 1px solid var(--border-color);
+}
+
+.before-title {
+    color: var(--accent-red) !important;
+    background: rgba(239, 68, 68, 0.1);
+    padding: var(--spacing-md);
+    border-radius: 8px;
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
+}
+
+.after-title {
+    color: var(--accent-green) !important;
+    background: rgba(16, 185, 129, 0.1);
+    padding: var(--spacing-md);
+    border-radius: 8px;
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
+}
+
+.improvement-benefits {
+    grid-column: 1 / -1;
+    background: var(--bg-card);
+    border: 1px solid var(--accent-blue);
+    border-radius: 12px;
+    padding: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+}
+
+.improvement-benefits h4 {
+    color: var(--accent-blue);
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.improvement-benefits ul {
+    list-style: none;
+}
+
+.improvement-benefits li {
+    padding: var(--spacing-sm) 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.improvement-benefits li::before {
+    content: '✓';
+    color: var(--accent-green);
+    font-weight: bold;
+}
+
+/* ==================== 실습 문제 ==================== */
+.practice-problems {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    flex: 1;
+}
+
+.problem-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: var(--spacing-xl);
+    transition: all var(--transition-fast);
+}
+
+.problem-card:hover {
+    border-color: var(--accent-blue);
+    box-shadow: var(--shadow-lg);
+}
+
+.answer-section {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background: rgba(59, 130, 246, 0.05);
+    border: 1px solid var(--accent-blue);
+    border-radius: 8px;
+}
+
+.answer-section h4 {
+    color: var(--accent-blue);
+    margin-bottom: var(--spacing-md);
+}
+
+.show-answer-btn {
+    margin-top: var(--spacing-md);
+}
+
+/* ==================== 정리 및 체크리스트 ==================== */
+.summary-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-xl);
+    flex: 1;
+}
+
+.key-points {
+    background: var(--bg-card);
+    border: 1px solid var(--accent-blue);
+    border-radius: 12px;
+    padding: var(--spacing-xl);
+}
+
+.key-points h3 {
+    color: var(--accent-blue);
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.key-list {
+    list-style: none;
+}
+
+.key-list li {
+    padding: var(--spacing-md) 0;
+    display: flex;
+    align-items: start;
+    gap: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.key-list li:last-child {
+    border-bottom: none;
+}
+
+.key-list li::before {
+    content: '▶';
+    color: var(--accent-blue);
+    font-size: 0.8rem;
+    margin-top: 0.2rem;
+}
+
+.checklist {
+    background: var(--bg-card);
+    border: 1px solid var(--accent-green);
+    border-radius: 12px;
+    padding: var(--spacing-xl);
+}
+
+.checklist h3 {
+    color: var(--accent-green);
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.checklist-items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.checklist-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    border-radius: 8px;
+    transition: background-color var(--transition-fast);
+}
+
+.checklist-item:hover {
+    background: var(--bg-card-hover);
+}
+
+.checklist-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--accent-green);
+}
+
+.checklist-item span {
+    flex: 1;
+    color: var(--text-secondary);
+    transition: color var(--transition-fast);
+}
+
+.checklist-item input[type="checkbox"]:checked + span {
+    color: var(--text-primary);
+    text-decoration: line-through;
+}
+
+.final-message {
+    grid-column: 1 / -1;
+    margin-top: var(--spacing-lg);
+}
+
+.final-message .card {
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+    color: white;
+    text-align: center;
+    padding: var(--spacing-xl);
+}
+
+.final-message h4 {
+    color: white;
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+/* ==================== 네비게이션 ==================== */
+.navigation {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: rgba(26, 26, 26, 0.95);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--spacing-xl);
+    z-index: 1000;
+}
+
+.nav-button {
+    background: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: 8px;
+    font-family: var(--font-family-sans);
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    transition: all var(--transition-fast);
+    font-size: 0.9rem;
+}
+
+.nav-button:hover {
+    background: var(--accent-blue-light);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.nav-button:disabled {
+    background: var(--text-muted);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.slide-dots {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.slide-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--border-color);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.slide-dot.active {
+    background: var(--accent-blue);
+    transform: scale(1.2);
+}
+
+.slide-dot:hover {
+    background: var(--accent-blue-light);
+}
+
+/* ==================== 반응형 디자인 ==================== */
+@media (max-width: 768px) {
+    .slide {
+        padding: var(--spacing-lg);
+    }
+    
+    .slide h2 {
+        font-size: 2rem;
+    }
+    
+    .title-slide h1 {
+        font-size: 2.5rem;
+    }
+    
+    .comparison-layout {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+    
+    .vs-divider {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+        justify-self: center;
+    }
+    
+    .header {
+        padding: 0 var(--spacing-lg);
+    }
+    
+    .navigation {
+        padding: 0 var(--spacing-lg);
+    }
+    
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .typeof-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .comparison-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .recommendations {
+        grid-template-columns: 1fr;
+    }
+    
+    .improvement-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .summary-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==================== 애니메이션 ==================== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-slide-in-left {
+    animation: slideInLeft 0.6s ease-out;
+}
+
+.animate-slide-in-right {
+    animation: slideInRight 0.6s ease-out;
+}
+
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
+
+/* ==================== 스크롤바 스타일 ==================== */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--border-hover);
+} 

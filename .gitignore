@@ -145,4 +145,7 @@ test-files/
 
 # 학습자 작업 파일 (선택적으로 제외)
 # student-work/
-# exercises/completed/ 
+# exercises/completed/
+
+# 대본 파일 제외
+*대본* 

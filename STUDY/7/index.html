@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript null과 undefined - 학습 프레젠테이션</title>
+    
+    <!-- 폰트 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- 아이콘 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 스타일 -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 상단 네비게이션 -->
+    <header class="header">
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">13</span>
+        </div>
+    </header>
+
+    <!-- 메인 프레젠테이션 영역 -->
+    <main class="presentation-container">
+        <!-- 슬라이드 1: 제목 -->
+        <section class="slide active" data-slide="1">
+            <div class="title-slide">
+                <h1><i class="fas fa-question-circle"></i> JavaScript null과 undefined</h1>
+                <p class="subtitle">"없음"을 나타내는 두 가지 값의 차이와 활용</p>
+                <div class="author-info">
+                    <p>Programming Fundamentals</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 2: 학습 목표 -->
+        <section class="slide" data-slide="2">
+            <h2><i class="fas fa-bullseye"></i> 학습 목표</h2>
+            <div class="content-grid">
+                <div class="card">
+                    <h3><i class="fas fa-search"></i> 차이점 이해</h3>
+                    <p>null과 undefined의 근본적인 차이점 파악하기</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-code"></i> 사용 시나리오</h3>
+                    <p>각각이 언제 사용되는지 구체적 상황 학습하기</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-balance-scale"></i> 비교 연산</h3>
+                    <p>== 와 === 연산자의 차이점 이해하기</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-shield-alt"></i> null check</h3>
+                    <p>안전한 null 체크 방법 습득하기</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 3: 문제 제기 -->
+        <section class="slide" data-slide="3">
+            <h2><i class="fas fa-exclamation-triangle"></i> 왜 "없음"을 나타내는 값이 두 개일까?</h2>
+            <div class="problem-presentation">
+                <div class="problem-card">
+                    <h3><i class="fas fa-user-edit"></i> 개발자의 고민</h3>
+                    <div class="code-block">
+                        <pre><code>let name;        // 아직 정하지 않음
+let age = null;  // 의도적으로 비워둠
+
+// 둘 다 "없음"인데... 무슨 차이가 있지?</code></pre>
+                    </div>
+                    <p>같은 "없음"인데 표현 방법이 다른 이유는?</p>
+                </div>
+                <div class="confusion-animation" id="confusionDemo">
+                    <!-- 혼란 애니메이션 영역 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 4: undefined 소개 -->
+        <section class="slide" data-slide="4">
+            <h2><i class="fas fa-ghost"></i> undefined: "아직 정해지지 않음"</h2>
+            <div class="content-layout">
+                <div class="definition-card">
+                    <h3>JavaScript가 자동으로 부여하는 값</h3>
+                    <p>개발자가 명시적으로 할당하지 않은 상태</p>
+                </div>
+                <div class="scenarios-grid">
+                    <div class="scenario-card">
+                        <h4><i class="fas fa-variable"></i> 선언만 된 변수</h4>
+                        <div class="code-block">
+                            <pre><code>let name;
+console.log(name); // undefined</code></pre>
+                        </div>
+                    </div>
+                    <div class="scenario-card">
+                        <h4><i class="fas fa-cube"></i> 없는 객체 속성</h4>
+                        <div class="code-block">
+                            <pre><code>const obj = {};
+console.log(obj.prop); // undefined</code></pre>
+                        </div>
+                    </div>
+                    <div class="scenario-card">
+                        <h4><i class="fas fa-return"></i> 반환값 없는 함수</h4>
+                        <div class="code-block">
+                            <pre><code>function hello() {
+  console.log('hi');
+}
+console.log(hello()); // undefined</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 5: null 소개 -->
+        <section class="slide" data-slide="5">
+            <h2><i class="fas fa-times-circle"></i> null: "의도적으로 비워둠"</h2>
+            <div class="content-layout">
+                <div class="definition-card">
+                    <h3>개발자가 명시적으로 할당하는 값</h3>
+                    <p>"여기에는 의도적으로 아무것도 없다"는 의미</p>
+                </div>
+                <div class="scenarios-grid">
+                    <div class="scenario-card">
+                        <h4><i class="fas fa-user-slash"></i> 의도적 초기화</h4>
+                        <div class="code-block">
+                            <pre><code>let currentUser = null;
+// "현재 로그인한 사용자 없음"</code></pre>
+                        </div>
+                    </div>
+                    <div class="scenario-card">
+                        <h4><i class="fas fa-database"></i> 데이터베이스 NULL</h4>
+                        <div class="code-block">
+                            <pre><code>const user = {
+  name: '김철수',
+  middleName: null  // 중간 이름 없음
+};</code></pre>
+                        </div>
+                    </div>
+                    <div class="scenario-card">
+                        <h4><i class="fas fa-refresh"></i> 초기화/리셋</h4>
+                        <div class="code-block">
+                            <pre><code>let selectedItem = getItem();
+// 선택 해제
+selectedItem = null;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 6: 핵심 차이점 비교 -->
+        <section class="slide" data-slide="6">
+            <h2><i class="fas fa-not-equal"></i> 핵심 차이점 비교</h2>
+            <div class="comparison-layout">
+                <div class="comparison-section">
+                    <h3 class="undefined-title"><i class="fas fa-ghost"></i> undefined</h3>
+                    <div class="comparison-card">
+                        <div class="feature">
+                            <span class="label">할당 주체:</span>
+                            <span class="value">JavaScript 엔진</span>
+                        </div>
+                        <div class="feature">
+                            <span class="label">의미:</span>
+                            <span class="value">아직 정해지지 않음</span>
+                        </div>
+                        <div class="feature">
+                            <span class="label">타입:</span>
+                            <span class="value">'undefined'</span>
+                        </div>
+                        <div class="feature">
+                            <span class="label">권장 사용:</span>
+                            <span class="value">직접 할당 금지</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="vs-divider">VS</div>
+                <div class="comparison-section">
+                    <h3 class="null-title"><i class="fas fa-times-circle"></i> null</h3>
+                    <div class="comparison-card">
+                        <div class="feature">
+                            <span class="label">할당 주체:</span>
+                            <span class="value">개발자</span>
+                        </div>
+                        <div class="feature">
+                            <span class="label">의미:</span>
+                            <span class="value">의도적으로 비어있음</span>
+                        </div>
+                        <div class="feature">
+                            <span class="label">타입:</span>
+                            <span class="value">'object' (버그)</span>
+                        </div>
+                        <div class="feature">
+                            <span class="label">권장 사용:</span>
+                            <span class="value">명시적 "없음" 표현</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="comparison-animation" id="comparisonDemo">
+                <!-- 비교 애니메이션 영역 -->
+            </div>
+        </section>
+
+        <!-- 슬라이드 7: typeof 연산자 결과 -->
+        <section class="slide" data-slide="7">
+            <h2><i class="fas fa-search-plus"></i> typeof 연산자로 확인하기</h2>
+            <div class="typeof-demo">
+                <div class="typeof-cards">
+                    <div class="typeof-card" data-type="undefined">
+                        <h3>undefined</h3>
+                        <div class="code-block">
+                            <pre><code>typeof undefined</code></pre>
+                        </div>
+                        <div class="result-arrow">↓</div>
+                        <div class="result-value">"undefined"</div>
+                        <p class="result-note">예상 가능한 결과</p>
+                    </div>
+                    <div class="typeof-card" data-type="null">
+                        <h3>null</h3>
+                        <div class="code-block">
+                            <pre><code>typeof null</code></pre>
+                        </div>
+                        <div class="result-arrow">↓</div>
+                        <div class="result-value">"object"</div>
+                        <p class="result-note">JavaScript의 유명한 버그!</p>
+                    </div>
+                </div>
+                <div class="typeof-explanation">
+                    <div class="card">
+                        <h4><i class="fas fa-bug"></i> 왜 null의 typeof가 'object'일까?</h4>
+                        <p>JavaScript 초기 설계의 실수로, 하위 호환성을 위해 수정되지 않았습니다.</p>
+                        <div class="code-block">
+                            <pre><code>// 올바른 null 체크 방법
+value === null  // ✅ 정확
+typeof value === 'object' && value === null  // ❌ 복잡</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 8: 동등성 비교 (== vs ===) -->
+        <section class="slide" data-slide="8">
+            <h2><i class="fas fa-balance-scale"></i> 동등성 비교: == vs ===</h2>
+            <div class="equality-demo">
+                <div class="comparison-grid">
+                    <div class="equality-section">
+                        <h3>느슨한 비교 (==)</h3>
+                        <div class="comparison-results">
+                            <div class="comparison-item">
+                                <span class="code">null == undefined</span>
+                                <span class="result true">true</span>
+                            </div>
+                            <div class="comparison-item">
+                                <span class="code">null == 0</span>
+                                <span class="result false">false</span>
+                            </div>
+                            <div class="comparison-item">
+                                <span class="code">null == ''</span>
+                                <span class="result false">false</span>
+                            </div>
+                            <div class="comparison-item">
+                                <span class="code">null == false</span>
+                                <span class="result false">false</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="equality-section">
+                        <h3>엄격한 비교 (===)</h3>
+                        <div class="comparison-results">
+                            <div class="comparison-item">
+                                <span class="code">null === undefined</span>
+                                <span class="result false">false</span>
+                            </div>
+                            <div class="comparison-item">
+                                <span class="code">null === null</span>
+                                <span class="result true">true</span>
+                            </div>
+                            <div class="comparison-item">
+                                <span class="code">undefined === undefined</span>
+                                <span class="result true">true</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="equality-animation" id="equalityDemo">
+                    <!-- 동등성 비교 애니메이션 -->
+                </div>
+                <div class="key-insight">
+                    <h4><i class="fas fa-lightbulb"></i> 핵심 포인트</h4>
+                    <p><code>==</code> 연산자는 null과 undefined를 서로 같다고 판단하지만, <code>===</code>는 다르다고 판단합니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 9: null check 방법 -->
+        <section class="slide" data-slide="9">
+            <h2><i class="fas fa-shield-alt"></i> 안전한 null check 방법</h2>
+            <div class="nullcheck-methods">
+                <div class="method-card recommended">
+                    <h3><i class="fas fa-star"></i> 권장 방법 1: == 활용</h3>
+                    <div class="code-block">
+                        <pre><code>if (value != null) {
+  // value가 null도 undefined도 아닐 때
+  console.log('값이 존재합니다:', value);
+}</code></pre>
+                    </div>
+                    <p class="benefit">null과 undefined를 한 번에 체크</p>
+                </div>
+                <div class="method-card">
+                    <h3><i class="fas fa-tools"></i> 엄격한 방법: === 활용</h3>
+                    <div class="code-block">
+                        <pre><code>if (value !== null && value !== undefined) {
+  console.log('값이 존재합니다:', value);
+}</code></pre>
+                    </div>
+                    <p class="benefit">명확하지만 길어짐</p>
+                </div>
+                <div class="method-card modern">
+                    <h3><i class="fas fa-rocket"></i> 현대적 방법: nullish coalescing</h3>
+                    <div class="code-block">
+                        <pre><code>const result = value ?? '기본값';
+// value가 null이나 undefined면 '기본값' 사용</code></pre>
+                    </div>
+                    <p class="benefit">ES2020의 새로운 연산자</p>
+                </div>
+            </div>
+            <div class="nullcheck-flowchart" id="nullcheckDemo">
+                <!-- null check 플로우차트 애니메이션 -->
+            </div>
+        </section>
+
+        <!-- 슬라이드 10: 실무 권장사항 -->
+        <section class="slide" data-slide="10">
+            <h2><i class="fas fa-thumbs-up"></i> 실무 권장사항</h2>
+            <div class="recommendations">
+                <div class="recommendation-card good">
+                    <h3><i class="fas fa-check-circle"></i> 권장하는 방법</h3>
+                    <ul>
+                        <li>명시적 "없음" 표현 시 <code>null</code> 사용</li>
+                        <li>null check는 <code>!= null</code> 사용</li>
+                        <li><code>undefined</code>를 직접 할당하지 않기</li>
+                        <li>객체 속성의 부재는 아예 정의하지 않기</li>
+                    </ul>
+                    <div class="code-block">
+                        <pre><code>// ✅ 좋은 예
+let currentUser = null;
+const user = { name: 'Kim' }; // address 속성 없음
+
+if (currentUser != null) {
+  showProfile(currentUser);}</code></pre>
+                    </div>
+                </div>
+                <div class="recommendation-card bad">
+                    <h3><i class="fas fa-times-circle"></i> 피해야 할 방법</h3>
+                    <ul>
+                        <li><code>undefined</code>를 직접 할당하기</li>
+                        <li>null 체크 시 <code>typeof</code> 사용하기</li>
+                        <li>불필요한 속성에 <code>null</code> 할당하기</li>
+                    </ul>
+                    <div class="code-block">
+                        <pre><code>// ❌ 나쁜 예
+let name = undefined; // 의미 모호
+const user = { 
+  name: 'Kim', 
+  address: undefined // 불필요
+};
+
+if (typeof value === 'object' && value === null) {
+  // 복잡한 null 체크
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 11: Before & After 예제 -->
+        <section class="slide" data-slide="11">
+            <h2><i class="fas fa-magic"></i> Before & After: 코드 개선하기</h2>
+            <div class="improvement-layout">
+                <div class="improvement-section">
+                    <h3 class="before-title"><i class="fas fa-times-circle"></i> Before (개선 전)</h3>
+                    <div class="code-block">
+                        <pre><code>// 혼란스러운 코드
+let userName = undefined;
+let userAge = undefined;
+let userEmail = undefined;
+
+const userData = {
+  name: userName,
+  age: userAge, 
+  email: userEmail,
+  phone: undefined
+};
+
+// 복잡한 체크
+if (typeof userData.name !== 'undefined' && 
+    userData.name !== null) {
+  displayName(userData.name);
+}</code></pre>
+                    </div>
+                </div>
+                <div class="improvement-section">
+                    <h3 class="after-title"><i class="fas fa-check-circle"></i> After (개선 후)</h3>
+                    <div class="code-block">
+                        <pre><code>// 명확한 코드
+let userName = null;
+let userAge = null;  
+let userEmail = null;
+
+const userData = {
+  name: userName,
+  age: userAge,
+  email: userEmail
+  // phone 속성은 아예 제외
+};
+
+// 간단한 체크
+if (userData.name != null) {
+  displayName(userData.name);
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+            <div class="improvement-benefits">
+                <h4><i class="fas fa-star"></i> 개선된 점</h4>
+                <ul>
+                    <li>의도가 명확해짐 (null = 의도적 빈 값)</li>
+                    <li>불필요한 속성 제거</li>
+                    <li>간단한 null check 사용</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 슬라이드 12: 실습 문제 -->
+        <section class="slide" data-slide="12">
+            <h2><i class="fas fa-keyboard"></i> 실습 문제</h2>
+            <div class="practice-problems">
+                <div class="problem-card">
+                    <h3>문제 1: 타입 확인하기</h3>
+                    <p>다음 코드의 출력 결과를 예상해보세요.</p>
+                    <div class="code-block">
+                        <pre><code>let a;
+let b = null;
+
+console.log(typeof a);     // ?
+console.log(typeof b);     // ?
+console.log(a == b);       // ?
+console.log(a === b);      // ?</code></pre>
+                    </div>
+                    <button class="show-answer-btn nav-button">답 확인하기</button>
+                    <div class="answer-section" style="display: none;">
+                        <h4>💡 정답:</h4>
+                        <div class="code-block">
+                            <pre><code>'undefined'  // typeof a
+'object'     // typeof b
+true         // a == b
+false        // a === b</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="problem-card">
+                    <h3>문제 2: 안전한 함수 만들기</h3>
+                    <p>사용자 정보를 안전하게 출력하는 함수를 완성하세요.</p>
+                    <div class="code-block">
+                        <pre><code>function printUserInfo(user) {
+  // user가 null/undefined이면 "정보 없음" 출력
+  // 아니면 user.name을 출력하는 코드 작성
+}
+
+printUserInfo(null);           // "정보 없음"
+printUserInfo({name: '김철수'}); // "김철수"</code></pre>
+                    </div>
+                    <button class="show-answer-btn nav-button">답 확인하기</button>
+                    <div class="answer-section" style="display: none;">
+                        <h4>💡 정답:</h4>
+                        <div class="code-block">
+                            <pre><code>function printUserInfo(user) {
+  if (user != null) {
+    console.log(user.name);
+  } else {
+    console.log("정보 없음");
+  }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="problem-card">
+                    <h3>문제 3: 객체 속성 처리</h3>
+                    <p>다음 상황에서 적절한 값을 선택하세요.</p>
+                    <div class="code-block">
+                        <pre><code>const product = {
+  name: '스마트폰',
+  price: 500000,
+  discount: ???,     // 할인이 없을 때
+  description: ???   // 설명이 아직 없을 때
+};</code></pre>
+                    </div>
+                    <button class="show-answer-btn nav-button">답 확인하기</button>
+                    <div class="answer-section" style="display: none;">
+                        <h4>💡 정답:</h4>
+                        <div class="code-block">
+                            <pre><code>const product = {
+  name: '스마트폰',
+  price: 500000,
+  discount: null,        // 의도적으로 할인 없음
+  description: null      // 의도적으로 설명 없음
+  // 또는 아예 속성을 정의하지 않는 방법도 가능
+};</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 13: 정리 및 체크리스트 -->
+        <section class="slide" data-slide="13">
+            <h2><i class="fas fa-check-square"></i> 학습 정리 및 체크리스트</h2>
+            <div class="summary-layout">
+                <div class="key-points">
+                    <h3><i class="fas fa-key"></i> 핵심 포인트</h3>
+                    <ul class="key-list">
+                        <li><code>undefined</code>: JavaScript가 자동으로 부여</li>
+                        <li><code>null</code>: 개발자가 의도적으로 할당</li>
+                        <li><code>typeof null</code>은 'object' (버그)</li>
+                        <li><code>==</code>로 간편한 null check 가능</li>
+                        <li>실무에서는 <code>null</code> 사용 권장</li>
+                    </ul>
+                </div>
+                <div class="checklist">
+                    <h3><i class="fas fa-tasks"></i> 학습 체크리스트</h3>
+                    <div class="checklist-items">
+                        <label class="checklist-item">
+                            <input type="checkbox">
+                            <span>null과 undefined의 차이점을 설명할 수 있다</span>
+                        </label>
+                        <label class="checklist-item">
+                            <input type="checkbox">
+                            <span>typeof 연산자의 결과를 예측할 수 있다</span>
+                        </label>
+                        <label class="checklist-item">
+                            <input type="checkbox">
+                            <span>== 와 === 연산자의 차이를 이해한다</span>
+                        </label>
+                        <label class="checklist-item">
+                            <input type="checkbox">
+                            <span>안전한 null check 방법을 사용할 수 있다</span>
+                        </label>
+                        <label class="checklist-item">
+                            <input type="checkbox">
+                            <span>실무에서 적절한 값 선택을 할 수 있다</span>
+                        </label>
+                        <label class="checklist-item">
+                            <input type="checkbox">
+                            <span>undefined를 직접 할당하지 않는 이유를 안다</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="final-message">
+                <div class="card">
+                    <h4><i class="fas fa-graduation-cap"></i> 수고하셨습니다!</h4>
+                    <p>null과 undefined의 차이를 이해하면 더 명확하고 안전한 JavaScript 코드를 작성할 수 있습니다.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 하단 네비게이션 -->
+    <footer class="navigation">
+        <button class="nav-button" id="prevButton">
+            <i class="fas fa-chevron-left"></i> 이전
+        </button>
+        <div class="slide-dots" id="slideDots">
+            <!-- 슬라이드 점들 -->
+        </div>
+        <button class="nav-button" id="nextButton">
+            다음 <i class="fas fa-chevron-right"></i>
+        </button>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 

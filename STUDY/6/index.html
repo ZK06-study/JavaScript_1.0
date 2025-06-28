@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Boolean 타입</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Slide Counter -->
+    <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">10</span>
+    </div>
+
+    <!-- Main Presentation Container -->
+    <div class="presentation-container">
+        
+        <!-- Slide 1: 제목 슬라이드 -->
+        <div class="slide active" id="slide-1">
+            <div class="slide-content title-slide">
+                <div class="title-icon">
+                    <i class="fas fa-toggle-on"></i>
+                </div>
+                <h1>JavaScript Boolean 타입</h1>
+                <h2>참과 거짓, 논리의 세계</h2>
+                <div class="learning-objectives">
+                    <h3><i class="fas fa-bullseye"></i> 학습 목표</h3>
+                    <ul>
+                        <li>Boolean 타입의 기본 개념 이해</li>
+                        <li>논리 연산자의 활용법 습득</li>
+                        <li>Truthy/Falsy 개념 파악</li>
+                        <li>실무에서의 Boolean 활용법 학습</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: 문제 제기 -->
+        <div class="slide" id="slide-2">
+            <div class="slide-content">
+                <h1><i class="fas fa-question-circle"></i> 왜 Boolean이 필요할까?</h1>
+                <div class="problem-scenario">
+                    <div class="scenario-card">
+                        <h3>상황: 로그인 시스템</h3>
+                        <div class="code-block">
+                            <pre><code>if (사용자가_로그인했다) {
+    대시보드_보여주기();
+} else {
+    로그인_페이지_보여주기();
+}</code></pre>
+                        </div>
+                    </div>
+                    <div class="scenario-card">
+                        <h3>상황: 폼 검증</h3>
+                        <div class="code-block">
+                            <pre><code>if (이메일이_올바르다 && 비밀번호가_유효하다) {
+    회원가입_처리();
+} else {
+                        error_메시지_표시();
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="insight-box">
+                    <p><strong>프로그래밍의 핵심:</strong> 조건에 따른 분기 처리</p>
+                    <p>Boolean은 이러한 의사결정을 가능하게 하는 기본 타입입니다.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Boolean 기본 개념 -->
+        <div class="slide" id="slide-3">
+            <div class="slide-content">
+                <h1><i class="fas fa-lightbulb"></i> Boolean 기본 개념</h1>
+                <div class="concept-container">
+                    <div class="boolean-demo" id="booleanDemo">
+                        <div class="boolean-value true-value" data-value="true">
+                            <div class="lightbulb on">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <h3>true</h3>
+                            <p>참, 켜짐, 1</p>
+                        </div>
+                        <div class="boolean-value false-value" data-value="false">
+                            <div class="lightbulb off">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <h3>false</h3>
+                            <p>거짓, 꺼짐, 0</p>
+                        </div>
+                    </div>
+                    <div class="code-example">
+                        <h3>코드 예시</h3>
+                        <div class="code-block">
+                            <pre><code>// Boolean 리터럴
+let isLoggedIn = true;
+let isGuest = false;
+
+// typeof 확인
+console.log(typeof true);  // 'boolean'
+console.log(typeof false); // 'boolean'</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: 논리 연산자 소개 -->
+        <div class="slide" id="slide-4">
+            <div class="slide-content">
+                <h1><i class="fas fa-calculator"></i> 논리 연산자</h1>
+                <div class="operators-grid">
+                    <div class="operator-card" data-operator="and">
+                        <div class="operator-symbol">&&</div>
+                        <h3>논리곱 (AND)</h3>
+                        <p>모두 참일 때만 참</p>
+                        <div class="example">true && true → true</div>
+                    </div>
+                    <div class="operator-card" data-operator="or">
+                        <div class="operator-symbol">||</div>
+                        <h3>논리합 (OR)</h3>
+                        <p>하나라도 참이면 참</p>
+                        <div class="example">true || false → true</div>
+                    </div>
+                    <div class="operator-card" data-operator="not">
+                        <div class="operator-symbol">!</div>
+                        <h3>논리부정 (NOT)</h3>
+                        <p>참과 거짓을 뒤바꿈</p>
+                        <div class="example">!true → false</div>
+                    </div>
+                </div>
+                <div class="real-world-example">
+                    <h3>실제 활용 예시</h3>
+                    <div class="code-block">
+                        <pre><code>// 접근 권한 확인
+if (isLoggedIn && hasPermission) {
+    showAdminPanel();
+}
+
+// 기본값 설정
+let userName = inputName || 'Guest';</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: 진리표 인터랙티브 -->
+        <div class="slide" id="slide-5">
+            <div class="slide-content">
+                <h1><i class="fas fa-table"></i> 논리 연산자 진리표</h1>
+                <div class="truth-table-container">
+                    <div class="interactive-controls">
+                        <button class="operator-btn active" data-op="and">AND (&&)</button>
+                        <button class="operator-btn" data-op="or">OR (||)</button>
+                        <button class="operator-btn" data-op="not">NOT (!)</button>
+                    </div>
+                    <div class="truth-table-demo" id="truthTableDemo">
+                        <!-- 동적으로 생성됨 -->
+                    </div>
+                    <div class="interactive-test">
+                        <h3>직접 테스트해보기</h3>
+                        <div class="test-inputs">
+                            <select id="valueA">
+                                <option value="true">true</option>
+                                <option value="false">false</option>
+                            </select>
+                            <span id="currentOperator">&&</span>
+                            <select id="valueB">
+                                <option value="true">true</option>
+                                <option value="false">false</option>
+                            </select>
+                            <span>=</span>
+                            <span id="testResult">true</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: 연산자 우선순위 -->
+        <div class="slide" id="slide-6">
+            <div class="slide-content">
+                <h1><i class="fas fa-sort-numeric-down"></i> 연산자 우선순위</h1>
+                <div class="precedence-demo">
+                    <div class="precedence-example">
+                        <h3>표현식: <code>true || true && false</code></h3>
+                        <div class="precedence-steps" id="precedenceSteps">
+                            <div class="step">
+                                <div class="expression">true || <span class="highlight">true && false</span></div>
+                                <div class="explanation">1. && 연산자가 먼저 계산됩니다</div>
+                            </div>
+                            <div class="step">
+                                <div class="expression">true || <span class="result">false</span></div>
+                                <div class="explanation">2. true && false = false</div>
+                            </div>
+                            <div class="step">
+                                <div class="expression"><span class="final-result">true</span></div>
+                                <div class="explanation">3. true || false = true</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="precedence-table">
+                        <h3>우선순위 (높음 → 낮음)</h3>
+                        <div class="precedence-item">
+                            <span class="rank">1</span>
+                            <span class="operator">!</span>
+                            <span class="name">논리 부정 (NOT)</span>
+                        </div>
+                        <div class="precedence-item">
+                            <span class="rank">2</span>
+                            <span class="operator">&&</span>
+                            <span class="name">논리곱 (AND)</span>
+                        </div>
+                        <div class="precedence-item">
+                            <span class="rank">3</span>
+                            <span class="operator">||</span>
+                            <span class="name">논리합 (OR)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Truthy/Falsy -->
+        <div class="slide" id="slide-7">
+            <div class="slide-content">
+                <h1><i class="fas fa-balance-scale"></i> Truthy & Falsy</h1>
+                <div class="truthy-falsy-container">
+                    <div class="concept-intro">
+                        <p>JavaScript에서는 Boolean이 아닌 값도 조건문에서 참/거짓으로 평가됩니다.</p>
+                    </div>
+                    <div class="classification-demo" id="truthyFalsyDemo">
+                        <div class="falsy-section">
+                            <h3><i class="fas fa-times-circle"></i> Falsy 값들</h3>
+                            <div class="value-grid falsy-grid">
+                                <div class="value-item" data-value="false">false</div>
+                                <div class="value-item" data-value="0">0</div>
+                                <div class="value-item" data-value="empty-string">""</div>
+                                <div class="value-item" data-value="null">null</div>
+                                <div class="value-item" data-value="undefined">undefined</div>
+                                <div class="value-item" data-value="nan">NaN</div>
+                            </div>
+                        </div>
+                        <div class="truthy-section">
+                            <h3><i class="fas fa-check-circle"></i> Truthy 값들</h3>
+                            <div class="value-grid truthy-grid">
+                                <div class="value-item" data-value="true">true</div>
+                                <div class="value-item" data-value="1">1</div>
+                                <div class="value-item" data-value="string">"hello"</div>
+                                <div class="value-item" data-value="array">[]</div>
+                                <div class="value-item" data-value="object">{}</div>
+                                <div class="value-item" data-value="function">function(){}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="conversion-demo">
+                        <h3>Boolean 변환 테스트</h3>
+                        <div class="conversion-test">
+                            <input type="text" id="testValue" placeholder="값을 입력하세요" />
+                            <button id="testConvert">변환 테스트</button>
+                            <div id="conversionResult"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: 단축 평가 -->
+        <div class="slide" id="slide-8">
+            <div class="slide-content">
+                <h1><i class="fas fa-route"></i> 단축 평가 (Short-Circuit)</h1>
+                <div class="short-circuit-demo">
+                    <div class="concept-explanation">
+                        <p>논리 연산자는 결과가 확정되면 나머지 평가를 중단합니다.</p>
+                    </div>
+                    <div class="circuit-visualization" id="circuitDemo">
+                        <div class="circuit-example" data-type="and">
+                            <h3>AND (&&) 단축 평가</h3>
+                            <div class="circuit-flow">
+                                <div class="flow-step">
+                                    <div class="value-box">false</div>
+                                    <span class="operator">&&</span>
+                                    <div class="value-box dimmed">console.log("실행 안됨")</div>
+                                    <div class="result">= false</div>
+                                </div>
+                                <div class="explanation">첫 번째가 false면 두 번째는 평가하지 않음</div>
+                            </div>
+                        </div>
+                        <div class="circuit-example" data-type="or">
+                            <h3>OR (||) 단축 평가</h3>
+                            <div class="circuit-flow">
+                                <div class="flow-step">
+                                    <div class="value-box">true</div>
+                                    <span class="operator">||</span>
+                                    <div class="value-box dimmed">console.log("실행 안됨")</div>
+                                    <div class="result">= true</div>
+                                </div>
+                                <div class="explanation">첫 번째가 true면 두 번째는 평가하지 않음</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="practical-examples">
+                        <h3>실용적 활용</h3>
+                        <div class="example-grid">
+                            <div class="example-card">
+                                <h4>기본값 설정</h4>
+                                <div class="code-block">
+                                    <pre><code>let name = userName || 'Guest';</code></pre>
+                                </div>
+                            </div>
+                            <div class="example-card">
+                                <h4>안전한 접근</h4>
+                                <div class="code-block">
+                                    <pre><code>user && user.profile && user.profile.name;</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: 실무 활용 -->
+        <div class="slide" id="slide-9">
+            <div class="slide-content">
+                <h1><i class="fas fa-briefcase"></i> 실무에서의 Boolean 활용</h1>
+                <div class="practical-applications">
+                    <div class="application-tabs">
+                        <button class="tab-btn active" data-tab="validation">폼 검증</button>
+                        <button class="tab-btn" data-tab="permissions">권한 관리</button>
+                        <button class="tab-btn" data-tab="states">상태 관리</button>
+                    </div>
+                    <div class="tab-content active" data-tab="validation">
+                        <h3>폼 검증 예시</h3>
+                        <div class="demo-container">
+                            <div class="form-demo">
+                                <input type="text" id="demoEmail" placeholder="이메일을 입력하세요">
+                                <input type="password" id="demoPassword" placeholder="비밀번호를 입력하세요">
+                                <button id="validateBtn">검증하기</button>
+                                <div id="validationResult"></div>
+                            </div>
+                            <div class="code-block">
+                                <pre><code>function validateForm(email, password) {
+    const isEmailValid = email.includes('@');
+    const isPasswordValid = password.length >= 8;
+    
+    return isEmailValid && isPasswordValid;
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content" data-tab="permissions">
+                        <h3>권한 관리 예시</h3>
+                        <div class="permissions-demo">
+                            <div class="user-info">
+                                <label>
+                                    <input type="checkbox" id="isLoggedIn"> 로그인 상태
+                                </label>
+                                <label>
+                                    <input type="checkbox" id="isAdmin"> 관리자 권한
+                                </label>
+                                <label>
+                                    <input type="checkbox" id="hasSubscription"> 구독 중
+                                </label>
+                            </div>
+                            <div class="access-results" id="accessResults">
+                                <div class="access-item">
+                                    <span>기본 콘텐츠:</span>
+                                    <span class="access-status" id="basicAccess">허용</span>
+                                </div>
+                                <div class="access-item">
+                                    <span>프리미엄 콘텐츠:</span>
+                                    <span class="access-status" id="premiumAccess">차단</span>
+                                </div>
+                                <div class="access-item">
+                                    <span>관리자 패널:</span>
+                                    <span class="access-status" id="adminAccess">차단</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content" data-tab="states">
+                        <h3>상태 관리 예시</h3>
+                        <div class="state-demo">
+                            <div class="toggle-switches">
+                                <label class="switch">
+                                    <input type="checkbox" id="darkMode">
+                                    <span class="slider">다크모드</span>
+                                </label>
+                                <label class="switch">
+                                    <input type="checkbox" id="notifications">
+                                    <span class="slider">알림</span>
+                                </label>
+                                <label class="switch">
+                                    <input type="checkbox" id="autoSave">
+                                    <span class="slider">자동저장</span>
+                                </label>
+                            </div>
+                            <div class="state-display" id="stateDisplay">
+                                현재 설정이 여기에 표시됩니다.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: 퀴즈 및 정리 -->
+        <div class="slide" id="slide-10">
+            <div class="slide-content">
+                <h1><i class="fas fa-graduation-cap"></i> 퀴즈 & 정리</h1>
+                <div class="quiz-container">
+                    <div class="quiz-question active" data-question="1">
+                        <h3>문제 1. 다음 중 falsy 값이 아닌 것은?</h3>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-answer="wrong">0</button>
+                            <button class="quiz-option" data-answer="wrong">""</button>
+                            <button class="quiz-option" data-answer="correct">"0"</button>
+                            <button class="quiz-option" data-answer="wrong">null</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                    <div class="quiz-question" data-question="2">
+                        <h3>문제 2. `true || false && true`의 결과는?</h3>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-answer="correct">true</button>
+                            <button class="quiz-option" data-answer="wrong">false</button>
+                            <button class="quiz-option" data-answer="wrong">undefined</button>
+                            <button class="quiz-option" data-answer="wrong">에러</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                    <div class="quiz-question" data-question="3">
+                        <h3>문제 3. `!!0`의 결과는?</h3>
+                        <div class="quiz-options">
+                            <button class="quiz-option" data-answer="wrong">true</button>
+                            <button class="quiz-option" data-answer="correct">false</button>
+                            <button class="quiz-option" data-answer="wrong">0</button>
+                            <button class="quiz-option" data-answer="wrong">1</button>
+                        </div>
+                        <div class="quiz-feedback"></div>
+                    </div>
+                    <div class="quiz-navigation">
+                        <button id="prevQuiz" disabled>이전</button>
+                        <span id="quizCounter">1 / 3</span>
+                        <button id="nextQuiz">다음</button>
+                    </div>
+                    <div class="quiz-summary" id="quizSummary" style="display: none;">
+                        <h3>수고하셨습니다! 🎉</h3>
+                        <div class="summary-stats" id="summaryStats"></div>
+                        <div class="key-points">
+                            <h4>핵심 요점 정리</h4>
+                            <ul>
+                                <li>Boolean은 true/false 두 값만 가짐</li>
+                                <li>논리 연산자: &&(AND), ||(OR), !(NOT)</li>
+                                <li>Falsy: false, 0, "", null, undefined, NaN</li>
+                                <li>단축 평가로 성능 최적화 가능</li>
+                                <li>실무에서 조건문과 검증에 필수</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="navigation-controls">
+        <button class="nav-btn" id="prevBtn">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="nav-btn" id="nextBtn">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Keyboard Hints -->
+    <div class="keyboard-hints">
+        <span>← → 방향키로 슬라이드 이동</span>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
