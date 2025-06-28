@@ -148,4 +148,10 @@ test-files/
 # exercises/completed/
 
 # 대본 파일 제외
-*대본* 
+*대본*
+
+# 프로젝트 특정 파일 제외
+tree.js
+CLAUDE.md
+study_paper/
+document/

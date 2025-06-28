@@ -17,12 +17,8 @@ class PresentationController {
     init() {
         this.setupEventListeners();
         this.updateProgress();
+        this.initializeSlideContent();
         this.updateSlideCounter();
-        // 초기화를 약간 지연시켜 DOM이 완전히 준비되도록 함
-        setTimeout(() => {
-            this.initializeSlideContent();
-            this.setupAllSlideInteractions();
-        }, 100);
     }
 
     setupEventListeners() {
@@ -35,18 +31,33 @@ class PresentationController {
         });
 
         // 네비게이션 버튼
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        if (prevBtn) prevBtn.addEventListener('click', () => this.previousSlide());
-        if (nextBtn) nextBtn.addEventListener('click', () => this.nextSlide());
+        document.getElementById('prevBtn').addEventListener('click', () => this.previousSlide());
+        document.getElementById('nextBtn').addEventListener('click', () => this.nextSlide());
+
+        // 슬라이드별 인터랙티브 요소들
+        this.setupSlideInteractions();
     }
 
-    setupAllSlideInteractions() {
-        // 모든 슬라이드의 인터랙티브 요소들을 안전하게 설정
+    setupSlideInteractions() {
+        // Slide 3: Boolean 값 클릭 이벤트
         this.setupBooleanDemo();
+        
+        // Slide 5: 진리표 인터랙션
         this.setupTruthTable();
+        
+        // Slide 6: 연산자 우선순위 애니메이션
+        this.setupPrecedenceDemo();
+        
+        // Slide 7: Truthy/Falsy 테스트
         this.setupTruthyFalsyDemo();
+        
+        // Slide 8: 단축 평가 시각화
+        this.setupShortCircuitDemo();
+        
+        // Slide 9: 실무 활용 데모
         this.setupPracticalDemo();
+        
+        // Slide 10: 퀴즈
         this.setupQuiz();
     }
 
@@ -73,8 +84,21 @@ class PresentationController {
         const currentSlideEl = document.getElementById(`slide-${this.currentSlide}`);
         const targetSlideEl = document.getElementById(`slide-${slideNumber}`);
         
-        if (currentSlideEl) currentSlideEl.classList.remove('active');
-        if (targetSlideEl) targetSlideEl.classList.add('active');
+        if (currentSlideEl) {
+            currentSlideEl.classList.remove('active');
+            if (this.currentSlide > slideNumber) {
+                currentSlideEl.classList.remove('prev');
+            } else {
+                currentSlideEl.classList.add('prev');
+            }
+        }
+        
+        if (targetSlideEl) {
+            targetSlideEl.classList.add('active');
+            if (this.currentSlide < slideNumber) {
+                targetSlideEl.classList.remove('prev');
+            }
+        }
         
         this.currentSlide = slideNumber;
         this.updateProgress();
@@ -87,25 +111,21 @@ class PresentationController {
 
     updateProgress() {
         const progressBar = document.getElementById('progressBar');
-        if (progressBar) {
-            const progress = (this.currentSlide / this.totalSlides) * 100;
-            progressBar.style.width = `${progress}%`;
-        }
+        const progress = (this.currentSlide / this.totalSlides) * 100;
+        progressBar.style.width = `${progress}%`;
     }
 
     updateSlideCounter() {
-        const currentSlideEl = document.getElementById('currentSlide');
-        const totalSlidesEl = document.getElementById('totalSlides');
-        if (currentSlideEl) currentSlideEl.textContent = this.currentSlide;
-        if (totalSlidesEl) totalSlidesEl.textContent = this.totalSlides;
+        document.getElementById('currentSlide').textContent = this.currentSlide;
+        document.getElementById('totalSlides').textContent = this.totalSlides;
     }
 
     updateNavigationButtons() {
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         
-        if (prevBtn) prevBtn.disabled = this.currentSlide === 1;
-        if (nextBtn) nextBtn.disabled = this.currentSlide === this.totalSlides;
+        prevBtn.disabled = this.currentSlide === 1;
+        nextBtn.disabled = this.currentSlide === this.totalSlides;
     }
 
     clearAnimations() {
@@ -132,12 +152,6 @@ class PresentationController {
             case 8:
                 this.animateShortCircuit();
                 break;
-            case 9:
-                this.initializePracticalTabs();
-                break;
-            case 10:
-                this.initializeQuiz();
-                break;
         }
     }
 
@@ -156,26 +170,21 @@ class PresentationController {
         const newValue = currentValue === 'true' ? 'false' : 'true';
         
         element.dataset.value = newValue;
-        const titleEl = element.querySelector('h3');
-        if (titleEl) titleEl.textContent = newValue;
+        element.querySelector('h3').textContent = newValue;
         
         const lightbulb = element.querySelector('.lightbulb');
-        if (lightbulb) {
-            if (newValue === 'true') {
-                lightbulb.classList.add('on');
-                lightbulb.classList.remove('off');
-                element.classList.add('true-value');
-                element.classList.remove('false-value');
-                const pEl = element.querySelector('p');
-                if (pEl) pEl.textContent = '참, 켜짐, 1';
-            } else {
-                lightbulb.classList.add('off');
-                lightbulb.classList.remove('on');
-                element.classList.add('false-value');
-                element.classList.remove('true-value');
-                const pEl = element.querySelector('p');
-                if (pEl) pEl.textContent = '거짓, 꺼짐, 0';
-            }
+        if (newValue === 'true') {
+            lightbulb.classList.add('on');
+            lightbulb.classList.remove('off');
+            element.classList.add('true-value');
+            element.classList.remove('false-value');
+            element.querySelector('p').textContent = '참, 켜짐, 1';
+        } else {
+            lightbulb.classList.add('off');
+            lightbulb.classList.remove('on');
+            element.classList.add('false-value');
+            element.classList.remove('true-value');
+            element.querySelector('p').textContent = '거짓, 꺼짐, 0';
         }
         
         // 반짝 효과
@@ -198,44 +207,24 @@ class PresentationController {
     // Slide 5: 진리표
     setupTruthTable() {
         const operatorBtns = document.querySelectorAll('.operator-btn');
-        
-        // 기존 이벤트 리스너 제거 후 재등록
         operatorBtns.forEach(btn => {
-            // 새로운 이벤트 리스너 추가
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                
+            btn.addEventListener('click', () => {
                 operatorBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 this.renderTruthTable(btn.dataset.op);
                 this.updateCurrentOperator(btn.dataset.op);
             });
-            
-            // 버튼이 클릭 가능하도록 스타일 보장
-            btn.style.pointerEvents = 'auto';
-            btn.style.cursor = 'pointer';
         });
 
         const valueA = document.getElementById('valueA');
         const valueB = document.getElementById('valueB');
         
-        if (valueA) {
-            valueA.addEventListener('change', () => this.updateTestResult());
-            valueA.style.pointerEvents = 'auto';
-        }
-        if (valueB) {
-            valueB.addEventListener('change', () => this.updateTestResult());
-            valueB.style.pointerEvents = 'auto';
-        }
-
-        // 초기 테스트 결과 업데이트
-        this.updateTestResult();
+        valueA.addEventListener('change', this.updateTestResult.bind(this));
+        valueB.addEventListener('change', this.updateTestResult.bind(this));
     }
 
     renderTruthTable(operator) {
         const container = document.getElementById('truthTableDemo');
-        if (!container) return;
         
         let tableHTML = '';
         
@@ -315,45 +304,40 @@ class PresentationController {
 
     updateCurrentOperator(operator) {
         const currentOperator = document.getElementById('currentOperator');
-        if (currentOperator) {
-            const symbol = operator === 'and' ? '&&' : operator === 'or' ? '||' : '!';
-            currentOperator.textContent = symbol;
-        }
+        const symbol = operator === 'and' ? '&&' : operator === 'or' ? '||' : '!';
+        currentOperator.textContent = symbol;
         this.updateTestResult();
     }
 
     updateTestResult() {
-        const valueA = document.getElementById('valueA');
-        const valueB = document.getElementById('valueB');
+        const valueA = document.getElementById('valueA').value === 'true';
+        const valueB = document.getElementById('valueB').value === 'true';
         const operatorBtn = document.querySelector('.operator-btn.active');
-        const resultElement = document.getElementById('testResult');
-        
-        if (!valueA || !resultElement) return;
-        
-        const valA = valueA.value === 'true';
-        const valB = valueB ? valueB.value === 'true' : false;
         const operator = operatorBtn ? operatorBtn.dataset.op : 'and';
         
         let result;
         switch(operator) {
             case 'and':
-                result = valA && valB;
+                result = valueA && valueB;
                 break;
             case 'or':
-                result = valA || valB;
+                result = valueA || valueB;
                 break;
             case 'not':
-                result = !valA;
+                result = !valueA;
                 break;
-            default:
-                result = valA && valB;
         }
         
+        const resultElement = document.getElementById('testResult');
         resultElement.textContent = result.toString();
         resultElement.className = result ? 'result-true' : 'result-false';
     }
 
     // Slide 6: 연산자 우선순위
+    setupPrecedenceDemo() {
+        // 이미 HTML에 구현되어 있음
+    }
+
     animatePrecedence() {
         const steps = document.querySelectorAll('.step');
         steps.forEach((step, index) => {
@@ -371,26 +355,15 @@ class PresentationController {
         const testInput = document.getElementById('testValue');
         
         if (testButton && testInput) {
-            // 버튼 클릭 이벤트
-            testButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
+            testButton.addEventListener('click', () => {
                 this.testBooleanConversion();
             });
             
-            // 엔터키 이벤트
             testInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
-                    e.preventDefault();
                     this.testBooleanConversion();
                 }
             });
-
-            // 입력 필드 클릭 가능하도록 보장
-            testInput.style.pointerEvents = 'auto';
-            testInput.style.cursor = 'text';
-            testButton.style.pointerEvents = 'auto';
-            testButton.style.cursor = 'pointer';
         }
 
         // 값 항목 클릭 시 설명 표시
@@ -399,7 +372,6 @@ class PresentationController {
             item.addEventListener('click', () => {
                 this.showValueExplanation(item);
             });
-            item.style.cursor = 'pointer';
         });
     }
 
@@ -429,8 +401,6 @@ class PresentationController {
             result.textContent = booleanResult.toString();
             result.style.background = booleanResult ? 'var(--accent-green)' : 'var(--accent-red)';
             result.style.color = 'white';
-            result.style.padding = '0.5rem 1rem';
-            result.style.borderRadius = '8px';
             
             // 애니메이션 효과
             result.style.transform = 'scale(1.2)';
@@ -442,8 +412,6 @@ class PresentationController {
             result.textContent = 'Error';
             result.style.background = 'var(--accent-red)';
             result.style.color = 'white';
-            result.style.padding = '0.5rem 1rem';
-            result.style.borderRadius = '8px';
         }
     }
 
@@ -464,15 +432,8 @@ class PresentationController {
             'function': 'Function - 함수는 항상 truthy'
         };
         
-        // 기존 툴팁 제거
-        const existingTooltip = item.querySelector('.tooltip');
-        if (existingTooltip) {
-            existingTooltip.remove();
-        }
-        
-        // 툴팁 표시
+        // 툴팁 표시 (간단한 구현)
         const tooltip = document.createElement('div');
-        tooltip.className = 'tooltip';
         tooltip.textContent = explanations[value] || '설명 없음';
         tooltip.style.cssText = `
             position: absolute;
@@ -487,7 +448,6 @@ class PresentationController {
             left: 50%;
             transform: translateX(-50%);
             white-space: nowrap;
-            pointer-events: none;
         `;
         
         item.style.position = 'relative';
@@ -519,6 +479,10 @@ class PresentationController {
     }
 
     // Slide 8: 단축 평가
+    setupShortCircuitDemo() {
+        // 시각화는 CSS 애니메이션으로 처리
+    }
+
     animateShortCircuit() {
         const examples = document.querySelectorAll('.circuit-example');
         examples.forEach((example, index) => {
@@ -553,101 +517,60 @@ class PresentationController {
         const tabContents = document.querySelectorAll('.tab-content');
         
         tabBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                
+            btn.addEventListener('click', () => {
                 const tabName = btn.dataset.tab;
                 
                 tabBtns.forEach(b => b.classList.remove('active'));
                 tabContents.forEach(c => c.classList.remove('active'));
                 
                 btn.classList.add('active');
-                const targetContent = document.querySelector(`.tab-content[data-tab="${tabName}"]`);
+                const targetContent = document.querySelector(`[data-tab="${tabName}"]`);
                 if (targetContent) {
                     targetContent.classList.add('active');
                 }
             });
-            
-            // 탭 버튼 클릭 가능하도록 보장
-            btn.style.pointerEvents = 'auto';
-            btn.style.cursor = 'pointer';
         });
 
         // 폼 검증 데모
         const validateBtn = document.getElementById('validateBtn');
         if (validateBtn) {
-            validateBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                this.validateFormDemo();
-            });
-            validateBtn.style.pointerEvents = 'auto';
-            validateBtn.style.cursor = 'pointer';
+            validateBtn.addEventListener('click', this.validateFormDemo.bind(this));
         }
 
         // 권한 관리 데모
         const checkboxes = document.querySelectorAll('#isLoggedIn, #isAdmin, #hasSubscription');
         checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', () => {
-                this.updatePermissions();
-            });
-            checkbox.style.pointerEvents = 'auto';
-            checkbox.style.cursor = 'pointer';
+            checkbox.addEventListener('change', this.updatePermissions.bind(this));
         });
 
         // 상태 관리 데모
         const toggles = document.querySelectorAll('#darkMode, #notifications, #autoSave');
         toggles.forEach(toggle => {
-            toggle.addEventListener('change', () => {
-                this.updateStateDisplay();
-            });
-            toggle.style.pointerEvents = 'auto';
-            toggle.style.cursor = 'pointer';
+            toggle.addEventListener('change', this.updateStateDisplay.bind(this));
         });
-
-        // 초기 상태 설정
-        this.updatePermissions();
-        this.updateStateDisplay();
-    }
-
-    initializePracticalTabs() {
-        // 첫 번째 탭을 활성화 상태로 보장
-        const firstTab = document.querySelector('.tab-btn[data-tab="validation"]');
-        const firstContent = document.querySelector('.tab-content[data-tab="validation"]');
-        
-        if (firstTab && firstContent) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
-            firstTab.classList.add('active');
-            firstContent.classList.add('active');
-        }
     }
 
     validateFormDemo() {
-        const emailEl = document.getElementById('demoEmail');
-        const passwordEl = document.getElementById('demoPassword');
+        const email = document.getElementById('demoEmail').value;
+        const password = document.getElementById('demoPassword').value;
         const result = document.getElementById('validationResult');
-        
-        if (!emailEl || !passwordEl || !result) return;
-        
-        const email = emailEl.value;
-        const password = passwordEl.value;
         
         const isEmailValid = email.includes('@') && email.length > 0;
         const isPasswordValid = password.length >= 8;
         const isFormValid = isEmailValid && isPasswordValid;
         
         let message = '';
+        let className = '';
         
         if (isFormValid) {
             message = '✅ 폼 검증 성공!';
+            className = 'success';
             result.style.background = 'var(--accent-green)';
         } else {
             message = '❌ 검증 실패: ';
             if (!isEmailValid) message += '올바른 이메일 입력 필요. ';
             if (!isPasswordValid) message += '비밀번호 8자 이상 필요.';
+            className = 'error';
             result.style.background = 'var(--accent-red)';
         }
         
@@ -659,59 +582,42 @@ class PresentationController {
     }
 
     updatePermissions() {
-        const isLoggedInEl = document.getElementById('isLoggedIn');
-        const isAdminEl = document.getElementById('isAdmin');
-        const hasSubscriptionEl = document.getElementById('hasSubscription');
-        
-        if (!isLoggedInEl || !isAdminEl || !hasSubscriptionEl) return;
-        
-        const isLoggedIn = isLoggedInEl.checked;
-        const isAdmin = isAdminEl.checked;
-        const hasSubscription = hasSubscriptionEl.checked;
+        const isLoggedIn = document.getElementById('isLoggedIn').checked;
+        const isAdmin = document.getElementById('isAdmin').checked;
+        const hasSubscription = document.getElementById('hasSubscription').checked;
         
         // 기본 콘텐츠 (항상 허용)
         const basicAccess = document.getElementById('basicAccess');
-        if (basicAccess) {
-            basicAccess.textContent = '허용';
-            basicAccess.className = 'access-status allowed';
-        }
+        basicAccess.textContent = '허용';
+        basicAccess.className = 'access-status allowed';
         
         // 프리미엄 콘텐츠 (로그인 && 구독)
         const premiumAccess = document.getElementById('premiumAccess');
-        if (premiumAccess) {
-            if (isLoggedIn && hasSubscription) {
-                premiumAccess.textContent = '허용';
-                premiumAccess.className = 'access-status allowed';
-            } else {
-                premiumAccess.textContent = '차단';
-                premiumAccess.className = 'access-status denied';
-            }
+        if (isLoggedIn && hasSubscription) {
+            premiumAccess.textContent = '허용';
+            premiumAccess.className = 'access-status allowed';
+        } else {
+            premiumAccess.textContent = '차단';
+            premiumAccess.className = 'access-status denied';
         }
         
         // 관리자 패널 (로그인 && 관리자)
         const adminAccess = document.getElementById('adminAccess');
-        if (adminAccess) {
-            if (isLoggedIn && isAdmin) {
-                adminAccess.textContent = '허용';
-                adminAccess.className = 'access-status allowed';
-            } else {
-                adminAccess.textContent = '차단';
-                adminAccess.className = 'access-status denied';
-            }
+        if (isLoggedIn && isAdmin) {
+            adminAccess.textContent = '허용';
+            adminAccess.className = 'access-status allowed';
+        } else {
+            adminAccess.textContent = '차단';
+            adminAccess.className = 'access-status denied';
         }
     }
 
     updateStateDisplay() {
-        const darkModeEl = document.getElementById('darkMode');
-        const notificationsEl = document.getElementById('notifications');
-        const autoSaveEl = document.getElementById('autoSave');
+        const darkMode = document.getElementById('darkMode').checked;
+        const notifications = document.getElementById('notifications').checked;
+        const autoSave = document.getElementById('autoSave').checked;
+        
         const display = document.getElementById('stateDisplay');
-        
-        if (!darkModeEl || !notificationsEl || !autoSaveEl || !display) return;
-        
-        const darkMode = darkModeEl.checked;
-        const notifications = notificationsEl.checked;
-        const autoSave = autoSaveEl.checked;
         
         const settings = {
             '다크모드': darkMode,
@@ -734,125 +640,56 @@ class PresentationController {
         const quizOptions = document.querySelectorAll('.quiz-option');
         quizOptions.forEach(option => {
             option.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
                 this.handleQuizAnswer(e.target);
             });
-            option.style.cursor = 'pointer';
         });
 
         const prevQuizBtn = document.getElementById('prevQuiz');
         const nextQuizBtn = document.getElementById('nextQuiz');
         
-        if (prevQuizBtn) {
-            prevQuizBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                this.previousQuestion();
-            });
-        }
-        if (nextQuizBtn) {
-            nextQuizBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                this.nextQuestion();
-            });
-        }
-    }
-
-    initializeQuiz() {
-        // 퀴즈 상태 초기화
-        this.quizState = {
-            currentQuestion: 1,
-            totalQuestions: 3,
-            answers: {},
-            score: 0
-        };
-
-        // 첫 번째 질문만 활성화
-        const questions = document.querySelectorAll('.quiz-question');
-        questions.forEach((q, index) => {
-            if (index === 0) {
-                q.classList.add('active');
-                q.style.display = 'block';
-            } else {
-                q.classList.remove('active');
-                q.style.display = 'none';
-            }
-            
-            // 모든 옵션 초기화
-            const options = q.querySelectorAll('.quiz-option');
-            options.forEach(option => {
-                option.classList.remove('correct', 'wrong');
-                option.style.pointerEvents = 'auto';
-            });
-            
-            // 피드백 초기화
-            const feedback = q.querySelector('.quiz-feedback');
-            if (feedback) {
-                feedback.innerHTML = '';
-                feedback.style.background = '';
-                feedback.style.color = '';
-                feedback.style.padding = '';
-                feedback.style.borderRadius = '';
-                feedback.style.marginTop = '';
-            }
-        });
-
-        // 네비게이션 초기화
-        const navigation = document.querySelector('.quiz-navigation');
-        if (navigation) navigation.style.display = 'flex';
-        
-        const prevBtn = document.getElementById('prevQuiz');
-        const nextBtn = document.getElementById('nextQuiz');
-        const counter = document.getElementById('quizCounter');
-        
-        if (prevBtn) prevBtn.disabled = true;
-        if (nextBtn) {
-            nextBtn.disabled = true;
-            nextBtn.textContent = '다음';
-        }
-        if (counter) counter.textContent = '1 / 3';
-
-        // 결과 숨김
-        const summary = document.getElementById('quizSummary');
-        if (summary) {
-            summary.style.display = 'none';
-        }
+        if (prevQuizBtn) prevQuizBtn.addEventListener('click', () => this.previousQuestion());
+        if (nextQuizBtn) nextQuizBtn.addEventListener('click', () => this.nextQuestion());
     }
 
     handleQuizAnswer(button) {
         const question = button.closest('.quiz-question');
         const questionNumber = parseInt(question.dataset.question);
+        
+        // 이미 답변한 질문은 무시
+        if (this.quizState.answers.hasOwnProperty(questionNumber)) {
+            return;
+        }
+
         const isCorrect = button.dataset.answer === 'correct';
         
         // 모든 옵션 비활성화
         const options = question.querySelectorAll('.quiz-option');
         options.forEach(option => {
-            option.style.pointerEvents = 'none';
-            if (option.dataset.answer === 'correct') {
-                option.classList.add('correct');
-            } else {
-                option.classList.add('wrong');
+            option.style.pointerEvents = 'none'; // 중복 클릭 방지
+            if (option.dataset.answer !== 'correct') {
+                option.style.opacity = '0.5';
             }
         });
+
+        // 선택한 버튼에 스타일 적용
+        button.classList.add(isCorrect ? 'correct' : 'wrong');
         
         // 피드백 표시
         const feedback = question.querySelector('.quiz-feedback');
-        if (feedback) {
-            if (isCorrect) {
-                feedback.innerHTML = '✅ 정답입니다!';
-                feedback.style.background = 'var(--accent-green)';
-                this.quizState.score++;
-            } else {
-                feedback.innerHTML = '❌ 틀렸습니다. 정답을 확인해보세요.';
-                feedback.style.background = 'var(--accent-red)';
-            }
-            feedback.style.color = 'white';
-            feedback.style.padding = '1rem';
-            feedback.style.borderRadius = '8px';
-            feedback.style.marginTop = '1rem';
+        feedback.style.display = 'block'; // 피드백 보이기
+        if (isCorrect) {
+            feedback.innerHTML = '✅ 정답입니다!';
+            feedback.style.background = 'var(--accent-green)';
+            this.quizState.score++;
+        } else {
+            feedback.innerHTML = '❌ 틀렸습니다. 정답을 확인해보세요.';
+            feedback.style.background = 'var(--accent-red)';
+            // 오답 시 정답 옵션 강조
+            question.querySelector('.quiz-option[data-answer="correct"]').classList.add('correct');
         }
+        feedback.style.color = 'white';
+        feedback.style.padding = '1rem';
+        feedback.style.borderRadius = '8px';
         
         this.quizState.answers[questionNumber] = isCorrect;
         
@@ -878,17 +715,11 @@ class PresentationController {
     showQuestion(questionNumber) {
         // 현재 질문 숨기기
         const currentQuestion = document.querySelector('.quiz-question.active');
-        if (currentQuestion) {
-            currentQuestion.classList.remove('active');
-            currentQuestion.style.display = 'none';
-        }
+        if (currentQuestion) currentQuestion.classList.remove('active');
         
         // 새 질문 표시
         const newQuestion = document.querySelector(`[data-question="${questionNumber}"]`);
-        if (newQuestion) {
-            newQuestion.classList.add('active');
-            newQuestion.style.display = 'block';
-        }
+        if (newQuestion) newQuestion.classList.add('active');
         
         this.quizState.currentQuestion = questionNumber;
         
@@ -910,10 +741,7 @@ class PresentationController {
     showQuizSummary() {
         // 퀴즈 질문들 숨기기
         const questions = document.querySelectorAll('.quiz-question');
-        questions.forEach(q => {
-            q.style.display = 'none';
-            q.classList.remove('active');
-        });
+        questions.forEach(q => q.style.display = 'none');
         
         const navigation = document.querySelector('.quiz-navigation');
         if (navigation) navigation.style.display = 'none';
