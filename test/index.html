@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>함수 - JavaScript 학습</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="slide-counter">
+            <span id="current-slide">1</span> / <span id="total-slides">12</span>
+        </div>
+    </nav>
+    <main class="presentation-container">
+        <!-- 슬라이드들은 1-based data-slide 속성을 가집니다. -->
+        <section class="slide active" data-slide="1">
+            <div class="slide-content title-slide">
+                <div class="title-icon"><i class="fas fa-cube"></i></div>
+                <h1>함수</h1>
+                <h2>Functions</h2>
+                <p class="subtitle">코드를 재사용 가능한 단위로 만들어 프로그램을 체계적으로 구성하기</p>
+                <div class="learning-objectives">
+                    <h3><i class="fas fa-target"></i> 학습 목표</h3>
+                    <ul>
+                        <li>함수의 정의와 호출 방법 이해</li>
+                        <li>매개변수와 반환값의 개념 습득</li>
+                        <li>스코프와 스코프 연쇄의 원리 파악</li>
+                        <li>1급 함수와 화살표 함수 활용</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ... 슬라이드 2 ... -->
+        <section class="slide" data-slide="2">
+            <div class="slide-content">
+                <h1><i class="fas fa-question-circle"></i> 함수란 무엇인가?</h1>
+                <div class="content-grid">
+                    <div class="concept-card"><div class="card-header"><i class="fas fa-code"></i><h3>코드 뭉치의 단위</h3></div><p>특정 코드 뭉치를 반복해서 사용할 수 있도록 묶어놓은 단위</p></div>
+                    <div class="concept-card"><div class="card-header"><i class="fas fa-recycle"></i><h3>재사용성</h3></div><p>코드 중복을 줄이고 유지보수성을 높임</p></div>
+                </div>
+                <div class="function-analogy">
+                    <h3><i class="fas fa-lightbulb"></i> 실생활 비유</h3>
+                    <div class="analogy-grid">
+                        <div class="analogy-item"><i class="fas fa-calculator"></i><div><h4>계산기</h4><p>숫자를 입력하면 → 계산 과정 → 결과를 출력</p></div></div>
+                        <div class="analogy-item"><i class="fas fa-industry"></i><div><h4>공장</h4><p>원료를 투입하면 → 가공 과정 → 제품을 생산</p></div></div>
+                        <div class="analogy-item"><i class="fas fa-utensils"></i><div><h4>요리 레시피</h4><p>재료를 준비하면 → 조리 과정 → 음식을 완성</p></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 3 -->
+        <section class="slide" data-slide="3">
+            <div class="slide-content">
+                <h1><i class="fas fa-puzzle-piece"></i> 함수의 구성 요소</h1>
+                <div class="function-anatomy">
+                    <!-- JS가 동적으로 내용을 생성할 컨테이너 -->
+                    <div class="anatomy-visual" id="function-anatomy-demo"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 4 -->
+        <section class="slide" data-slide="4">
+            <div class="slide-content">
+                <h1><i class="fas fa-play"></i> 함수 호출과 실행 순서</h1>
+                <div class="interactive-execution">
+                    <h3><i class="fas fa-rocket"></i> 실행 흐름 체험</h3>
+                    <!-- JS가 동적으로 시뮬레이터를 생성할 컨테이너 -->
+                    <div id="execution-simulator"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 슬라이드 5 -->
+        <section class="slide" data-slide="5">
+            <div class="slide-content">
+                <h1><i class="fas fa-exchange-alt"></i> 매개변수와 인수</h1>
+                <!-- JS가 동적으로 데모를 생성할 컨테이너 -->
+                <div id="parameter-independence-demo"></div>
+            </div>
+        </section>
+        
+        <!-- 슬라이드 6 -->
+        <section class="slide" data-slide="6">
+            <div class="slide-content">
+                <h1><i class="fas fa-undo"></i> 반환값 (Return Value)</h1>
+                <!-- JS가 동적으로 데모를 생성할 컨테이너 -->
+                <div id="return-flow-demo"></div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 7 -->
+        <section class="slide" data-slide="7">
+            <div class="slide-content">
+                <h1><i class="fas fa-map-marked-alt"></i> 스코프 (Scope)</h1>
+                <!-- JS가 동적으로 데모를 생성할 컨테이너 -->
+                <div id="scope-demo"></div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 8 -->
+        <section class="slide" data-slide="8">
+             <div class="slide-content">
+                <h1><i class="fas fa-link"></i> 스코프 연쇄 (Scope Chain)</h1>
+                <!-- JS가 동적으로 데모를 생성할 컨테이너 -->
+                <div id="scope-chain-demo"></div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 9 -->
+        <section class="slide" data-slide="9">
+            <div class="slide-content">
+                <h1><i class="fas fa-mask"></i> 변수 가리기 (Variable Shadowing)</h1>
+                 <!-- JS가 동적으로 데모를 생성할 컨테이너 -->
+                <div id="shadowing-demo"></div>
+            </div>
+        </section>
+        
+        <!-- 슬라이드 10 -->
+        <section class="slide" data-slide="10">
+            <div class="slide-content">
+                <h1><i class="fas fa-book"></i> 어휘적 스코핑 (Lexical Scoping)</h1>
+                <!-- JS가 동적으로 데모를 생성할 컨테이너 -->
+                <div id="lexical-scoping-demo"></div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 11 -->
+        <section class="slide" data-slide="11">
+            <div class="slide-content">
+                <h1><i class="fas fa-gem"></i> 값으로서의 함수</h1>
+                <!-- JS가 동적으로 데모를 생성할 컨테이너 -->
+                <div id="first-class-demo"></div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 12 -->
+        <section class="slide" data-slide="12">
+            <div class="slide-content">
+                <h1><i class="fas fa-arrow-right"></i> 화살표 함수 (Arrow Function)</h1>
+                <!-- JS가 동적으로 데모를 생성할 컨테이너 -->
+                <div id="arrow-function-demo"></div>
+            </div>
+        </section>
+    </main>
+
+    <div class="nav-controls">
+        <button class="nav-btn" id="prev-btn"><i class="fas fa-chevron-left"></i></button>
+        <button class="nav-btn" id="next-btn"><i class="fas fa-chevron-right"></i></button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

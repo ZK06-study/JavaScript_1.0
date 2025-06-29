@@ -159,7 +159,7 @@ body {
   transition: all var(--transition-medium);
   padding: var(--spacing-3xl);
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* 콘텐츠가 길어질 경우 위에서부터 보이도록 수정 */
   justify-content: center;
   overflow-y: auto;
 }
@@ -1558,4 +1558,20 @@ kbd {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--function-blue);
+}
+
+.interactive-return-demo, .interactive-scope-chain-demo, .interactive-shadowing-demo, .interactive-lexical-demo, .interactive-first-class-demo, .interactive-arrow-demo {
+    margin: var(--spacing-2xl) 0;
+    background: var(--bg-tertiary);
+    border-radius: 16px;
+    padding: var(--spacing-2xl);
+    border: 1px solid var(--border-color);
+}
+
+.interactive-return-demo h3, .interactive-scope-chain-demo h3, .interactive-shadowing-demo h3, .interactive-lexical-demo h3, .interactive-first-class-demo h3, .interactive-arrow-demo h3 {
+    color: var(--accent-info);
+    margin-bottom: var(--spacing-xl);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
 }

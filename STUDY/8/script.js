@@ -177,6 +177,7 @@ class PresentationController {
   }
   
   initializeSlideAnimations() {
+    console.log('Initializing animations for slide:', this.currentSlide);
     switch(this.currentSlide) {
       case 3:
         this.createFunctionAnatomyDemo();
@@ -670,6 +671,45 @@ class PresentationController {
         executeAnimation(0);
       });
     }
+    
+    // 6번 슬라이드의 추가 인터랙션 버튼
+    const additionalBtn = document.getElementById('demo-return-behavior');
+    const outputDiv = document.getElementById('return-demo-output');
+    
+    if (additionalBtn && outputDiv) {
+      additionalBtn.addEventListener('click', () => {
+        outputDiv.innerHTML = '';
+        
+        const steps = [
+          '함수 호출: testReturn()',
+          '실행: console.log("시작");',
+          '실행: return "결과값";',
+          '함수 종료 (아래 코드 실행 안됨)',
+          '실행되지 않음: console.log("종료");',
+          '반환값: "결과값"'
+        ];
+        
+        let currentStep = 0;
+        const showStep = () => {
+          if (currentStep < steps.length) {
+            const stepDiv = document.createElement('div');
+            stepDiv.style.cssText = `
+              margin: 5px 0;
+              padding: 5px;
+              ${currentStep === 2 ? 'color: var(--return-orange); font-weight: bold;' : ''}
+              ${currentStep === 4 ? 'color: var(--text-muted); text-decoration: line-through;' : ''}
+            `;
+            stepDiv.textContent = `${currentStep + 1}. ${steps[currentStep]}`;
+            outputDiv.appendChild(stepDiv);
+            currentStep++;
+            
+            self.setAnimationTimeout(showStep, 1000);
+          }
+        };
+        
+        showStep();
+      });
+    }
   }
   
   // 슬라이드 7: 스코프 시각화
@@ -839,6 +879,46 @@ class PresentationController {
         }, scopes.length * 500 + 1000);
       });
     }
+    
+    // 8번 슬라이드의 추가 인터랙션 버튼
+    const additionalBtn = document.getElementById('demo-scope-chain');
+    const outputDiv = document.getElementById('scope-chain-output');
+    
+    if (additionalBtn && outputDiv) {
+      const self = this;
+      additionalBtn.addEventListener('click', () => {
+        outputDiv.innerHTML = '';
+        
+        const steps = [
+          '변수 "five" 찾기 시작...',
+          '1단계: add 함수 스코프에서 검색 → 없음',
+          '2단계: add5 함수 스코프에서 검색 → 없음',
+          '3단계: 전역 스코프에서 검색 → 발견!',
+          'const five = 5를 찾아서 사용',
+          '스코프 연쇄 완료 ✓'
+        ];
+        
+        let currentStep = 0;
+        const showStep = () => {
+          if (currentStep < steps.length) {
+            const stepDiv = document.createElement('div');
+            stepDiv.style.cssText = `
+              margin: 8px 0;
+              padding: 8px;
+              ${currentStep === 3 ? 'color: var(--accent-success); font-weight: bold;' : ''}
+              ${currentStep === 5 ? 'color: var(--accent-primary); font-weight: bold;' : ''}
+            `;
+            stepDiv.textContent = steps[currentStep];
+            outputDiv.appendChild(stepDiv);
+            currentStep++;
+            
+            self.setAnimationTimeout(showStep, 1200);
+          }
+        };
+        
+        showStep();
+      });
+    }
   }
   
   // 슬라이드 9: 변수 가리기 데모
@@ -935,6 +1015,49 @@ class PresentationController {
             scopeDiv.style.transform = 'translateY(0)';
           }, index * 400);
         });
+      });
+    }
+    
+    // 9번 슬라이드의 추가 인터랙션 버튼
+    const additionalBtn = document.getElementById('demo-shadowing');
+    const outputDiv = document.getElementById('shadowing-output');
+    
+    if (additionalBtn && outputDiv) {
+      const self = this;
+      additionalBtn.addEventListener('click', () => {
+        outputDiv.innerHTML = '';
+        
+        const steps = [
+          'const x = 3; // 전역 스코프에 x 선언',
+          'function add5(x) { // 매개변수 x가 전역 x를 가림',
+          '  function add(x, y) { // 매개변수 x가 상위 x를 가림',
+          '    return x + y; // 가장 가까운 x (add 함수의 x) 사용',
+          '  }',
+          '  return add(x, 5); // add5 함수의 x 사용',
+          '}',
+          'add5(10); // 결과: 15 (10 + 5)'
+        ];
+        
+        let currentStep = 0;
+        const showStep = () => {
+          if (currentStep < steps.length) {
+            const stepDiv = document.createElement('div');
+            stepDiv.style.cssText = `
+              margin: 5px 0;
+              padding: 5px;
+              font-family: 'JetBrains Mono', monospace;
+              ${currentStep === 1 || currentStep === 2 ? 'color: var(--warning); font-weight: bold;' : ''}
+              ${currentStep === 7 ? 'color: var(--accent-success); font-weight: bold;' : ''}
+            `;
+            stepDiv.textContent = steps[currentStep];
+            outputDiv.appendChild(stepDiv);
+            currentStep++;
+            
+            self.setAnimationTimeout(showStep, 800);
+          }
+        };
+        
+        showStep();
       });
     }
   }
@@ -1067,6 +1190,46 @@ class PresentationController {
         });
       });
     }
+    
+    // 10번 슬라이드의 추가 인터랙션 버튼
+    const additionalBtn = document.getElementById('demo-lexical');
+    const outputDiv = document.getElementById('lexical-output');
+    
+    if (additionalBtn && outputDiv) {
+      const self = this;
+      additionalBtn.addEventListener('click', () => {
+        outputDiv.innerHTML = '';
+        
+        const explanation = [
+          '어휘적 스코핑 규칙:',
+          '',
+          '✅ 함수가 정의된 위치에 따라 스코프 결정',
+          '❌ 함수가 호출되는 위치는 상관없음',
+          '',
+          '예시 분석:',
+          '- inner()가 outer() 안에서 호출되어도',
+          '- inner() 함수는 outer() 스코프에 접근 불가',
+          '- 함수 정의 위치가 다르기 때문',
+          '',
+          '올바른 방법:',
+          '- inner()를 outer() 안에서 정의',
+          '- 중첩 함수가 되어 상위 스코프 접근 가능'
+        ];
+        
+        explanation.forEach((line, index) => {
+          const lineDiv = document.createElement('div');
+          lineDiv.style.cssText = `
+            margin: 3px 0;
+            padding: 2px;
+            ${line.startsWith('✅') ? 'color: var(--accent-success); font-weight: bold;' : ''}
+            ${line.startsWith('❌') ? 'color: var(--warning); font-weight: bold;' : ''}
+            ${line.startsWith('예시') || line.startsWith('올바른') ? 'color: var(--accent-primary); font-weight: bold; margin-top: 10px;' : ''}
+          `;
+          lineDiv.textContent = line;
+          outputDiv.appendChild(lineDiv);
+        });
+      });
+    }
   }
   
   // 슬라이드 11: 1급 함수 데모
@@ -1183,6 +1346,51 @@ class PresentationController {
             featureDiv.style.opacity = '1';
             featureDiv.style.transform = 'translateY(0)';
           }, index * 300);
+        });
+      });
+    }
+    
+    // 11번 슬라이드의 추가 인터랙션 버튼
+    const additionalBtn = document.getElementById('demo-first-class');
+    const outputDiv = document.getElementById('first-class-output');
+    
+    if (additionalBtn && outputDiv) {
+      const self = this;
+      additionalBtn.addEventListener('click', () => {
+        outputDiv.innerHTML = '';
+        
+        const examples = [
+          '1급 함수 예제들:',
+          '',
+          '// 변수 할당',
+          'const greet = function(name) { return "Hello " + name; };',
+          'console.log(greet("World")); // "Hello World"',
+          '',
+          '// 배열에 저장',
+          'const operations = [add, subtract, multiply];',
+          'operations[0](5, 3); // add(5, 3) 실행',
+          '',
+          '// 고차 함수 (함수를 반환하는 함수)',
+          'function multiplier(factor) {',
+          '  return function(number) {',
+          '    return number * factor;',
+          '  };',
+          '}',
+          'const double = multiplier(2);',
+          'double(5); // 10'
+        ];
+        
+        examples.forEach((line, index) => {
+          const lineDiv = document.createElement('div');
+          lineDiv.style.cssText = `
+            margin: 2px 0;
+            font-family: ${line.startsWith('//') || line.includes('function') || line.includes('const') ? "'JetBrains Mono', monospace" : "inherit"};
+            font-size: ${line.startsWith('//') || line.includes('function') || line.includes('const') ? '12px' : '14px'};
+            color: ${line.startsWith('1급') ? 'var(--accent-primary)' : 'var(--text-primary)'};
+            font-weight: ${line.startsWith('1급') ? 'bold' : 'normal'};
+          `;
+          lineDiv.textContent = line;
+          outputDiv.appendChild(lineDiv);
         });
       });
     }
@@ -1307,6 +1515,58 @@ class PresentationController {
             transformContainer.style.opacity = '1';
             transformContainer.style.transform = 'translateX(0)';
           }, index * 700);
+        });
+      });
+    }
+    
+    // 12번 슬라이드의 추가 인터랙션 버튼
+    const additionalBtn = document.getElementById('demo-arrow');
+    const outputDiv = document.getElementById('arrow-output');
+    
+    if (additionalBtn && outputDiv) {
+      const self = this;
+      additionalBtn.addEventListener('click', () => {
+        outputDiv.innerHTML = '';
+        
+        const examples = [
+          '화살표 함수 변환 규칙:',
+          '',
+          '1. 기본 형태:',
+          'function(x, y) { return x + y; }',
+          '↓',
+          '(x, y) => x + y',
+          '',
+          '2. 매개변수가 하나일 때:',
+          'function(x) { return x * 2; }',
+          '↓',
+          'x => x * 2  // 괄호 생략 가능',
+          '',
+          '3. 매개변수가 없을 때:',
+          'function() { return "hello"; }',
+          '↓',
+          '() => "hello"  // 빈 괄호 필요',
+          '',
+          '4. 블록 구문이 필요할 때:',
+          '(x, y) => {',
+          '  const result = x + y;',
+          '  return result;',
+          '}'
+        ];
+        
+        examples.forEach((line, index) => {
+          const lineDiv = document.createElement('div');
+          lineDiv.style.cssText = `
+            margin: 2px 0;
+            font-family: ${line.includes('function') || line.includes('=>') || line.includes('const') ? "'JetBrains Mono', monospace" : "inherit"};
+            font-size: ${line.includes('function') || line.includes('=>') || line.includes('const') ? '12px' : '14px'};
+            color: ${line.startsWith('화살표') || line.match(/^\d\./) ? 'var(--accent-primary)' : 'var(--text-primary)'};
+            font-weight: ${line.startsWith('화살표') || line.match(/^\d\./) ? 'bold' : 'normal'};
+            text-align: ${line === '↓' ? 'center' : 'left'};
+            color: ${line === '↓' ? 'var(--accent-success)' : ''};
+            font-size: ${line === '↓' ? '18px' : ''};
+          `;
+          lineDiv.textContent = line;
+          outputDiv.appendChild(lineDiv);
         });
       });
     }

@@ -222,6 +222,19 @@
                                 <p>매개변수는 바깥 변수와 <strong>독립적</strong>입니다. 함수 내부에서 매개변수 값을 변경해도 원본 변수는 영향받지 않습니다.</p>
                             </div>
                         </div>
+                        <div class="demonstration-example">
+                            <h4><i class="fas fa-code"></i> 실제 예제</h4>
+                            <pre><code class="language-javascript">function reassign(x) {
+  x = 100;  // 매개변수 x 변경
+  return x;
+}
+
+const y = 50;
+const result = reassign(y);
+
+console.log(y);      // 50 (변경되지 않음)
+console.log(result); // 100</code></pre>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -274,13 +287,20 @@ noReturn(); // undefined</code></pre>
                     <div class="return-visualization" id="return-flow-demo">
                         <!-- JavaScript로 return 동작 시각화 -->
                     </div>
+                    <div class="interactive-return-demo">
+                        <h3><i class="fas fa-play"></i> 인터랙티브 데모</h3>
+                        <div style="text-align: center; margin: 20px 0;">
+                            <button id="demo-return-behavior">return 동작 실행</button>
+                        </div>
+                        <div id="return-demo-output"></div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- 슬라이드 7: 스코프 소개 -->
         <section class="slide" data-slide="7">
-            <div class="slide-content">
+            <div class="slide-content" style="overflow-y: auto; max-height: 90vh; padding-right: 20px;">
                 <h1><i class="fas fa-map-marked-alt"></i> 스코프 (Scope)</h1>
                 <div class="scope-introduction">
                     <div class="scope-definition">
@@ -338,6 +358,13 @@ console.log(x); // 에러! x는 함수 밖에서 접근 불가</code></pre>
                     <div class="chain-visualization" id="scope-chain-demo">
                         <!-- JavaScript로 스코프 연쇄 시각화 -->
                     </div>
+                    <div class="interactive-chain-demo">
+                        <h3><i class="fas fa-play"></i> 인터랙티브 데모</h3>
+                        <div style="text-align: center; margin: 20px 0;">
+                            <button id="demo-scope-chain">스코프 연쇄 추적</button>
+                        </div>
+                        <div id="scope-chain-output"></div>
+                    </div>
                     <div class="chain-example">
                         <div class="example-code">
                             <pre><code class="language-javascript">const five = 5;          // 전역 스코프
@@ -390,6 +417,13 @@ add5(3); // 8</code></pre>
                     </div>
                     <div class="shadowing-visualization" id="shadowing-demo">
                         <!-- JavaScript로 변수 가리기 시각화 -->
+                    </div>
+                    <div class="interactive-shadowing-demo">
+                        <h3><i class="fas fa-play"></i> 인터랙티브 데모</h3>
+                        <div style="text-align: center; margin: 20px 0;">
+                            <button id="demo-shadowing">변수 가리기 확인</button>
+                        </div>
+                        <div id="shadowing-output"></div>
                     </div>
                     <div class="shadowing-example">
                         <div class="example-code">
@@ -464,6 +498,13 @@ add5(3); // 8</code></pre>
                     <div class="lexical-visualization" id="lexical-scoping-demo">
                         <!-- JavaScript로 어휘적 스코핑 시각화 -->
                     </div>
+                    <div class="interactive-lexical-demo">
+                        <h3><i class="fas fa-play"></i> 인터랙티브 데모</h3>
+                        <div style="text-align: center; margin: 20px 0;">
+                            <button id="demo-lexical">어휘적 스코핑 확인</button>
+                        </div>
+                        <div id="lexical-output"></div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -517,6 +558,13 @@ const obj = {method: myFunc};</code></pre>
                         <h3><i class="fas fa-tools"></i> 실제 활용 예시</h3>
                         <div id="first-class-demo">
                             <!-- JavaScript로 1급 함수 데모 생성 -->
+                        </div>
+                        <div class="interactive-first-class-demo">
+                            <h3><i class="fas fa-play"></i> 인터랙티브 데모</h3>
+                            <div style="text-align: center; margin: 20px 0;">
+                                <button id="demo-first-class">1급 함수 기능 체험</button>
+                            </div>
+                            <div id="first-class-output"></div>
                         </div>
                     </div>
                 </div>
@@ -594,6 +642,13 @@ const add = (x, y) => x + y;</code></pre>
                         <h3><i class="fas fa-rocket"></i> 실제 사용 예시</h3>
                         <div id="arrow-function-demo">
                             <!-- JavaScript로 화살표 함수 활용 데모 생성 -->
+                        </div>
+                        <div class="interactive-arrow-demo">
+                            <h3><i class="fas fa-play"></i> 인터랙티브 데모</h3>
+                            <div style="text-align: center; margin: 20px 0;">
+                                <button id="demo-arrow">화살표 함수 변환 보기</button>
+                            </div>
+                            <div id="arrow-output"></div>
                         </div>
                     </div>
                 </div>
