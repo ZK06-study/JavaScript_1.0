@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제어 구문 - JavaScript 학습</title>
+    
+    <!-- 폰트 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- 아이콘 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 코드 하이라이팅 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 네비게이션 바 -->
+    <nav class="navbar">
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="slide-counter">
+            <span id="current-slide">1</span> / <span id="total-slides">12</span>
+        </div>
+    </nav>
+
+    <!-- 메인 컨테이너 -->
+    <main class="presentation-container">
+        <!-- 슬라이드 1: 제목 -->
+        <section class="slide active" data-slide="1">
+            <div class="slide-content title-slide">
+                <div class="title-icon">
+                    <i class="fas fa-code-branch"></i>
+                </div>
+                <h1>제어 구문</h1>
+                <h2>Control Statements</h2>
+                <p class="subtitle">조건문과 반복문으로 프로그램의 논리 구조 만들기</p>
+                <div class="learning-objectives">
+                    <h3><i class="fas fa-target"></i> 학습 목표</h3>
+                    <ul>
+                        <li>조건문(if, switch)을 이용한 분기 처리</li>
+                        <li>반복문(while, for)을 이용한 반복 처리</li>
+                        <li>break, continue를 이용한 실행 흐름 제어</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 2: 제어 구문이란? -->
+        <section class="slide" data-slide="2">
+            <div class="slide-content">
+                <h1><i class="fas fa-question-circle"></i> 제어 구문이란?</h1>
+                <div class="content-grid">
+                    <div class="concept-card">
+                        <div class="card-header">
+                            <i class="fas fa-route"></i>
+                            <h3>프로그램의 논리 구조</h3>
+                        </div>
+                        <p>실제 프로그램은 단순한 계산이 아닌 <strong>복잡한 논리 구조</strong>를 가지고 있습니다.</p>
+                    </div>
+                    <div class="concept-card">
+                        <div class="card-header">
+                            <i class="fas fa-sitemap"></i>
+                            <h3>경우의 수 처리</h3>
+                        </div>
+                        <p>다양한 상황과 조건에 따라 <strong>다른 동작</strong>을 수행해야 합니다.</p>
+                    </div>
+                </div>
+                <div class="example-container">
+                    <h3><i class="fas fa-lightbulb"></i> 실생활 예시</h3>
+                    <div class="example-grid">
+                        <div class="example-item">
+                            <i class="fas fa-mouse-pointer"></i>
+                            <p><strong>클릭 이벤트:</strong> 왼쪽/오른쪽/더블클릭에 따른 다른 동작</p>
+                        </div>
+                        <div class="example-item">
+                            <i class="fas fa-gamepad"></i>
+                            <p><strong>게임:</strong> 아이템 종류에 따른 효과 적용</p>
+                        </div>
+                        <div class="example-item">
+                            <i class="fas fa-paper-plane"></i>
+                            <p><strong>폼 검증:</strong> 입력값 유효성에 따른 처리</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 3: 조건문 소개 -->
+        <section class="slide" data-slide="3">
+            <div class="slide-content">
+                <h1><i class="fas fa-code-branch"></i> 조건문 (Conditional Statement)</h1>
+                <div class="concept-visual">
+                    <div class="flowchart-container" id="conditional-flowchart">
+                        <!-- JavaScript로 동적 생성 -->
+                    </div>
+                </div>
+                <div class="concept-explanation">
+                    <div class="explanation-card">
+                        <h3>조건문의 역할</h3>
+                        <p>특정 조건을 만족할 때와 그렇지 않을 때 <strong>다른 코드를 실행</strong>하도록 합니다.</p>
+                    </div>
+                    <div class="syntax-preview">
+                        <h4>기본 형태</h4>
+                        <div class="code-preview">
+                            <pre><code class="language-javascript">if (조건) {
+  // 조건이 참일 때 실행
+} else {
+  // 조건이 거짓일 때 실행
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 4: if...else 기본 -->
+        <section class="slide" data-slide="4">
+            <div class="slide-content">
+                <h1><i class="fas fa-code"></i> if...else 구문</h1>
+                <div class="code-demonstration">
+                    <div class="demo-header">
+                        <h3><i class="fas fa-dice"></i> 주사위 게임 예제</h3>
+                    </div>
+                    <div class="code-container">
+                        <pre><code class="language-javascript">function roll() {
+  return Math.ceil(Math.random() * 6);
+}
+
+function game() {
+  const result = roll();
+  alert(`결과: ${result}`);
+
+  // if...else 구문
+  if (result >= 4) {
+    // 조건이 true이면 실행
+    alert('당신이 이겼습니다!');
+  } else {
+    // 조건이 false이면 실행
+    alert('당신이 졌습니다.');
+  }
+}
+
+game();</code></pre>
+                    </div>
+                    <div class="interactive-demo" id="dice-game-demo">
+                        <!-- JavaScript로 인터랙티브 데모 생성 -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 5: if...else 변형 -->
+        <section class="slide" data-slide="5">
+            <div class="slide-content">
+                <h1><i class="fas fa-edit"></i> if...else 변형</h1>
+                <div class="syntax-variations">
+                    <div class="variation-card">
+                        <h3><i class="fas fa-minus"></i> else 생략</h3>
+                        <pre><code class="language-javascript">if (result === 6) {
+  alert('당신은 운이 좋군요!');
+}</code></pre>
+                    </div>
+                    <div class="variation-card">
+                        <h3><i class="fas fa-compress"></i> 중괄호 생략</h3>
+                        <pre><code class="language-javascript">if (result === 6) alert('당신은 운이 좋군요!');</code></pre>
+                        <div class="warning-note">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>한 줄일 때만 가능</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="best-practice">
+                    <h3><i class="fas fa-star"></i> 권장 사항</h3>
+                    <ul>
+                        <li>가독성을 위해 중괄호 사용 권장</li>
+                        <li>조건이 복잡할 때는 여러 줄로 작성</li>
+                        <li>일관된 스타일 유지</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 6: 다중 조건문 -->
+        <section class="slide" data-slide="6">
+            <div class="slide-content">
+                <h1><i class="fas fa-layer-group"></i> 다중 조건문</h1>
+                <div class="multi-condition-demo">
+                    <div class="before-after">
+                        <div class="before">
+                            <h3><i class="fas fa-times"></i> 중첩된 형태</h3>
+                            <pre><code class="language-javascript">if (result >= 5) {
+  alert('당신이 이겼습니다!');
+} else {
+  if (result >= 3) {
+    alert('비겼습니다.');
+  } else {
+    alert('당신이 졌습니다.');
+  }
+}</code></pre>
+                        </div>
+                        <div class="arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                        <div class="after">
+                            <h3><i class="fas fa-check"></i> 개선된 형태</h3>
+                            <pre><code class="language-javascript">if (result >= 5) {
+  alert('당신이 이겼습니다!');
+} else if (result >= 3) {
+  alert('비겼습니다.');
+} else {
+  alert('당신이 졌습니다.');
+}</code></pre>
+                        </div>
+                    </div>
+                    <div class="visual-flow" id="multi-condition-flow">
+                        <!-- JavaScript로 흐름도 생성 -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 7: switch 구문 -->
+        <section class="slide" data-slide="7">
+            <div class="slide-content">
+                <h1><i class="fas fa-exchange-alt"></i> switch 구문</h1>
+                <div class="switch-explanation">
+                    <div class="when-to-use">
+                        <h3><i class="fas fa-lightbulb"></i> 언제 사용하나?</h3>
+                        <p>하나의 변수에 대해 <strong>많은 경우의 수</strong>가 있을 때</p>
+                    </div>
+                    <div class="comparison">
+                        <div class="if-version">
+                            <h4>if...else 버전</h4>
+                            <pre><code class="language-javascript">function translateColor(english) {
+  if (english === 'red') {
+    return '빨강색';
+  } else if (english === 'blue') {
+    return '파랑색';
+  } else if (english === 'purple' || english === 'violet') {
+    return '보라색';
+  } else {
+    return '일치하는 색깔이 없습니다.';
+  }
+}</code></pre>
+                        </div>
+                        <div class="switch-version">
+                            <h4>switch 버전</h4>
+                            <pre><code class="language-javascript">function translateColor(english) {
+  let result;
+  switch (english) {
+    case 'red':
+      result = '빨강색';
+      break;
+    case 'blue':
+      result = '파랑색';
+      break;
+    case 'purple':
+    case 'violet':
+      result = '보라색';
+      break;
+    default:
+      result = '일치하는 색깔이 없습니다.';
+  }
+  return result;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 8: break의 중요성 -->
+        <section class="slide" data-slide="8">
+            <div class="slide-content">
+                <h1><i class="fas fa-stop"></i> break의 중요성</h1>
+                <div class="break-demo">
+                    <div class="warning-box">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>주의: break를 빼먹으면?</h3>
+                    </div>
+                    <div class="break-comparison">
+                        <div class="without-break">
+                            <h4><i class="fas fa-bug"></i> break 없음 (문제)</h4>
+                            <pre><code class="language-javascript">switch (english) {
+  case 'blue':
+    result = '파랑색';
+    // break가 없음!
+  case 'purple':
+    result = '보라색';
+    break;
+}
+
+translateColor('blue'); // '보라색' (잘못된 결과)</code></pre>
+                        </div>
+                        <div class="with-break">
+                            <h4><i class="fas fa-check"></i> break 있음 (정상)</h4>
+                            <pre><code class="language-javascript">switch (english) {
+  case 'blue':
+                            result = '파랑색';
+    break; // 중요!
+  case 'purple':
+    result = '보라색';
+    break;
+}
+
+translateColor('blue'); // '파랑색' (올바른 결과)</code></pre>
+                        </div>
+                    </div>
+                    <div class="execution-flow" id="break-flow-demo">
+                        <!-- JavaScript로 실행 흐름 시각화 -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 9: 반복문 소개 -->
+        <section class="slide" data-slide="9">
+            <div class="slide-content">
+                <h1><i class="fas fa-sync"></i> 반복문 (Looping Statement)</h1>
+                <div class="loop-introduction">
+                    <div class="why-loops">
+                        <h3><i class="fas fa-question"></i> 왜 반복문이 필요한가?</h3>
+                        <div class="loop-examples">
+                            <div class="example">
+                                <i class="fas fa-table"></i>
+                                <p><strong>스프레드시트:</strong> 1000개 행의 데이터 처리</p>
+                            </div>
+                            <div class="example">
+                                <i class="fas fa-chess-board"></i>
+                                <p><strong>게임:</strong> 승부가 날 때까지 턴 반복</p>
+                            </div>
+                            <div class="example">
+                                <i class="fas fa-comments"></i>
+                                <p><strong>댓글:</strong> 모든 댓글을 화면에 표시</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="loop-types">
+                        <h3><i class="fas fa-list"></i> 반복문의 종류</h3>
+                        <div class="type-grid">
+                            <div class="type-card">
+                                <i class="fas fa-play"></i>
+                                <h4>while</h4>
+                                <p>조건이 참인 동안 반복</p>
+                            </div>
+                            <div class="type-card">
+                                <i class="fas fa-play-circle"></i>
+                                <h4>do...while</h4>
+                                <p>최소 한 번은 실행</p>
+                            </div>
+                            <div class="type-card">
+                                <i class="fas fa-forward"></i>
+                                <h4>for</h4>
+                                <p>횟수가 정해진 반복</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 10: while 구문 -->
+        <section class="slide" data-slide="10">
+            <div class="slide-content">
+                <h1><i class="fas fa-play"></i> while 구문</h1>
+                <div class="while-demo">
+                    <div class="syntax-explanation">
+                        <h3>기본 구조</h3>
+                        <pre><code class="language-javascript">let i = 0; // 초기값
+
+while (i < 5) { // 실행 조건
+  console.log(`현재 i의 값: ${i}`);
+  i++; // 갱신
+}
+
+console.log('루프가 종료되었습니다.');</code></pre>
+                    </div>
+                    <div class="execution-visualization" id="while-execution">
+                        <!-- JavaScript로 실행 과정 시각화 -->
+                    </div>
+                    <div class="while-components">
+                        <div class="component">
+                            <i class="fas fa-play"></i>
+                            <h4>초기값</h4>
+                            <p>반복을 시작하기 전 설정</p>
+                        </div>
+                        <div class="component">
+                            <i class="fas fa-question-circle"></i>
+                            <h4>조건</h4>
+                            <p>매번 확인하는 반복 조건</p>
+                        </div>
+                        <div class="component">
+                            <i class="fas fa-arrow-up"></i>
+                            <h4>갱신</h4>
+                            <p>조건 변경을 위한 값 수정</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 11: for 구문 -->
+        <section class="slide" data-slide="11">
+            <div class="slide-content">
+                <h1><i class="fas fa-forward"></i> for 구문</h1>
+                <div class="for-demo">
+                    <div class="syntax-breakdown">
+                        <h3>구조 분해</h3>
+                        <div class="for-structure">
+                            <pre><code class="language-javascript">for (let i = 0; i < 5; i++) {
+     ↑초기값   ↑조건  ↑갱신
+  console.log(`현재 i의 값: ${i}`);
+}</code></pre>
+                        </div>
+                    </div>
+                    <div class="comparison-table">
+                        <h3>while vs for 비교</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>구분</th>
+                                    <th>while</th>
+                                    <th>for</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>사용 시기</strong></td>
+                                    <td>조건 중심 반복</td>
+                                    <td>횟수 정해진 반복</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>초기값</strong></td>
+                                    <td>별도 선언</td>
+                                    <td>괄호 내 선언</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>갱신</strong></td>
+                                    <td>블록 내부</td>
+                                    <td>괄호 내 명시</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="array-traversal">
+                        <h3><i class="fas fa-list"></i> 배열 순회</h3>
+                        <div class="traversal-methods">
+                            <div class="method">
+                                <h4>전통적인 for</h4>
+                                <pre><code class="language-javascript">const arr = [1, 2, 3, 4, 5];
+for (let i = 0; i < arr.length; i++) {
+  console.log(arr[i]);
+}</code></pre>
+                            </div>
+                            <div class="method">
+                                <h4>forEach 메소드</h4>
+                                <pre><code class="language-javascript">const arr = [1, 2, 3, 4, 5];
+arr.forEach((item, index) => {
+  console.log(item);
+});</code></pre>
+                            </div>
+                            <div class="method">
+                                <h4>for...of 구문</h4>
+                                <pre><code class="language-javascript">const arr = [1, 2, 3, 4, 5];
+for (let item of arr) {
+  console.log(item);
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 슬라이드 12: break & continue -->
+        <section class="slide" data-slide="12">
+            <div class="slide-content">
+                <h1><i class="fas fa-traffic-light"></i> break & continue</h1>
+                <div class="flow-control">
+                    <div class="control-explanation">
+                        <div class="break-section">
+                            <div class="control-header">
+                                <i class="fas fa-stop"></i>
+                                <h3>break</h3>
+                                <span class="description">루프를 완전히 종료</span>
+                            </div>
+                            <div class="code-example">
+                                <pre><code class="language-javascript">// 퀴즈 예제
+while (true) {
+  const answer = prompt('빨강의 보색은?');
+  if (answer === '초록') {
+    alert('정답입니다! 🎉');
+    break; // 루프 종료
+  } else {
+    alert('틀렸습니다! 다시 시도해보세요.');
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                        <div class="continue-section">
+                            <div class="control-header">
+                                <i class="fas fa-step-forward"></i>
+                                <h3>continue</h3>
+                                <span class="description">현재 반복을 건너뛰고 다음으로</span>
+                            </div>
+                            <div class="code-example">
+                                <pre><code class="language-javascript">// 7의 배수만 출력
+for (let i = 1; i < 100; i++) {
+  if (i % 7 !== 0) {
+    continue; // 나머지 코드 건너뛰기
+  }
+  console.log(`${i}는 7의 배수입니다.`);
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flow-visualization" id="break-continue-demo">
+                        <!-- JavaScript로 흐름 시각화 -->
+                    </div>
+                    <div class="function-control">
+                        <h3><i class="fas fa-function"></i> 함수 제어</h3>
+                        <div class="function-controls">
+                            <div class="control-item">
+                                <i class="fas fa-undo"></i>
+                                <h4>return</h4>
+                                <p>함수를 즉시 종료하고 값 반환</p>
+                            </div>
+                            <div class="control-item">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <h4>throw</h4>
+                                <p>에러를 발생시키며 함수 종료</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 네비게이션 컨트롤 -->
+    <div class="nav-controls">
+        <button class="nav-btn" id="prev-btn">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="nav-btn" id="next-btn">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- 키보드 가이드 -->
+    <div class="keyboard-guide">
+        <div class="guide-item">
+            <kbd>←</kbd><kbd>→</kbd> 슬라이드 이동
+        </div>
+        <div class="guide-item">
+            <kbd>Home</kbd><kbd>End</kbd> 처음/끝
+        </div>
+        <div class="guide-item">
+            <kbd>Space</kbd> 다음 슬라이드
+        </div>
+    </div>
+
+    <!-- JavaScript 라이브러리 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
