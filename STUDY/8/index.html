@@ -3,685 +3,984 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>함수 - JavaScript 학습</title>
-    
-    <!-- 폰트 -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- 아이콘 -->
+    <title>JavaScript 함수 마스터하기</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- 코드 하이라이팅 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-    
     <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            /* Color Palette (Dark Mode) */
+            --bg-dark: #0a0e27;
+            --bg-card: #1a1f3a;
+            --bg-code: #282c34;
+            --text-primary: #e8eaed;
+            --text-secondary: #9aa0a6;
+            --accent-blue: #4285f4;
+            --accent-green: #34a853;
+            --accent-yellow: #fbbc04;
+            --accent-red: #ea4335;
+            --border-color: #2d3142;
+            --shadow: rgba(0, 0, 0, 0.3);
+
+            /* Typography */
+            --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            --font-code: 'Consolas', 'Monaco', 'Courier New', monospace;
+
+            /* Transitions */
+            --transition-speed: 300ms;
+            --transition-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a1f3a 100%);
+            color: var(--text-primary);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Presentation Container */
+        #presentation-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Slides */
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all var(--transition-speed) ease-out;
+            pointer-events: none;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            color: var(--accent-blue);
+        }
+
+        p, li {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 1rem;
+            box-shadow: 0 8px 32px var(--shadow);
+            transition: all var(--transition-speed) ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 48px var(--shadow);
+            border-color: var(--accent-blue);
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--bg-code);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        pre, code {
+            font-family: var(--font-code);
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #abb2bf;
+        }
+
+        .code-block code {
+            display: block;
+            white-space: pre;
+        }
+
+        /* Interactive Elements */
+        .interactive-demo {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 32px var(--shadow);
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .button {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            margin: 0.5rem;
+            box-shadow: 0 4px 16px rgba(66, 133, 244, 0.3);
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(66, 133, 244, 0.5);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .nav-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+            font-size: 1.2rem;
+        }
+
+        .nav-button:hover {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            transform: scale(1.1);
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+            width: 0%;
+            transition: width var(--transition-speed) ease-out;
+            z-index: 1000;
+        }
+
+        /* Lists */
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            padding-left: 2rem;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* Special Slides Styles */
+        .title-slide {
+            background: radial-gradient(circle at 50% 50%, rgba(66, 133, 244, 0.1) 0%, transparent 70%);
+        }
+
+        .title-slide h1 {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        /* Code Highlighting */
+        .keyword { color: #c678dd; }
+        .string { color: #98c379; }
+        .function { color: #61afef; }
+        .number { color: #d19a66; }
+        .comment { color: #5c6370; font-style: italic; }
+
+        /* Visualizations */
+        .visualization {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 32px var(--shadow);
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scope-box {
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem;
+            position: relative;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .scope-box.highlight {
+            border-color: var(--accent-blue);
+            background: rgba(66, 133, 244, 0.1);
+        }
+
+        .scope-label {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--bg-card);
+            padding: 0 10px;
+            color: var(--accent-blue);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Quiz Elements */
+        .quiz-option {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all var(--transition-speed) ease;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--accent-blue);
+            transform: translateX(10px);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--accent-green);
+            background: rgba(52, 168, 83, 0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--accent-red);
+            background: rgba(234, 67, 53, 0.1);
+        }
+
+        /* Terminal Style */
+        .terminal {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 1rem;
+            font-family: var(--font-code);
+            box-shadow: 0 8px 32px var(--shadow);
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .terminal-dot.red { background: #ff5f57; }
+        .terminal-dot.yellow { background: #ffbd2e; }
+        .terminal-dot.green { background: #28ca42; }
+
+        .terminal-content {
+            color: #abb2bf;
+            line-height: 1.6;
+        }
+
+        /* Icons */
+        .icon {
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+            color: var(--accent-blue);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- 네비게이션 바 -->
-    <nav class="navbar">
-        <div class="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-        <div class="slide-counter">
-            <span id="current-slide">1</span> / <span id="total-slides">12</span>
-        </div>
-    </nav>
-
-    <!-- 메인 컨테이너 -->
-    <main class="presentation-container">
-        <!-- 슬라이드 1: 제목 -->
-        <section class="slide active" data-slide="1">
-            <div class="slide-content title-slide">
-                <div class="title-icon">
-                    <i class="fas fa-cube"></i>
+    <div class="progress-bar" id="progress-bar"></div>
+    
+    <div id="presentation-container">
+        <!-- Slide 1: Title -->
+        <section class="slide active title-slide" data-slide-id="title">
+            <h1><i class="fas fa-code"></i> JavaScript 함수 마스터하기</h1>
+            <p class="subtitle">함수의 모든 것을 인터랙티브하게 배워보자!</p>
+            <div class="terminal" style="margin-top: 3rem; max-width: 600px;">
+                <div class="terminal-header">
+                    <div class="terminal-dot red"></div>
+                    <div class="terminal-dot yellow"></div>
+                    <div class="terminal-dot green"></div>
                 </div>
-                <h1>함수</h1>
-                <h2>Functions</h2>
-                <p class="subtitle">코드를 재사용 가능한 단위로 만들어 프로그램을 체계적으로 구성하기</p>
-                <div class="learning-objectives">
-                    <h3><i class="fas fa-target"></i> 학습 목표</h3>
+                <div class="terminal-content">
+                    <span class="keyword">function</span> <span class="function">welcome</span>() {<br>
+                    &nbsp;&nbsp;<span class="keyword">return</span> <span class="string">"함수의 세계로 오신 것을 환영합니다! 🚀"</span>;<br>
+                    }<br><br>
+                    <span class="function">welcome</span>(); <span class="comment">// 시작해볼까요?</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2: Learning Objectives -->
+        <section class="slide" data-slide-id="objectives">
+            <h2><i class="fas fa-bullseye"></i> 학습 목표</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3><i class="fas fa-lightbulb icon"></i>이해하기</h3>
                     <ul>
-                        <li>함수의 정의와 호출 방법 이해</li>
-                        <li>매개변수와 반환값의 개념 습득</li>
-                        <li>스코프와 스코프 연쇄의 원리 파악</li>
-                        <li>1급 함수와 화살표 함수 활용</li>
+                        <li>함수의 구성 요소와 작동 원리</li>
+                        <li>스코프와 클로저의 개념</li>
+                        <li>this 키워드의 동작 방식</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-tools icon"></i>활용하기</h3>
+                    <ul>
+                        <li>다양한 함수 정의 방법 사용</li>
+                        <li>고차 함수 작성 및 활용</li>
+                        <li>실무에서 쓰이는 패턴 구현</li>
                     </ul>
                 </div>
             </div>
         </section>
 
-        <!-- 슬라이드 2: 함수란 무엇인가? -->
-        <section class="slide" data-slide="2">
-            <div class="slide-content">
-                <h1><i class="fas fa-question-circle"></i> 함수란 무엇인가?</h1>
-                <div class="content-grid">
-                    <div class="concept-card">
-                        <div class="card-header">
-                            <i class="fas fa-code"></i>
-                            <h3>코드 뭉치의 단위</h3>
-                        </div>
-                        <p>큰 프로그램을 잘게 쪼개어 <strong>특정 코드 뭉치를 반복해서 사용</strong>할 수 있도록 묶어놓은 단위</p>
-                    </div>
-                    <div class="concept-card">
-                        <div class="card-header">
-                            <i class="fas fa-recycle"></i>
-                            <h3>재사용성</h3>
-                        </div>
-                        <p>한 번 작성한 코드를 <strong>여러 번 재사용</strong>할 수 있어 코드 중복을 줄이고 유지보수성을 높임</p>
-                    </div>
+        <!-- Slide 3: Function Basics -->
+        <section class="slide" data-slide-id="basics">
+            <h2><i class="fas fa-cube"></i> 함수의 구성 요소</h2>
+            <div class="interactive-demo">
+                <div class="code-block">
+                    <code>
+<span class="keyword">function</span> <span class="function">add</span>(<span class="parameter">x</span>, <span class="parameter">y</span>) {  <span class="comment">// 매개변수 (parameter)</span>
+  <span class="keyword">const</span> result = x + y;
+  <span class="keyword">return</span> result;         <span class="comment">// 반환값 (return value)</span>
+}
+
+<span class="function">add</span>(<span class="number">2</span>, <span class="number">3</span>);              <span class="comment">// 인수 (argument)</span>
+                    </code>
                 </div>
-                <div class="function-analogy">
-                    <h3><i class="fas fa-lightbulb"></i> 실생활 비유</h3>
-                    <div class="analogy-grid">
-                        <div class="analogy-item">
-                            <i class="fas fa-calculator"></i>
-                            <div>
-                                <h4>계산기</h4>
-                                <p>숫자를 입력하면 → 계산 과정 → 결과를 출력</p>
-                            </div>
-                        </div>
-                        <div class="analogy-item">
-                            <i class="fas fa-industry"></i>
-                            <div>
-                                <h4>공장</h4>
-                                <p>원료를 투입하면 → 가공 과정 → 제품을 생산</p>
-                            </div>
-                        </div>
-                        <div class="analogy-item">
-                            <i class="fas fa-utensils"></i>
-                            <div>
-                                <h4>요리 레시피</h4>
-                                <p>재료를 준비하면 → 조리 과정 → 음식을 완성</p>
-                            </div>
-                        </div>
-                    </div>
+                <div style="margin-top: 2rem;">
+                    <button class="button" onclick="animateFunctionParts()">
+                        <i class="fas fa-play"></i> 구성 요소 확인하기
+                    </button>
                 </div>
+                <div id="function-parts-result" style="margin-top: 1rem; min-height: 50px;"></div>
             </div>
         </section>
 
-        <!-- 슬라이드 3: 함수의 구성 요소 -->
-        <section class="slide" data-slide="3">
-            <div class="slide-content">
-                <h1><i class="fas fa-puzzle-piece"></i> 함수의 구성 요소</h1>
-                <div class="function-anatomy">
-                    <div class="anatomy-visual" id="function-anatomy-demo">
-                        <!-- JavaScript로 동적 생성 -->
-                    </div>
-                    <div class="component-explanation">
-                        <div class="component-grid">
-                            <div class="component-card">
-                                <i class="fas fa-tag"></i>
-                                <h4>함수 이름</h4>
-                                <p>함수를 식별하고 호출할 때 사용하는 이름</p>
-                            </div>
-                            <div class="component-card">
-                                <i class="fas fa-arrow-down"></i>
-                                <h4>매개변수</h4>
-                                <p>함수에 전달되는 입력값들을 받는 변수</p>
-                            </div>
-                            <div class="component-card">
-                                <i class="fas fa-cogs"></i>
-                                <h4>함수 본문</h4>
-                                <p>실제 작업을 수행하는 코드 블록</p>
-                            </div>
-                            <div class="component-card">
-                                <i class="fas fa-arrow-up"></i>
-                                <h4>반환값</h4>
-                                <p>함수가 처리한 결과를 돌려주는 값</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="example-function">
-                    <h3>기본 예제</h3>
-                    <pre><code class="language-javascript">function add(x, y) {
-  const result = x + y;
-  return result;
-}</code></pre>
-                </div>
-            </div>
-        </section>
-
-        <!-- 슬라이드 4: 함수 호출과 실행 순서 -->
-        <section class="slide" data-slide="4">
-            <div class="slide-content">
-                <h1><i class="fas fa-play"></i> 함수 호출과 실행 순서</h1>
-                <div class="execution-demo">
-                    <div class="execution-visual" id="execution-flow-demo">
-                        <!-- JavaScript로 실행 흐름 시각화 -->
-                    </div>
-                    <div class="execution-explanation">
-                        <div class="step-cards">
-                            <div class="step-card">
-                                <div class="step-number">1</div>
-                                <h4>함수 정의</h4>
-                                <p>함수 코드를 작성하지만 아직 실행되지 않음</p>
-                            </div>
-                            <div class="step-card">
-                                <div class="step-number">2</div>
-                                <h4>함수 호출</h4>
-                                <p>함수 이름과 괄호로 함수를 실행</p>
-                            </div>
-                            <div class="step-card">
-                                <div class="step-number">3</div>
-                                <h4>함수 실행</h4>
-                                <p>매개변수에 인수가 대입되고 코드 실행</p>
-                            </div>
-                            <div class="step-card">
-                                <div class="step-number">4</div>
-                                <h4>결과 반환</h4>
-                                <p>return문을 만나면 값을 반환하고 종료</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="interactive-execution">
-                    <h3><i class="fas fa-rocket"></i> 실행 흐름 체험</h3>
-                    <div id="execution-simulator">
-                        <!-- JavaScript로 인터랙티브 시뮬레이터 생성 -->
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 슬라이드 5: 매개변수와 인수 -->
-        <section class="slide" data-slide="5">
-            <div class="slide-content">
-                <h1><i class="fas fa-exchange-alt"></i> 매개변수와 인수</h1>
-                <div class="parameter-demo">
-                    <div class="concept-visual">
-                        <div class="parameter-explanation">
-                            <div class="param-card definition">
-                                <h3><i class="fas fa-code"></i> 매개변수 (Parameter)</h3>
-                                <p>함수 정의 시 선언하는 변수</p>
-                                <pre><code class="language-javascript">function add(x, y) {
-//           ↑   ↑
-//      매개변수들
-}</code></pre>
-                            </div>
-                            <div class="param-card usage">
-                                <h3><i class="fas fa-play"></i> 인수 (Argument)</h3>
-                                <p>함수 호출 시 전달하는 실제 값</p>
-                                <pre><code class="language-javascript">add(2, 3);
-//  ↑  ↑
-// 인수들</code></pre>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="independence-demo">
-                        <h3><i class="fas fa-shield-alt"></i> 매개변수의 독립성</h3>
-                        <div class="independence-visual" id="parameter-independence-demo">
-                            <!-- JavaScript로 매개변수 독립성 시각화 -->
-                        </div>
-                        <div class="independence-explanation">
-                            <div class="warning-box">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                <h4>중요한 특징</h4>
-                                <p>매개변수는 바깥 변수와 <strong>독립적</strong>입니다. 함수 내부에서 매개변수 값을 변경해도 원본 변수는 영향받지 않습니다.</p>
-                            </div>
-                        </div>
-                        <div class="demonstration-example">
-                            <h4><i class="fas fa-code"></i> 실제 예제</h4>
-                            <pre><code class="language-javascript">function reassign(x) {
-  x = 100;  // 매개변수 x 변경
-  return x;
+        <!-- Slide 4: Function Declaration Methods -->
+        <section class="slide" data-slide-id="declaration">
+            <h2><i class="fas fa-code-branch"></i> 함수 정의 방법</h2>
+            <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="card">
+                    <h3>함수 선언문</h3>
+                    <div class="code-block">
+                        <code>
+<span class="keyword">function</span> <span class="function">greet</span>(name) {
+  <span class="keyword">return</span> <span class="string">`안녕, ${name}!`</span>;
 }
-
-const y = 50;
-const result = reassign(y);
-
-console.log(y);      // 50 (변경되지 않음)
-console.log(result); // 100</code></pre>
-                        </div>
+                        </code>
                     </div>
+                    <p><i class="fas fa-check icon"></i>호이스팅 됨</p>
                 </div>
-            </div>
-        </section>
-
-        <!-- 슬라이드 6: 반환값 -->
-        <section class="slide" data-slide="6">
-            <div class="slide-content">
-                <h1><i class="fas fa-undo"></i> 반환값 (Return Value)</h1>
-                <div class="return-demo">
-                    <div class="return-explanation">
-                        <div class="return-card">
-                            <h3><i class="fas fa-code"></i> return 구문</h3>
-                            <p>함수의 실행 결과를 호출한 곳으로 돌려보내는 구문</p>
-                        </div>
-                        <div class="return-behavior">
-                            <h4>동작 방식</h4>
-                            <ul>
-                                <li><code>return</code> 키워드 다음의 값이 반환됨</li>
-                                <li>반환되는 즉시 함수 실행이 <strong>종료</strong>됨</li>
-                                <li><code>return</code> 없으면 <code>undefined</code> 반환</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="return-examples">
-                        <div class="example-grid">
-                            <div class="example-card">
-                                <h4><i class="fas fa-check"></i> 값 반환</h4>
-                                <pre><code class="language-javascript">function add(x, y) {
-  return x + y;
-}
-add(2, 3); // 5</code></pre>
-                            </div>
-                            <div class="example-card">
-                                <h4><i class="fas fa-stop"></i> 조기 종료</h4>
-                                <pre><code class="language-javascript">function add(x, y) {
-  return x + y;
-  console.log('실행 안됨');
-}</code></pre>
-                            </div>
-                            <div class="example-card">
-                                <h4><i class="fas fa-question"></i> undefined 반환</h4>
-                                <pre><code class="language-javascript">function noReturn() {
-  // return 없음
-}
-noReturn(); // undefined</code></pre>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="return-visualization" id="return-flow-demo">
-                        <!-- JavaScript로 return 동작 시각화 -->
-                    </div>
-                    <div class="interactive-return-demo">
-                        <h3><i class="fas fa-play"></i> 인터랙티브 데모</h3>
-                        <div style="text-align: center; margin: 20px 0;">
-                            <button id="demo-return-behavior">return 동작 실행</button>
-                        </div>
-                        <div id="return-demo-output"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 슬라이드 7: 스코프 소개 -->
-        <section class="slide" data-slide="7">
-            <div class="slide-content" style="overflow-y: auto; max-height: 90vh; padding-right: 20px;">
-                <h1><i class="fas fa-map-marked-alt"></i> 스코프 (Scope)</h1>
-                <div class="scope-introduction">
-                    <div class="scope-definition">
-                        <div class="definition-card">
-                            <h3>스코프란?</h3>
-                            <p>변수가 <strong>유효한 코드 상의 범위</strong>를 의미합니다.</p>
-                        </div>
-                    </div>
-                    <div class="scope-visualization" id="scope-demo">
-                        <!-- JavaScript로 스코프 시각화 -->
-                    </div>
-                    <div class="scope-example">
-                        <h3><i class="fas fa-code"></i> 기본 예제</h3>
-                        <pre><code class="language-javascript">function add(x, y) { // x, y는 함수 내부에서만 유효
-  return x + y;
-}
-add(2, 3);
-console.log(x); // 에러! x는 함수 밖에서 접근 불가</code></pre>
-                    </div>
-                    <div class="scope-benefits">
-                        <h3><i class="fas fa-star"></i> 스코프의 장점</h3>
-                        <div class="benefit-grid">
-                            <div class="benefit-item">
-                                <i class="fas fa-shield-alt"></i>
-                                <h4>변수 보호</h4>
-                                <p>함수 내부 변수가 외부에 노출되지 않아 안전</p>
-                            </div>
-                            <div class="benefit-item">
-                                <i class="fas fa-recycle"></i>
-                                <h4>이름 재사용</h4>
-                                <p>같은 변수명을 다른 함수에서 사용 가능</p>
-                            </div>
-                            <div class="benefit-item">
-                                <i class="fas fa-memory"></i>
-                                <h4>메모리 효율</h4>
-                                <p>함수 종료 시 지역 변수가 자동으로 정리</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 슬라이드 8: 스코프 연쇄 -->
-        <section class="slide" data-slide="8">
-            <div class="slide-content">
-                <h1><i class="fas fa-link"></i> 스코프 연쇄 (Scope Chain)</h1>
-                <div class="scope-chain-demo">
-                    <div class="chain-explanation">
-                        <div class="explanation-card">
-                            <h3>스코프 연쇄란?</h3>
-                            <p>변수를 찾을 때 현재 스코프부터 시작해서 <strong>바깥쪽 스코프로 차례대로 찾아가는 과정</strong></p>
-                        </div>
-                    </div>
-                    <div class="chain-visualization" id="scope-chain-demo">
-                        <!-- JavaScript로 스코프 연쇄 시각화 -->
-                    </div>
-                    <div class="interactive-chain-demo">
-                        <h3><i class="fas fa-play"></i> 인터랙티브 데모</h3>
-                        <div style="text-align: center; margin: 20px 0;">
-                            <button id="demo-scope-chain">스코프 연쇄 추적</button>
-                        </div>
-                        <div id="scope-chain-output"></div>
-                    </div>
-                    <div class="chain-example">
-                        <div class="example-code">
-                            <pre><code class="language-javascript">const five = 5;          // 전역 스코프
-
-function add5(x) {        // 함수 스코프
-  function add(y) {       // 중첩 함수 스코프
-    return x + y;         // x는 상위 스코프에서 찾음
-  }
-  return add(five);       // five는 전역 스코프에서 찾음
-}
-
-add5(3); // 8</code></pre>
-                        </div>
-                        <div class="lookup-process">
-                            <h4><i class="fas fa-search"></i> 변수 찾기 과정</h4>
-                            <div class="process-steps">
-                                <div class="step">
-                                    <span class="step-num">1</span>
-                                    <p>현재 스코프에서 변수 검색</p>
-                                </div>
-                                <div class="step">
-                                    <span class="step-num">2</span>
-                                    <p>없으면 상위 스코프로 이동</p>
-                                </div>
-                                <div class="step">
-                                    <span class="step-num">3</span>
-                                    <p>전역 스코프까지 반복</p>
-                                </div>
-                                <div class="step">
-                                    <span class="step-num">4</span>
-                                    <p>끝까지 없으면 에러 발생</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 슬라이드 9: 변수 가리기 -->
-        <section class="slide" data-slide="9">
-            <div class="slide-content">
-                <h1><i class="fas fa-mask"></i> 변수 가리기 (Variable Shadowing)</h1>
-                <div class="shadowing-demo">
-                    <div class="shadowing-explanation">
-                        <div class="explanation-card">
-                            <h3>변수 가리기란?</h3>
-                            <p>안쪽 스코프에서 바깥쪽 스코프와 <strong>같은 이름의 변수</strong>를 선언하면, 안쪽에서는 바깥쪽 변수가 가려지는 현상</p>
-                        </div>
-                    </div>
-                    <div class="shadowing-visualization" id="shadowing-demo">
-                        <!-- JavaScript로 변수 가리기 시각화 -->
-                    </div>
-                    <div class="interactive-shadowing-demo">
-                        <h3><i class="fas fa-play"></i> 인터랙티브 데모</h3>
-                        <div style="text-align: center; margin: 20px 0;">
-                            <button id="demo-shadowing">변수 가리기 확인</button>
-                        </div>
-                        <div id="shadowing-output"></div>
-                    </div>
-                    <div class="shadowing-example">
-                        <div class="example-code">
-                            <pre><code class="language-javascript">const x = 3;              // 전역 x
-
-function add5(x) {        // 매개변수 x (전역 x를 가림)
-  function add(x, y) {    // 매개변수 x (상위 x를 가림)
-    return x + y;         // 가장 가까운 x 사용
-  }
-  return add(x, 5);       // 함수 스코프의 x 사용
-}
-
-add5(10); // 15</code></pre>
-                        </div>
-                        <div class="shadowing-rules">
-                            <h4><i class="fas fa-exclamation-circle"></i> 주의사항</h4>
-                            <ul>
-                                <li>가려진 변수는 <strong>접근 불가능</strong>해짐</li>
-                                <li>같은 스코프에서는 같은 이름 변수 선언 불가</li>
-                                <li>의도치 않은 가리기는 <strong>버그의 원인</strong>이 될 수 있음</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 슬라이드 10: 어휘적 스코핑 -->
-        <section class="slide" data-slide="10">
-            <div class="slide-content">
-                <h1><i class="fas fa-book"></i> 어휘적 스코핑 (Lexical Scoping)</h1>
-                <div class="lexical-demo">
-                    <div class="lexical-explanation">
-                        <div class="explanation-card">
-                            <h3>어휘적 스코핑이란?</h3>
-                            <p>스코프가 <strong>코드가 작성된 구조</strong>에 의해 결정되며, <strong>함수 호출 위치</strong>와는 무관한 특성</p>
-                        </div>
-                    </div>
-                    <div class="lexical-comparison">
-                        <div class="comparison-grid">
-                            <div class="wrong-example">
-                                <h4><i class="fas fa-times"></i> 잘못된 이해</h4>
-                                <pre><code class="language-javascript">function add5(x) {
-  const five = 5;
-  return add(x);    // add가 여기서 호출됨
-}
-
-function add(x) {
-  return five + x;  // ❌ five에 접근 불가
-}
-
-add5(3); // ReferenceError</code></pre>
-                                <p class="explanation">호출 위치와 상관없이 add 함수는 five 변수에 접근할 수 없습니다.</p>
-                            </div>
-                            <div class="correct-example">
-                                <h4><i class="fas fa-check"></i> 올바른 방법</h4>
-                                <pre><code class="language-javascript">function add5(x) {
-  const five = 5;
-  
-  function add(x) {   // add를 내부에 정의
-    return five + x;  // ✅ five에 접근 가능
-  }
-  
-  return add(x);
-}
-
-add5(3); // 8</code></pre>
-                                <p class="explanation">함수가 정의된 위치에 따라 스코프가 결정됩니다.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lexical-visualization" id="lexical-scoping-demo">
-                        <!-- JavaScript로 어휘적 스코핑 시각화 -->
-                    </div>
-                    <div class="interactive-lexical-demo">
-                        <h3><i class="fas fa-play"></i> 인터랙티브 데모</h3>
-                        <div style="text-align: center; margin: 20px 0;">
-                            <button id="demo-lexical">어휘적 스코핑 확인</button>
-                        </div>
-                        <div id="lexical-output"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 슬라이드 11: 값으로서의 함수 -->
-        <section class="slide" data-slide="11">
-            <div class="slide-content">
-                <h1><i class="fas fa-gem"></i> 값으로서의 함수</h1>
-                <div class="function-as-value">
-                    <div class="value-explanation">
-                        <div class="explanation-card">
-                            <h3>1급 함수 (First-Class Function)</h3>
-                            <p>JavaScript에서 함수는 <strong>값</strong>으로 취급되어 다른 데이터 타입처럼 자유롭게 사용할 수 있습니다.</p>
-                        </div>
-                    </div>
-                    <div class="first-class-features">
-                        <h3><i class="fas fa-star"></i> 1급 함수의 특징</h3>
-                        <div class="feature-grid">
-                            <div class="feature-card">
-                                <i class="fas fa-box"></i>
-                                <h4>변수 할당</h4>
-                                <pre><code class="language-javascript">const myFunc = function() {
-  return "Hello!";
-};</code></pre>
-                            </div>
-                            <div class="feature-card">
-                                <i class="fas fa-arrow-right"></i>
-                                <h4>인수로 전달</h4>
-                                <pre><code class="language-javascript">[1,2,3].filter(function(x) {
-  return x > 1;
-});</code></pre>
-                            </div>
-                            <div class="feature-card">
-                                <i class="fas fa-undo"></i>
-                                <h4>반환값으로 사용</h4>
-                                <pre><code class="language-javascript">function createFunc() {
-  return function() {
-    return "Created!";
-  };
-}</code></pre>
-                            </div>
-                            <div class="feature-card">
-                                <i class="fas fa-database"></i>
-                                <h4>자료구조에 저장</h4>
-                                <pre><code class="language-javascript">const funcs = [add, subtract];
-const obj = {method: myFunc};</code></pre>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="practical-example">
-                        <h3><i class="fas fa-tools"></i> 실제 활용 예시</h3>
-                        <div id="first-class-demo">
-                            <!-- JavaScript로 1급 함수 데모 생성 -->
-                        </div>
-                        <div class="interactive-first-class-demo">
-                            <h3><i class="fas fa-play"></i> 인터랙티브 데모</h3>
-                            <div style="text-align: center; margin: 20px 0;">
-                                <button id="demo-first-class">1급 함수 기능 체험</button>
-                            </div>
-                            <div id="first-class-output"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 슬라이드 12: 화살표 함수 -->
-        <section class="slide" data-slide="12">
-            <div class="slide-content">
-                <h1><i class="fas fa-arrow-right"></i> 화살표 함수 (Arrow Function)</h1>
-                <div class="arrow-function-demo">
-                    <div class="arrow-introduction">
-                        <div class="intro-card">
-                            <h3>화살표 함수란?</h3>
-                            <p>ES2015에서 도입된 <strong>간결한 함수 정의 문법</strong>으로, 특히 익명 함수를 간단하게 작성할 때 유용합니다.</p>
-                        </div>
-                    </div>
-                    <div class="syntax-comparison">
-                        <h3><i class="fas fa-code"></i> 문법 비교</h3>
-                        <div class="comparison-grid">
-                            <div class="traditional">
-                                <h4>전통적인 함수</h4>
-                                <pre><code class="language-javascript">// 기본 형태
-function add(x, y) {
-  return x + y;
-}
-
-// 익명 함수
-const add = function(x, y) {
-  return x + y;
-};</code></pre>
-                            </div>
-                            <div class="arrow">
-                                <h4>화살표 함수</h4>
-                                <pre><code class="language-javascript">// 기본 형태
-const add = (x, y) => {
-  return x + y;
+                <div class="card">
+                    <h3>함수 표현식</h3>
+                    <div class="code-block">
+                        <code>
+<span class="keyword">const</span> greet = <span class="keyword">function</span>(name) {
+  <span class="keyword">return</span> <span class="string">`안녕, ${name}!`</span>;
 };
+                        </code>
+                    </div>
+                    <p><i class="fas fa-times icon"></i>호이스팅 안 됨</p>
+                </div>
+                <div class="card">
+                    <h3>화살표 함수</h3>
+                    <div class="code-block">
+                        <code>
+<span class="keyword">const</span> greet = (name) => {
+  <span class="keyword">return</span> <span class="string">`안녕, ${name}!`</span>;
+};
+                        </code>
+                    </div>
+                    <p><i class="fas fa-info icon"></i>this 바인딩 없음</p>
+                </div>
+            </div>
+        </section>
 
-// 간단한 형태
-const add = (x, y) => x + y;</code></pre>
-                            </div>
-                        </div>
+        <!-- Slide 5: Scope Visualization -->
+        <section class="slide" data-slide-id="scope">
+            <h2><i class="fas fa-layer-group"></i> 스코프와 스코프 체인</h2>
+            <div class="visualization" id="scope-visualization">
+                <div class="scope-box" style="width: 600px; height: 400px;">
+                    <span class="scope-label">전역 스코프</span>
+                    <div style="margin-top: 20px;">
+                        <code>const globalVar = '전역';</code>
                     </div>
-                    <div class="arrow-variations">
-                        <h3><i class="fas fa-list"></i> 다양한 형태</h3>
-                        <div class="variation-grid">
-                            <div class="variation-card">
-                                <h4>매개변수 하나</h4>
-                                <pre><code class="language-javascript">const negate = x => !x;
-// 괄호 생략 가능</code></pre>
-                            </div>
-                            <div class="variation-card">
-                                <h4>매개변수 없음</h4>
-                                <pre><code class="language-javascript">const sayHello = () => "Hello!";
-// 빈 괄호 필요</code></pre>
-                            </div>
-                            <div class="variation-card">
-                                <h4>블록 구문</h4>
-                                <pre><code class="language-javascript">const complex = (x, y) => {
-  const result = x * y;
-  return result + 1;
-};</code></pre>
-                            </div>
-                            <div class="variation-card">
-                                <h4>객체 반환</h4>
-                                <pre><code class="language-javascript">const createUser = name => ({
-  name: name,
-  id: Math.random()
-});</code></pre>
-                            </div>
+                    <div class="scope-box" style="margin-top: 20px;">
+                        <span class="scope-label">외부 함수 스코프</span>
+                        <div style="margin-top: 20px;">
+                            <code>const outerVar = '외부';</code>
                         </div>
-                    </div>
-                    <div class="arrow-usage">
-                        <h3><i class="fas fa-rocket"></i> 실제 사용 예시</h3>
-                        <div id="arrow-function-demo">
-                            <!-- JavaScript로 화살표 함수 활용 데모 생성 -->
-                        </div>
-                        <div class="interactive-arrow-demo">
-                            <h3><i class="fas fa-play"></i> 인터랙티브 데모</h3>
-                            <div style="text-align: center; margin: 20px 0;">
-                                <button id="demo-arrow">화살표 함수 변환 보기</button>
+                        <div class="scope-box" style="margin-top: 20px;">
+                            <span class="scope-label">내부 함수 스코프</span>
+                            <div style="margin-top: 20px;">
+                                <code>const innerVar = '내부';</code>
                             </div>
-                            <div id="arrow-output"></div>
                         </div>
                     </div>
                 </div>
             </div>
+            <button class="button" onclick="animateScopeChain()">
+                <i class="fas fa-search"></i> 스코프 체인 시뮬레이션
+            </button>
         </section>
-    </main>
 
-    <!-- 네비게이션 컨트롤 -->
-    <div class="nav-controls">
-        <button class="nav-btn" id="prev-btn">
+        <!-- Slide 6: Closure Example -->
+        <section class="slide" data-slide-id="closure">
+            <h2><i class="fas fa-lock"></i> 클로저 실습</h2>
+            <div class="interactive-demo">
+                <div class="code-block">
+                    <code>
+<span class="keyword">function</span> <span class="function">makeCounter</span>() {
+  <span class="keyword">let</span> count = <span class="number">0</span>;
+  
+  <span class="keyword">return</span> <span class="keyword">function</span>() {
+    count++;
+    <span class="keyword">return</span> count;
+  };
+}
+
+<span class="keyword">const</span> counter1 = <span class="function">makeCounter</span>();
+<span class="keyword">const</span> counter2 = <span class="function">makeCounter</span>();
+                    </code>
+                </div>
+                <div style="margin-top: 2rem; display: flex; gap: 2rem; justify-content: center;">
+                    <div class="card">
+                        <h3>Counter 1</h3>
+                        <div id="counter1-display" style="font-size: 3rem; color: var(--accent-blue);">0</div>
+                        <button class="button" onclick="incrementCounter1()">증가</button>
+                    </div>
+                    <div class="card">
+                        <h3>Counter 2</h3>
+                        <div id="counter2-display" style="font-size: 3rem; color: var(--accent-green);">0</div>
+                        <button class="button" onclick="incrementCounter2()">증가</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: Higher Order Functions -->
+        <section class="slide" data-slide-id="higher-order">
+            <h2><i class="fas fa-layer-group"></i> 고차 함수</h2>
+            <div class="interactive-demo">
+                <h3>배열 필터링 실습</h3>
+                <div class="code-block">
+                    <code>
+<span class="keyword">const</span> numbers = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>];
+
+<span class="comment">// 조건을 선택하세요:</span>
+                    </code>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <button class="button" onclick="filterEven()">짝수만</button>
+                    <button class="button" onclick="filterOdd()">홀수만</button>
+                    <button class="button" onclick="filterGreaterThan5()">5보다 큰 수</button>
+                </div>
+                <div id="filter-result" class="card" style="margin-top: 2rem; min-height: 80px;">
+                    <p>결과가 여기에 표시됩니다</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 8: this Keyword -->
+        <section class="slide" data-slide-id="this-keyword">
+            <h2><i class="fas fa-hand-pointer"></i> this 키워드</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>일반 함수에서의 this</h3>
+                    <div class="code-block">
+                        <code>
+<span class="keyword">const</span> obj = {
+  name: <span class="string">'김철수'</span>,
+  greet: <span class="keyword">function</span>() {
+    <span class="keyword">return</span> <span class="string">`안녕, ${<span class="keyword">this</span>.name}!`</span>;
+  }
+};
+obj.greet(); <span class="comment">// "안녕, 김철수!"</span>
+                        </code>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>화살표 함수에서의 this</h3>
+                    <div class="code-block">
+                        <code>
+<span class="keyword">const</span> obj = {
+  name: <span class="string">'김철수'</span>,
+  greet: () => {
+    <span class="keyword">return</span> <span class="string">`안녕, ${<span class="keyword">this</span>.name}!`</span>;
+  }
+};
+obj.greet(); <span class="comment">// "안녕, undefined!"</span>
+                        </code>
+                    </div>
+                </div>
+            </div>
+            <button class="button" onclick="demonstrateThis()">
+                <i class="fas fa-play"></i> this 동작 확인하기
+            </button>
+            <div id="this-demo-result" style="margin-top: 1rem;"></div>
+        </section>
+
+        <!-- Slide 9: Practice Quiz -->
+        <section class="slide" data-slide-id="quiz">
+            <h2><i class="fas fa-question-circle"></i> 실습 퀴즈</h2>
+            <div class="interactive-demo">
+                <h3>Q. 다음 코드의 실행 결과는?</h3>
+                <div class="code-block">
+                    <code>
+<span class="keyword">const</span> x = <span class="number">1</span>;
+<span class="keyword">function</span> <span class="function">test</span>(x) {
+  x = <span class="number">2</span>;
+}
+<span class="function">test</span>(x);
+console.<span class="function">log</span>(x);
+                    </code>
+                </div>
+                <div style="margin-top: 2rem;">
+                    <div class="quiz-option" onclick="checkAnswer(this, '1')">1</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, '2')">2</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, 'undefined')">undefined</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, 'error')">에러 발생</div>
+                </div>
+                <div id="quiz-explanation" style="margin-top: 2rem;"></div>
+            </div>
+        </section>
+
+        <!-- Slide 10: Summary -->
+        <section class="slide" data-slide-id="summary">
+            <h2><i class="fas fa-check-circle"></i> 학습 체크리스트</h2>
+            <div class="card" style="max-width: 800px;">
+                <div id="checklist">
+                    <label class="checkbox-item">
+                        <input type="checkbox"> 함수의 세 가지 정의 방법을 사용할 수 있다
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox"> 매개변수와 인수의 차이점을 안다
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox"> 스코프와 스코프 체인을 이해한다
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox"> 클로저를 활용할 수 있다
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox"> 고차 함수를 작성할 수 있다
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox"> this 키워드의 동작을 이해한다
+                    </label>
+                </div>
+                <div style="margin-top: 2rem; text-align: center;">
+                    <p id="completion-message" style="font-size: 1.2rem; color: var(--accent-green); opacity: 0;">
+                        🎉 축하합니다! 모든 학습 목표를 달성했습니다!
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-buttons">
+        <button class="nav-button" onclick="presentation.prev()">
             <i class="fas fa-chevron-left"></i>
         </button>
-        <button class="nav-btn" id="next-btn">
+        <button class="nav-button" onclick="presentation.next()">
             <i class="fas fa-chevron-right"></i>
         </button>
     </div>
 
-    <!-- 키보드 가이드 -->
-    <div class="keyboard-guide">
-        <div class="guide-item">
-            <kbd>←</kbd><kbd>→</kbd> 슬라이드 이동
-        </div>
-        <div class="guide-item">
-            <kbd>Home</kbd><kbd>End</kbd> 처음/끝
-        </div>
-        <div class="guide-item">
-            <kbd>Space</kbd> 다음 슬라이드
-        </div>
-    </div>
+    <script>
+        // Presentation Controller
+        class PresentationController {
+            constructor(selector) {
+                this.container = document.querySelector(selector);
+                this.slides = Array.from(this.container.children);
+                this.currentSlideIndex = 0;
+                this.activeTimers = [];
+                this.init();
+            }
 
-    <!-- JavaScript 라이브러리 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
-    <script src="script.js"></script>
+            init() {
+                this.updateSlideVisibility();
+                this.updateProgressBar();
+                this.setupKeyboardNavigation();
+                this.runSlideAnimations(0);
+            }
+
+            setupKeyboardNavigation() {
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowRight') this.next();
+                    else if (e.key === 'ArrowLeft') this.prev();
+                });
+            }
+
+            goTo(index) {
+                if (index < 0 || index >= this.slides.length) return;
+
+                this.clearAnimations();
+                this.currentSlideIndex = index;
+                this.updateSlideVisibility();
+                this.updateProgressBar();
+                this.runSlideAnimations(index);
+            }
+
+            next() { this.goTo(this.currentSlideIndex + 1); }
+            prev() { this.goTo(this.currentSlideIndex - 1); }
+
+            updateSlideVisibility() {
+                this.slides.forEach((slide, index) => {
+                    slide.classList.toggle('active', index === this.currentSlideIndex);
+                });
+            }
+
+            updateProgressBar() {
+                const progress = ((this.currentSlideIndex + 1) / this.slides.length) * 100;
+                document.getElementById('progress-bar').style.width = `${progress}%`;
+            }
+
+            clearAnimations() {
+                this.activeTimers.forEach(timerId => clearTimeout(timerId));
+                this.activeTimers = [];
+            }
+
+            runSlideAnimations(index) {
+                const slideId = this.slides[index].dataset.slideId;
+                
+                // Reset any previous states
+                if (slideId === 'scope') {
+                    document.querySelectorAll('.scope-box').forEach(box => {
+                        box.classList.remove('highlight');
+                    });
+                }
+            }
+        }
+
+        // Initialize presentation
+        const presentation = new PresentationController('#presentation-container');
+
+        // Interactive Functions
+
+        // Function Parts Animation
+        function animateFunctionParts() {
+            const result = document.getElementById('function-parts-result');
+            const steps = [
+                { text: '1️⃣ 함수 이름: <code>add</code>', delay: 0 },
+                { text: '2️⃣ 매개변수: <code>x, y</code>', delay: 500 },
+                { text: '3️⃣ 함수 본문: <code>const result = x + y;</code>', delay: 1000 },
+                { text: '4️⃣ 반환값: <code>return result;</code>', delay: 1500 },
+                { text: '5️⃣ 함수 호출: <code>add(2, 3)</code> → <strong>5</strong>', delay: 2000 }
+            ];
+
+            result.innerHTML = '';
+            steps.forEach(step => {
+                setTimeout(() => {
+                    result.innerHTML += `<p style="animation: fadeInUp 0.5s ease-out">${step.text}</p>`;
+                }, step.delay);
+            });
+        }
+
+        // Scope Chain Animation
+        function animateScopeChain() {
+            const boxes = document.querySelectorAll('.scope-box');
+            boxes.forEach(box => box.classList.remove('highlight'));
+
+            const highlightSequence = [2, 1, 0]; // Inner to outer
+            highlightSequence.forEach((index, step) => {
+                setTimeout(() => {
+                    boxes[index].classList.add('highlight');
+                }, step * 800);
+            });
+        }
+
+        // Closure Counter Demo
+        let counter1 = 0;
+        let counter2 = 0;
+
+        function incrementCounter1() {
+            counter1++;
+            document.getElementById('counter1-display').textContent = counter1;
+        }
+
+        function incrementCounter2() {
+            counter2++;
+            document.getElementById('counter2-display').textContent = counter2;
+        }
+
+        // Higher Order Functions Demo
+        const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+        function displayFilterResult(filtered, condition) {
+            const result = document.getElementById('filter-result');
+            result.innerHTML = `
+                <p><strong>조건:</strong> ${condition}</p>
+                <p><strong>결과:</strong> [${filtered.join(', ')}]</p>
+                <div class="code-block" style="margin-top: 1rem;">
+                    <code>numbers.filter(${condition})</code>
+                </div>
+            `;
+        }
+
+        function filterEven() {
+            const filtered = numbers.filter(x => x % 2 === 0);
+            displayFilterResult(filtered, 'x => x % 2 === 0');
+        }
+
+        function filterOdd() {
+            const filtered = numbers.filter(x => x % 2 !== 0);
+            displayFilterResult(filtered, 'x => x % 2 !== 0');
+        }
+
+        function filterGreaterThan5() {
+            const filtered = numbers.filter(x => x > 5);
+            displayFilterResult(filtered, 'x => x > 5');
+        }
+
+        // this Keyword Demo
+        function demonstrateThis() {
+            const result = document.getElementById('this-demo-result');
+            
+            const obj = {
+                name: '김철수',
+                greetNormal: function() {
+                    return `일반 함수: 안녕, ${this.name}!`;
+                },
+                greetArrow: () => {
+                    return `화살표 함수: 안녕, ${this.name}!`;
+                }
+            };
+
+            result.innerHTML = `
+                <div class="card">
+                    <p>${obj.greetNormal()}</p>
+                    <p>${obj.greetArrow()}</p>
+                    <p style="margin-top: 1rem; color: var(--text-secondary);">
+                        <i class="fas fa-info-circle"></i> 화살표 함수는 자신만의 this를 갖지 않고, 상위 스코프의 this를 사용합니다.
+                    </p>
+                </div>
+            `;
+        }
+
+        // Quiz
+        function checkAnswer(element, answer) {
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+            });
+
+            if (answer === '1') {
+                element.classList.add('correct');
+                document.getElementById('quiz-explanation').innerHTML = `
+                    <div class="card" style="background: rgba(52, 168, 83, 0.1);">
+                        <p><i class="fas fa-check-circle" style="color: var(--accent-green);"></i> 정답입니다!</p>
+                        <p>매개변수 x는 함수 내부의 독립적인 변수입니다. 함수 내부에서 x = 2로 변경해도 외부의 x 값은 영향을 받지 않습니다.</p>
+                    </div>
+                `;
+            } else {
+                element.classList.add('incorrect');
+                document.getElementById('quiz-explanation').innerHTML = `
+                    <div class="card" style="background: rgba(234, 67, 53, 0.1);">
+                        <p><i class="fas fa-times-circle" style="color: var(--accent-red);"></i> 다시 생각해보세요!</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Checklist
+        document.querySelectorAll('#checklist input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                const allChecked = Array.from(document.querySelectorAll('#checklist input[type="checkbox"]'))
+                    .every(cb => cb.checked);
+                
+                if (allChecked) {
+                    document.getElementById('completion-message').style.opacity = '1';
+                }
+            });
+        });
+
+        // Style for checkboxes
+        const style = document.createElement('style');
+        style.textContent = `
+            .checkbox-item {
+                display: block;
+                padding: 1rem;
+                margin: 0.5rem 0;
+                background: var(--bg-dark);
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all var(--transition-speed) ease;
+            }
+
+            .checkbox-item:hover {
+                background: rgba(66, 133, 244, 0.1);
+            }
+
+            .checkbox-item input[type="checkbox"] {
+                margin-right: 1rem;
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+            }
+
+            .checkbox-item input[type="checkbox"]:checked + * {
+                color: var(--accent-green);
+            }
+
+            .parameter { color: #e06c75; }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>

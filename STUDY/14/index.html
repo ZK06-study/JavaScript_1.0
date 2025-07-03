@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>웹 프레젠테이션 - 14. 객체 심화</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+    <div class="progress-bar"></div>
+    <div id="presentation-container">
+        <!-- Slide 1: Title -->
+        <section class="slide active" data-slide-id="0">
+            <div class="card">
+                <h1><i class="fa-solid fa-cube"></i> 자바스크립트 객체 심화</h1>
+                <p>프로토타입부터 속성 제어까지, 객체의 모든 것을 알아봅니다.</p>
+            </div>
+        </section>
+
+        <!-- Slide 2: Learning Objectives -->
+        <section class="slide" data-slide-id="1">
+            <h2><i class="fas fa-bullseye"></i> 학습 목표</h2>
+            <ul>
+                <li><i class="fa-solid fa-lightbulb"></i> 객체의 다양한 속성 접근 및 제어 방식 이해</li>
+                <li><i class="fa-solid fa-gears"></i> 'this'의 동작 원리와 생성자 함수 활용</li>
+                <li><i class="fa-solid fa-link"></i> 프로토타입 체인을 통한 상속 메커니즘 파악</li>
+                <li><i class="fa-solid fa-sliders"></i> 속성 설명자를 이용한 객체 속성 정밀 제어</li>
+                <li><i class="fa-solid fa-object-group"></i> 캡슐화, 상속 등 객체 지향 프로그래밍 개념 적용</li>
+            </ul>
+        </section>
+        
+        <!-- Slide 3: Basics -->
+        <section class="slide" data-slide-id="2">
+            <h2><i class="fa-solid fa-book"></i> 기본기: 속성 접근과 메소드</h2>
+            <pre><code class="javascript">const person = { 
+  name: 'Alice',
+  greet() { console.log(`Hello, I'm ${this.name}`); }
+};
+
+// 속성 접근
+console.log(person.name); // 'Alice'
+console.log(person['name']); // 'Alice'
+
+// 속성 추가 및 삭제
+person.age = 30;
+delete person.name;
+
+// 메소드 호출
+person.greet(); // "Hello, I'm undefined" (name이 삭제되었으므로)
+</code></pre>
+            <p>객체의 기본은 속성을 다루는 것입니다. 점(.) 또는 대괄호([])로 접근하며, 함수인 속성을 '메소드'라 부릅니다.</p>
+        </section>
+
+        <!-- Slide 4: Constructor -->
+        <section class="slide" data-slide-id="3">
+            <h2><i class="fa-solid fa-wrench"></i> 객체 생성: 생성자 함수</h2>
+            <pre><code class="javascript">function Person(name, age) {
+  // new와 함께 호출되면 this는 새로 생성될 객체를 가리킵니다.
+  this.name = name;
+  this.age = age;
+}
+
+// new 키워드로 새로운 객체(인스턴스)를 생성합니다.
+const alice = new Person('Alice', 30);
+const bob = new Person('Bob', 25);
+
+console.log(alice.name); // 'Alice'
+console.log(bob.age); // 25
+</code></pre>
+            <p><code>new</code> 키워드와 함께 사용되어 객체를 '찍어내는' 함수입니다. 객체의 청사진 역할을 합니다.</p>
+        </section>
+
+        <!-- Slide 5: Prototype Intro -->
+        <section class="slide" data-slide-id="4">
+            <h2><i class="fa-solid fa-diagram-project"></i> 핵심: 프로토타입</h2>
+            <div class="card">
+                <p>자바스크립트의 모든 객체는 **프로토타입(prototype)**이라는 다른 객체를 '부모'로 가리킵니다. 속성이나 메소드를 찾을 때, 현재 객체에 없으면 부모인 프로토타입을 따라 올라가며 찾습니다. 이 연결을 **프로토타입 체인**이라고 합니다.</p>
+                <p class="highlight">이것이 자바스크립트 상속의 핵심 원리입니다.</p>
+            </div>
+            <p style="text-align: center; margin-top: 20px;">다음 슬라이드에서 시각적으로 확인해봅시다.</p>
+        </section>
+
+        <!-- Slide 6: Interactive Prototype Demo -->
+        <section class="slide" data-slide-id="prototype-demo">
+            <h2><i class="fa-solid fa-sitemap"></i> 인터랙티브 데모: 프로토타입 체인</h2>
+            <div id="prototype-visualizer-container">
+                <!-- JS로 동적 생성될 시각화 영역 -->
+            </div>
+            <p>객체와 프로토타입의 관계를 시각적으로 보여줍니다. <code>myDog</code> 객체는 <code>Dog.prototype</code>을, <code>Dog.prototype</code>은 <code>Animal.prototype</code>을 가리킵니다.</p>
+        </section>
+
+        <!-- Slide 7: Property Descriptors -->
+        <section class="slide" data-slide-id="6">
+            <h2><i class="fa-solid fa-magnifying-glass-chart"></i> 심층 분석: 속성 설명자</h2>
+            <p>객체 속성은 단순한 값 외에 숨겨진 '부수 속성'들을 가집니다. 이를 **속성 설명자**라고 합니다.</p>
+            <pre><code class="javascript">// Math.PI는 수정, 삭제, 열거가 불가능하도록 설정되어 있습니다.
+const descriptor = Object.getOwnPropertyDescriptor(Math, 'PI');
+
+console.log(descriptor);
+// {
+//   value: 3.141592653589793,
+//   writable: false,      // 수정 불가
+//   enumerable: false,    // 열거(for...in) 불가
+//   configurable: false   // 삭제 및 재정의 불가
+// }
+</code></pre>
+        </section>
+        
+        <!-- Slide 8: Object.defineProperty -->
+        <section class="slide" data-slide-id="7">
+            <h2><i class="fa-solid fa-lock"></i> 속성 잠그기: `defineProperty`</h2>
+            <p><code>Object.defineProperty</code>를 사용하면 속성의 동작을 정밀하게 제어할 수 있습니다.</p>
+            <pre><code class="javascript">const user = {};
+Object.defineProperty(user, 'name', {
+  value: 'Alice',
+  writable: false, // 이제 user.name은 변경할 수 없습니다.
+  configurable: true,
+  enumerable: true
+});
+
+user.name = 'Bob'; // 엄격 모드에서는 에러 발생
+console.log(user.name); // 'Alice'
+</code></pre>
+        </section>
+
+        <!-- Slide 9: Getter & Setter -->
+        <section class="slide" data-slide-id="8">
+            <h2><i class="fa-solid fa-repeat"></i> 동기화: Getter & Setter</h2>
+            <p>속성에 접근하거나 값을 할당할 때 특정 함수(getter/setter)를 실행시켜, 값의 동기화나 유효성 검사를 수행할 수 있습니다.</p>
+            <pre><code class="javascript">const user = {
+  _name: 'alice',
+  
+  get name() {
+    return this._name.toUpperCase();
+  },
+  
+  set name(value) {
+    if (value.length > 1) {
+      this._name = value;
+    }
+  }
+};
+
+console.log(user.name); // get 호출 -> 'ALICE'
+user.name = 'bob';      // set 호출
+console.log(user.name); // 'BOB'
+</code></pre>
+        </section>
+        
+        <!-- Slide 10: Encapsulation -->
+        <section class="slide" data-slide-id="9">
+            <h2><i class="fa-solid fa-box-archive"></i> 객체 지향: 캡슐화</h2>
+            <p>클로저를 이용해 외부에서 직접 접근할 수 없는 '비공개(private)' 데이터를 만들고, 정해진 메소드로만 조작하게 하는 기법입니다.</p>
+            <pre><code class="javascript">function BankAccount(initialBalance) {
+  let _balance = initialBalance; // private 변수
+
+  return {
+    getBalance() { return _balance; },
+    deposit(amount) { _balance += amount; }
+  };
+}
+
+const account = BankAccount(1000);
+console.log(account._balance); // undefined (직접 접근 불가)
+console.log(account.getBalance()); // 1000
+</code></pre>
+        </section>
+        
+        <!-- Slide 11: Quiz 1 -->
+        <section class="slide" data-slide-id="10">
+            <h2><i class="fa-solid fa-clipboard-question"></i> 퀴즈 타임 #1</h2>
+            <div class="card quiz-card">
+                <p class="question">Q. 프로토타입(Prototype)에 대한 설명으로 <strong>틀린</strong> 것은?</p>
+                <ol type="a">
+                    <li>모든 함수는 prototype 속성을 가진다.</li>
+                    <li>객체는 `__proto__` 속성으로 프로토타입에 접근할 수 있다.</li>
+                    <li>프로토타입은 상속을 구현하는 메커니즘이다.</li>
+                    <li>프로토타입은 ES6에서 폐기(deprecated)되었다.</li>
+                </ol>
+                <div class="answer" style="display: none;">
+                    <h4>정답: d</h4>
+                    <p>프로토타입은 폐기되지 않았으며, 클래스 문법의 내부 동작 역시 프로토타입을 기반으로 합니다. 여전히 자바스크립트 상속의 핵심입니다.</p>
+                </div>
+                <button class="reveal-btn">정답 확인</button>
+            </div>
+        </section>
+        
+        <!-- Slide 12: Quiz 2 -->
+        <section class="slide" data-slide-id="11">
+            <h2><i class="fa-solid fa-clipboard-question"></i> 퀴즈 타임 #2</h2>
+            <div class="card quiz-card">
+                <p class="question">Q. 다음 코드의 실행 결과는?</p>
+                <pre><code class="javascript">function Person(name) {
+  this.name = name;
+}
+Person.prototype.sayHello = function() {
+  console.log(`Hi, I'm ${this.name}`);
+};
+
+const person1 = new Person('Alice');
+
+Person.prototype.sayHello = function() {
+  console.log(`Wow! I'm ${this.name}`);
+};
+
+person1.sayHello();</code></pre>
+                <div class="answer" style="display: none;">
+                    <h4>정답: "Wow! I'm Alice"</h4>
+                    <p><code>person1.sayHello()</code>가 호출되는 시점에는 이미 <code>Person.prototype.sayHello</code>가 새로운 함수로 덮어쓰여진 상태입니다. 객체는 메소드를 호출할 때 프로토타입 체인을 동적으로 탐색하므로, 변경된 최신 함수가 실행됩니다.</p>
+                </div>
+                <button class="reveal-btn">정답 확인</button>
+            </div>
+        </section>
+
+        <!-- Slide 13: Summary -->
+        <section class="slide" data-slide-id="12">
+            <h2><i class="fas fa-check-circle"></i> 정리</h2>
+            <ul class="summary-list">
+                <li>객체는 JS의 핵심이며, <strong>프로토타입</strong>을 통해 상속을 구현합니다.</li>
+                <li><strong>생성자 함수</strong>는 객체를 만드는 청사진 역할을 합니다.</li>
+                <li><strong>속성 설명자</strong>로 객체 속성을 읽기 전용으로 만들거나 숨길 수 있습니다.</li>
+                <li><strong>캡슐화</strong>와 같은 OOP 패턴을 통해 더 견고한 코드를 작성할 수 있습니다.</li>
+            </ul>
+        </section>
+
+        <!-- Slide 14: End -->
+        <section class="slide" data-slide-id="13">
+            <div class="card">
+                <h1>감사합니다</h1>
+                <p>Q&A</p>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 

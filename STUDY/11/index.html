@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript 배열 마스터하기 - 인터랙티브 프레젠테이션</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Design System Variables */
+        :root {
+            /* Color Palette (Dark Mode) */
+            --bg-dark: #0a0e1a;
+            --bg-card: #131825;
+            --bg-card-hover: #1a2033;
+            --bg-code: #1e2433;
+            --text-primary: #e8ecf4;
+            --text-secondary: #a8b3cf;
+            --text-muted: #6b7794;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --border-color: #2a3142;
+            --border-light: #3a4252;
+            
+            /* Typography */
+            --font-main: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            --font-code: 'JetBrains Mono', 'Fira Code', monospace;
+            
+            /* Spacing */
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            
+            /* Transitions */
+            --transition-speed: 300ms;
+            --transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.2), 0 6px 6px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.3);
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 1rem;
+            --radius-xl: 1.5rem;
+        }
+
+        /* Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #0f172a 100%);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            font-size: 16px;
+            line-height: 1.6;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Main Container */
+        #presentation-container {
+            width: 95%;
+            max-width: 1400px;
+            height: 90vh;
+            max-height: 900px;
+            position: relative;
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        /* Slide Component */
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: var(--spacing-2xl);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity var(--transition-speed) var(--transition-ease),
+                        transform var(--transition-speed) var(--transition-ease);
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Typography Components */
+        .slide h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: var(--spacing-lg);
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        .slide h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            margin-bottom: var(--spacing-xl);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .slide h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .slide p {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-lg);
+            max-width: 800px;
+        }
+
+        /* List Component */
+        .slide ul {
+            list-style: none;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .slide li {
+            font-size: 1.125rem;
+            margin-bottom: var(--spacing-md);
+            padding-left: var(--spacing-xl);
+            position: relative;
+            color: var(--text-secondary);
+        }
+
+        .slide li::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: var(--accent-purple);
+            font-size: 0.75rem;
+        }
+
+        /* Code Components */
+        code {
+            font-family: var(--font-code);
+            background: var(--bg-code);
+            color: var(--accent-pink);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            font-size: 0.95em;
+        }
+
+        pre {
+            background: var(--bg-code);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            overflow-x: auto;
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+
+        pre code {
+            background: none;
+            color: var(--text-primary);
+            padding: 0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Syntax Highlighting */
+        .token-keyword { color: var(--accent-purple); }
+        .token-string { color: var(--accent-green); }
+        .token-number { color: var(--accent-orange); }
+        .token-comment { color: var(--text-muted); font-style: italic; }
+        .token-function { color: var(--accent-blue); }
+        .token-operator { color: var(--accent-pink); }
+
+        /* Interactive Components */
+        .interactive-demo {
+            background: rgba(30, 36, 51, 0.6);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+            backdrop-filter: blur(10px);
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: var(--spacing-lg);
+        }
+
+        /* Button Component */
+        .btn {
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+            color: white;
+            border: none;
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border-radius: var(--radius-md);
+            font-family: var(--font-main);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-speed) var(--transition-ease);
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0);
+            transition: background var(--transition-speed) var(--transition-ease);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn:hover::before {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+            border: 1px solid var(--border-light);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--accent-pink) 0%, #dc2626 100%);
+        }
+
+        /* Array Visualization Component */
+        .array-visual {
+            display: flex;
+            gap: var(--spacing-sm);
+            justify-content: center;
+            align-items: center;
+            min-height: 100px;
+            flex-wrap: wrap;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .array-element {
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+            color: white;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: var(--radius-md);
+            font-family: var(--font-code);
+            font-size: 1.25rem;
+            font-weight: 600;
+            min-width: 80px;
+            text-align: center;
+            position: relative;
+            transition: all var(--transition-speed) var(--transition-ease);
+            box-shadow: var(--shadow-md);
+            cursor: pointer;
+        }
+
+        .array-element:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .array-element .index-label {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .array-element.highlighted {
+            background: linear-gradient(135deg, var(--accent-pink) 0%, var(--accent-orange) 100%);
+            transform: scale(1.1);
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1.1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .array-element.pop-out {
+            animation: popOut 0.5s var(--transition-ease) forwards;
+        }
+
+        @keyframes popOut {
+            to {
+                transform: translateY(-100px) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .array-element.push-in {
+            animation: pushIn 0.5s var(--transition-ease) forwards;
+        }
+
+        @keyframes pushIn {
+            from {
+                transform: translateY(50px) scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Output Display Component */
+        .output-display {
+            background: var(--bg-code);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+            font-family: var(--font-code);
+            font-size: 1.125rem;
+            color: var(--accent-green);
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Code Example Component */
+        .code-example {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .code-example pre {
+            margin-bottom: 0;
+        }
+
+        .result-box {
+            background: var(--bg-code);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        .result-box h4 {
+            color: var(--accent-blue);
+            margin-bottom: var(--spacing-md);
+            font-size: 1.125rem;
+        }
+
+        /* Progress Bar Component */
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-blue) 0%, var(--accent-purple) 50%, var(--accent-pink) 100%);
+            width: 0%;
+            transition: width var(--transition-speed) var(--transition-ease);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        /* Navigation Component */
+        .nav-controls {
+            position: absolute;
+            bottom: var(--spacing-lg);
+            right: var(--spacing-lg);
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .nav-btn {
+            background: var(--bg-card-hover);
+            border: 1px solid var(--border-light);
+            color: var(--text-primary);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-speed) var(--transition-ease);
+            font-size: 1.25rem;
+        }
+
+        .nav-btn:hover {
+            background: var(--accent-blue);
+            transform: scale(1.1);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: absolute;
+            top: var(--spacing-lg);
+            right: var(--spacing-lg);
+            background: var(--bg-card-hover);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            border: 1px solid var(--border-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide {
+                padding: var(--spacing-lg);
+            }
+
+            .code-example {
+                grid-template-columns: 1fr;
+            }
+
+            .slide h1 {
+                font-size: 2rem;
+            }
+
+            .slide h2 {
+                font-size: 1.5rem;
+            }
+
+            .array-element {
+                min-width: 60px;
+                padding: var(--spacing-sm) var(--spacing-md);
+                font-size: 1rem;
+            }
+        }
+
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .text-muted { color: var(--text-muted); }
+        .mt-lg { margin-top: var(--spacing-lg); }
+        .mb-lg { margin-bottom: var(--spacing-lg); }
+        .highlight { 
+            color: var(--accent-pink); 
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div id="presentation-container">
+        <!-- Slide 1: Title -->
+        <section class="slide active" data-slide-id="0">
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 2rem;">
+                <h1><i class="fas fa-layer-group"></i> JavaScript 배열 완전 정복</h1>
+                <p class="text-center" style="font-size: 1.5rem; max-width: 600px;">
+                    순서가 있는 데이터를 다루는 가장 강력한 도구, <span class="highlight">배열(Array)</span>의 모든 것
+                </p>
+                <p class="text-muted">← → 키보드 화살표로 이동</p>
+            </div>
+        </section>
+
+        <!-- Slide 2: 배열 개념 -->
+        <section class="slide" data-slide-id="1">
+            <h2><i class="fas fa-cubes"></i> 배열이란?</h2>
+            <p>배열은 <span class="highlight">순서가 있는 값들의 집합</span>입니다. 각 값은 고유한 번호(인덱스)로 접근할 수 있습니다.</p>
+            
+            <div class="code-example">
+                <pre><code><span class="token-comment">// 배열 생성하기</span>
+<span class="token-keyword">const</span> numbers = [<span class="token-number">10</span>, <span class="token-number">20</span>, <span class="token-number">30</span>, <span class="token-number">40</span>, <span class="token-number">50</span>];
+<span class="token-keyword">const</span> fruits = [<span class="token-string">'사과'</span>, <span class="token-string">'바나나'</span>, <span class="token-string">'딸기'</span>];
+<span class="token-keyword">const</span> mixed = [<span class="token-number">42</span>, <span class="token-string">'hello'</span>, <span class="token-keyword">true</span>, { name: <span class="token-string">'Kim'</span> }];
+
+<span class="token-comment">// 배열의 특징</span>
+console.log(<span class="token-keyword">typeof</span> numbers);  <span class="token-comment">// 'object' (배열은 특별한 객체)</span>
+console.log(numbers.length);    <span class="token-comment">// 5 (요소의 개수)</span>
+console.log(Array.isArray(numbers)); <span class="token-comment">// true</span></code></pre>
+                
+                <div class="result-box">
+                    <h4>핵심 특징</h4>
+                    <ul style="padding-left: 20px;">
+                        <li>• 인덱스는 0부터 시작</li>
+                        <li>• length 속성 자동 관리</li>
+                        <li>• 다양한 타입 저장 가능</li>
+                        <li>• 동적 크기 조절</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: 배열 생성 방법들 -->
+        <section class="slide" data-slide-id="2">
+            <h2><i class="fas fa-plus-circle"></i> 배열 생성 방법</h2>
+            
+            <pre><code><span class="token-comment">// 1. 배열 리터럴 (권장)</span>
+<span class="token-keyword">const</span> arr1 = [<span class="token-number">1</span>, <span class="token-number">2</span>, <span class="token-number">3</span>];
+
+<span class="token-comment">// 2. Array 생성자</span>
+<span class="token-keyword">const</span> arr2 = <span class="token-keyword">new</span> Array(<span class="token-number">5</span>);        <span class="token-comment">// 길이가 5인 빈 배열</span>
+<span class="token-keyword">const</span> arr3 = <span class="token-keyword">new</span> Array(<span class="token-number">1</span>, <span class="token-number">2</span>, <span class="token-number">3</span>); <span class="token-comment">// [1, 2, 3]</span>
+
+<span class="token-comment">// 3. Array.of() - ES6</span>
+<span class="token-keyword">const</span> arr4 = Array.of(<span class="token-number">7</span>);         <span class="token-comment">// [7] (숫자 7을 요소로)</span>
+
+<span class="token-comment">// 4. Array.from() - 유사 배열을 배열로 변환</span>
+<span class="token-keyword">const</span> str = <span class="token-string">'hello'</span>;
+<span class="token-keyword">const</span> chars = Array.from(str);    <span class="token-comment">// ['h', 'e', 'l', 'l', 'o']</span>
+
+<span class="token-comment">// 5. 특수한 배열 생성</span>
+<span class="token-keyword">const</span> zeros = <span class="token-keyword">new</span> Array(<span class="token-number">5</span>).fill(<span class="token-number">0</span>); <span class="token-comment">// [0, 0, 0, 0, 0]</span>
+<span class="token-keyword">const</span> range = Array.from({length: <span class="token-number">5</span>}, (_, i) => i + <span class="token-number">1</span>); <span class="token-comment">// [1, 2, 3, 4, 5]</span></code></pre>
+        </section>
+
+        <!-- Slide 4: 요소 접근 인터랙티브 데모 -->
+        <section class="slide" data-slide-id="3">
+            <h2><i class="fas fa-hand-pointer"></i> 배열 요소 접근하기</h2>
+            <p>배열의 각 요소는 인덱스를 통해 접근합니다. <span class="highlight">클릭해보세요!</span></p>
+            
+            <div class="interactive-demo">
+                <div id="access-visual" class="array-visual"></div>
+                <div id="access-output" class="output-display">요소를 클릭하면 결과가 표시됩니다</div>
+            </div>
+
+            <pre><code><span class="token-keyword">const</span> fruits = [<span class="token-string">'🍎'</span>, <span class="token-string">'🍌'</span>, <span class="token-string">'🍓'</span>, <span class="token-string">'🍊'</span>, <span class="token-string">'🍇'</span>];
+
+<span class="token-comment">// 인덱스로 접근</span>
+console.log(fruits[<span class="token-number">0</span>]);  <span class="token-comment">// '🍎' (첫 번째 요소)</span>
+console.log(fruits[<span class="token-number">4</span>]);  <span class="token-comment">// '🍇' (마지막 요소)</span>
+console.log(fruits[<span class="token-number">10</span>]); <span class="token-comment">// undefined (범위 초과)</span>
+
+<span class="token-comment">// 음수 인덱스는 at() 메소드로</span>
+console.log(fruits.at(<span class="token-operator">-</span><span class="token-number">1</span>)); <span class="token-comment">// '🍇' (마지막 요소)</span></code></pre>
+        </section>
+
+        <!-- Slide 5: push/pop 데모 -->
+        <section class="slide" data-slide-id="4">
+            <h2><i class="fas fa-arrow-right"></i> 끝에서 추가/제거: push & pop</h2>
+            
+            <div class="interactive-demo">
+                <div id="push-pop-visual" class="array-visual"></div>
+                <div class="demo-controls">
+                    <button id="push-btn" class="btn">push('🍒')</button>
+                    <button id="pop-btn" class="btn btn-danger">pop()</button>
+                </div>
+                <div id="push-pop-output" class="output-display mt-lg">결과가 여기에 표시됩니다</div>
+            </div>
+
+            <pre><code><span class="token-keyword">const</span> stack = [<span class="token-string">'🍎'</span>, <span class="token-string">'🍌'</span>];
+
+<span class="token-comment">// push: 끝에 추가 (반환값: 새 길이)</span>
+<span class="token-keyword">let</span> newLength = stack.<span class="token-function">push</span>(<span class="token-string">'🍓'</span>);
+console.log(stack);      <span class="token-comment">// ['🍎', '🍌', '🍓']</span>
+console.log(newLength);  <span class="token-comment">// 3</span>
+
+<span class="token-comment">// pop: 끝에서 제거 (반환값: 제거된 요소)</span>
+<span class="token-keyword">let</span> removed = stack.<span class="token-function">pop</span>();
+console.log(removed);    <span class="token-comment">// '🍓'</span>
+console.log(stack);      <span class="token-comment">// ['🍎', '🍌']</span></code></pre>
+        </section>
+
+        <!-- Slide 6: shift/unshift 데모 -->
+        <section class="slide" data-slide-id="5">
+            <h2><i class="fas fa-arrow-left"></i> 앞에서 추가/제거: unshift & shift</h2>
+            
+            <div class="interactive-demo">
+                <div id="shift-unshift-visual" class="array-visual"></div>
+                <div class="demo-controls">
+                    <button id="unshift-btn" class="btn">unshift('🥝')</button>
+                    <button id="shift-btn" class="btn btn-danger">shift()</button>
+                </div>
+                <div id="shift-unshift-output" class="output-display mt-lg">결과가 여기에 표시됩니다</div>
+            </div>
+
+            <pre><code><span class="token-keyword">const</span> queue = [<span class="token-string">'🍎'</span>, <span class="token-string">'🍌'</span>];
+
+<span class="token-comment">// unshift: 앞에 추가 (반환값: 새 길이)</span>
+<span class="token-keyword">let</span> newLength = queue.<span class="token-function">unshift</span>(<span class="token-string">'🥝'</span>);
+console.log(queue);      <span class="token-comment">// ['🥝', '🍎', '🍌']</span>
+console.log(newLength);  <span class="token-comment">// 3</span>
+
+<span class="token-comment">// shift: 앞에서 제거 (반환값: 제거된 요소)</span>
+<span class="token-keyword">let</span> first = queue.<span class="token-function">shift</span>();
+console.log(first);      <span class="token-comment">// '🥝'</span>
+console.log(queue);      <span class="token-comment">// ['🍎', '🍌']</span>
+
+<span class="token-comment">// 성능 팁: push/pop이 unshift/shift보다 빠릅니다!</span></code></pre>
+        </section>
+
+        <!-- Slide 7: splice -->
+        <section class="slide" data-slide-id="6">
+            <h2><i class="fas fa-cut"></i> 중간 조작: splice</h2>
+            <p><code>splice()</code>는 배열의 어느 위치에서든 요소를 추가, 제거, 교체할 수 있는 만능 메소드입니다.</p>
+            
+            <pre><code><span class="token-keyword">let</span> arr = [<span class="token-string">'a'</span>, <span class="token-string">'b'</span>, <span class="token-string">'c'</span>, <span class="token-string">'d'</span>, <span class="token-string">'e'</span>];
+
+<span class="token-comment">// splice(시작인덱스, 제거개수, 추가할요소들...)</span>
+
+<span class="token-comment">// 1. 요소 제거</span>
+<span class="token-keyword">let</span> removed = arr.<span class="token-function">splice</span>(<span class="token-number">2</span>, <span class="token-number">2</span>);  <span class="token-comment">// 인덱스 2부터 2개 제거</span>
+console.log(removed);  <span class="token-comment">// ['c', 'd']</span>
+console.log(arr);      <span class="token-comment">// ['a', 'b', 'e']</span>
+
+<span class="token-comment">// 2. 요소 추가</span>
+arr.<span class="token-function">splice</span>(<span class="token-number">2</span>, <span class="token-number">0</span>, <span class="token-string">'X'</span>, <span class="token-string">'Y'</span>);  <span class="token-comment">// 인덱스 2에 추가</span>
+console.log(arr);      <span class="token-comment">// ['a', 'b', 'X', 'Y', 'e']</span>
+
+<span class="token-comment">// 3. 요소 교체</span>
+arr.<span class="token-function">splice</span>(<span class="token-number">1</span>, <span class="token-number">2</span>, <span class="token-string">'🌟'</span>);     <span class="token-comment">// 1번 인덱스부터 2개를 '🌟'로 교체</span>
+console.log(arr);      <span class="token-comment">// ['a', '🌟', 'Y', 'e']</span></code></pre>
+        </section>
+
+        <!-- Slide 8: map 변환 -->
+        <section class="slide" data-slide-id="7">
+            <h2><i class="fas fa-magic"></i> 변환하기: map()</h2>
+            <p><code>map()</code>은 각 요소를 변환하여 <span class="highlight">새로운 배열</span>을 만듭니다.</p>
+            
+            <div class="code-example">
+                <pre><code><span class="token-keyword">const</span> prices = [<span class="token-number">1000</span>, <span class="token-number">2000</span>, <span class="token-number">3000</span>];
+
+<span class="token-comment">// 10% 할인 적용</span>
+<span class="token-keyword">const</span> discounted = prices.<span class="token-function">map</span>(price => {
+  <span class="token-keyword">return</span> price <span class="token-operator">*</span> <span class="token-number">0.9</span>;
+});
+
+<span class="token-comment">// 화폐 형식으로 변환</span>
+<span class="token-keyword">const</span> formatted = prices.<span class="token-function">map</span>(price => {
+  <span class="token-keyword">return</span> <span class="token-string">`₩${price.toLocaleString()}`</span>;
+});
+
+<span class="token-comment">// 인덱스도 활용 가능</span>
+<span class="token-keyword">const</span> indexed = prices.<span class="token-function">map</span>((price, index) => {
+  <span class="token-keyword">return</span> <span class="token-string">`${index + 1}번: ${price}원`</span>;
+});</code></pre>
+                
+                <div class="result-box">
+                    <h4>실행 결과</h4>
+                    <pre><code>discounted: [900, 1800, 2700]
+
+formatted: ['₩1,000', '₩2,000', '₩3,000']
+
+indexed: ['1번: 1000원', '2번: 2000원', '3번: 3000원']</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 9: filter 필터링 -->
+        <section class="slide" data-slide-id="8">
+            <h2><i class="fas fa-filter"></i> 걸러내기: filter()</h2>
+            <p><code>filter()</code>는 조건을 만족하는 요소만 모아 <span class="highlight">새로운 배열</span>을 만듭니다.</p>
+            
+            <div class="code-example">
+                <pre><code><span class="token-keyword">const</span> students = [
+  { name: <span class="token-string">'김철수'</span>, score: <span class="token-number">85</span>, passed: <span class="token-keyword">true</span> },
+  { name: <span class="token-string">'이영희'</span>, score: <span class="token-number">92</span>, passed: <span class="token-keyword">true</span> },
+  { name: <span class="token-string">'박민수'</span>, score: <span class="token-number">68</span>, passed: <span class="token-keyword">false</span> },
+  { name: <span class="token-string">'최지원'</span>, score: <span class="token-number">78</span>, passed: <span class="token-keyword">true</span> }
+];
+
+<span class="token-comment">// 합격자만 필터링</span>
+<span class="token-keyword">const</span> passed = students.<span class="token-function">filter</span>(student => {
+  <span class="token-keyword">return</span> student.passed;
+});
+
+<span class="token-comment">// 80점 이상 우수 학생</span>
+<span class="token-keyword">const</span> excellent = students.<span class="token-function">filter</span>(student => {
+  <span class="token-keyword">return</span> student.score >= <span class="token-number">80</span>;
+});
+
+<span class="token-comment">// 복합 조건</span>
+<span class="token-keyword">const</span> excellentPassed = students.<span class="token-function">filter</span>(s => {
+  <span class="token-keyword">return</span> s.score >= <span class="token-number">80</span> <span class="token-operator">&&</span> s.passed;
+});</code></pre>
+                
+                <div class="result-box">
+                    <h4>필터링 결과</h4>
+                    <pre><code>passed: 3명 (김철수, 이영희, 최지원)
+excellent: 2명 (김철수, 이영희)
+excellentPassed: 2명</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 10: reduce 집계 -->
+        <section class="slide" data-slide-id="9">
+            <h2><i class="fas fa-calculator"></i> 집계하기: reduce()</h2>
+            <p><code>reduce()</code>는 배열을 하나의 값으로 축약합니다. 가장 강력한 메소드!</p>
+            
+            <pre><code><span class="token-keyword">const</span> numbers = [<span class="token-number">1</span>, <span class="token-number">2</span>, <span class="token-number">3</span>, <span class="token-number">4</span>, <span class="token-number">5</span>];
+
+<span class="token-comment">// 기본 형태: reduce((누적값, 현재값) => 다음누적값, 초기값)</span>
+
+<span class="token-comment">// 1. 합계 구하기</span>
+<span class="token-keyword">const</span> sum = numbers.<span class="token-function">reduce</span>((acc, num) => acc + num, <span class="token-number">0</span>);
+console.log(sum); <span class="token-comment">// 15</span>
+
+<span class="token-comment">// 2. 최댓값 찾기</span>
+<span class="token-keyword">const</span> max = numbers.<span class="token-function">reduce</span>((acc, num) => Math.max(acc, num), <span class="token-number">-Infinity</span>);
+
+<span class="token-comment">// 3. 객체로 그룹핑</span>
+<span class="token-keyword">const</span> words = [<span class="token-string">'apple'</span>, <span class="token-string">'banana'</span>, <span class="token-string">'apple'</span>, <span class="token-string">'cherry'</span>, <span class="token-string">'banana'</span>];
+<span class="token-keyword">const</span> count = words.<span class="token-function">reduce</span>((acc, word) => {
+  acc[word] = (acc[word] || <span class="token-number">0</span>) + <span class="token-number">1</span>;
+  <span class="token-keyword">return</span> acc;
+}, {});
+<span class="token-comment">// { apple: 2, banana: 2, cherry: 1 }</span>
+
+<span class="token-comment">// 4. 파이프라인 처리</span>
+<span class="token-keyword">const</span> pipeline = [
+  x => x <span class="token-operator">*</span> <span class="token-number">2</span>,
+  x => x + <span class="token-number">10</span>,
+  x => x <span class="token-operator">/</span> <span class="token-number">5</span>
+];
+<span class="token-keyword">const</span> result = pipeline.<span class="token-function">reduce</span>((value, fn) => fn(value), <span class="token-number">10</span>);
+<span class="token-comment">// 10 → 20 → 30 → 6</span></code></pre>
+        </section>
+
+        <!-- Slide 11: find/findIndex -->
+        <section class="slide" data-slide-id="10">
+            <h2><i class="fas fa-search"></i> 찾기: find & findIndex</h2>
+            <p>조건에 맞는 <span class="highlight">첫 번째 요소</span>를 찾습니다.</p>
+            
+            <div class="code-example">
+                <pre><code><span class="token-keyword">const</span> users = [
+  { id: <span class="token-number">1</span>, name: <span class="token-string">'Alice'</span>, age: <span class="token-number">25</span> },
+  { id: <span class="token-number">2</span>, name: <span class="token-string">'Bob'</span>, age: <span class="token-number">30</span> },
+  { id: <span class="token-number">3</span>, name: <span class="token-string">'Charlie'</span>, age: <span class="token-number">25</span> }
+];
+
+<span class="token-comment">// find: 요소 자체를 반환</span>
+<span class="token-keyword">const</span> user = users.<span class="token-function">find</span>(u => u.id === <span class="token-number">2</span>);
+console.log(user); <span class="token-comment">// { id: 2, name: 'Bob', age: 30 }</span>
+
+<span class="token-comment">// findIndex: 인덱스를 반환</span>
+<span class="token-keyword">const</span> index = users.<span class="token-function">findIndex</span>(u => u.age === <span class="token-number">25</span>);
+console.log(index); <span class="token-comment">// 0 (첫 번째 일치)</span>
+
+<span class="token-comment">// 못 찾으면?</span>
+<span class="token-keyword">const</span> notFound = users.<span class="token-function">find</span>(u => u.age > <span class="token-number">50</span>);
+console.log(notFound); <span class="token-comment">// undefined</span>
+
+<span class="token-keyword">const</span> notFoundIndex = users.<span class="token-function">findIndex</span>(u => u.age > <span class="token-number">50</span>);
+console.log(notFoundIndex); <span class="token-comment">// -1</span></code></pre>
+                
+                <div class="result-box">
+                    <h4>다른 검색 메소드들</h4>
+                    <ul style="padding-left: 20px;">
+                        <li>• <code>includes()</code> - 포함 여부 (true/false)</li>
+                        <li>• <code>indexOf()</code> - 값의 인덱스</li>
+                        <li>• <code>some()</code> - 하나라도 만족?</li>
+                        <li>• <code>every()</code> - 모두 만족?</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 12: 메소드 체이닝 -->
+        <section class="slide" data-slide-id="11">
+            <h2><i class="fas fa-link"></i> 메소드 체이닝</h2>
+            <p>여러 메소드를 연결하여 강력한 데이터 파이프라인을 만들 수 있습니다.</p>
+            
+            <pre><code><span class="token-keyword">const</span> products = [
+  { name: <span class="token-string">'노트북'</span>, price: <span class="token-number">1200000</span>, category: <span class="token-string">'전자제품'</span>, stock: <span class="token-number">5</span> },
+  { name: <span class="token-string">'마우스'</span>, price: <span class="token-number">25000</span>, category: <span class="token-string">'액세서리'</span>, stock: <span class="token-number">0</span> },
+  { name: <span class="token-string">'키보드'</span>, price: <span class="token-number">75000</span>, category: <span class="token-string">'액세서리'</span>, stock: <span class="token-number">10</span> },
+  { name: <span class="token-string">'모니터'</span>, price: <span class="token-number">300000</span>, category: <span class="token-string">'전자제품'</span>, stock: <span class="token-number">3</span> }
+];
+
+<span class="token-comment">// 재고가 있는 전자제품 중 가격이 높은 순으로 정렬하여 이름만 추출</span>
+<span class="token-keyword">const</span> result = products
+  .<span class="token-function">filter</span>(p => p.stock > <span class="token-number">0</span>)                    <span class="token-comment">// 재고 있는 것만</span>
+  .<span class="token-function">filter</span>(p => p.category === <span class="token-string">'전자제품'</span>)      <span class="token-comment">// 전자제품만</span>
+  .<span class="token-function">sort</span>((a, b) => b.price - a.price)           <span class="token-comment">// 가격 내림차순</span>
+  .<span class="token-function">map</span>(p => ({                                 <span class="token-comment">// 필요한 정보만</span>
+    name: p.name,
+    displayPrice: <span class="token-string">`₩${p.price.toLocaleString()}`</span>
+  }));
+
+console.log(result);
+<span class="token-comment">// [
+//   { name: '노트북', displayPrice: '₩1,200,000' },
+//   { name: '모니터', displayPrice: '₩300,000' }
+// ]</span>
+
+<span class="token-comment">// 총 재고 가치 계산</span>
+<span class="token-keyword">const</span> totalValue = products
+  .<span class="token-function">filter</span>(p => p.stock > <span class="token-number">0</span>)
+  .<span class="token-function">map</span>(p => p.price <span class="token-operator">*</span> p.stock)
+  .<span class="token-function">reduce</span>((sum, value) => sum + value, <span class="token-number">0</span>);
+
+console.log(<span class="token-string">`총 재고 가치: ₩${totalValue.toLocaleString()}`</span>);
+<span class="token-comment">// 총 재고 가치: ₩7,650,000</span></code></pre>
+        </section>
+
+        <!-- Slide 13: 고급 팁 -->
+        <section class="slide" data-slide-id="12">
+            <h2><i class="fas fa-lightbulb"></i> 실무 활용 팁</h2>
+            
+            <pre><code><span class="token-comment">// 1. 구조 분해 할당 활용</span>
+<span class="token-keyword">const</span> [first, second, ...rest] = [<span class="token-number">1</span>, <span class="token-number">2</span>, <span class="token-number">3</span>, <span class="token-number">4</span>, <span class="token-number">5</span>];
+console.log(first);  <span class="token-comment">// 1</span>
+console.log(rest);   <span class="token-comment">// [3, 4, 5]</span>
+
+<span class="token-comment">// 2. 배열 복사 (얕은 복사)</span>
+<span class="token-keyword">const</span> original = [<span class="token-number">1</span>, <span class="token-number">2</span>, <span class="token-number">3</span>];
+<span class="token-keyword">const</span> copy1 = [...original];        <span class="token-comment">// 스프레드 연산자</span>
+<span class="token-keyword">const</span> copy2 = original.slice();     <span class="token-comment">// slice 메소드</span>
+<span class="token-keyword">const</span> copy3 = Array.from(original); <span class="token-comment">// Array.from</span>
+
+<span class="token-comment">// 3. 배열 합치기</span>
+<span class="token-keyword">const</span> arr1 = [<span class="token-number">1</span>, <span class="token-number">2</span>];
+<span class="token-keyword">const</span> arr2 = [<span class="token-number">3</span>, <span class="token-number">4</span>];
+<span class="token-keyword">const</span> combined = [...arr1, ...arr2]; <span class="token-comment">// [1, 2, 3, 4]</span>
+
+<span class="token-comment">// 4. 중복 제거</span>
+<span class="token-keyword">const</span> numbers = [<span class="token-number">1</span>, <span class="token-number">2</span>, <span class="token-number">2</span>, <span class="token-number">3</span>, <span class="token-number">3</span>, <span class="token-number">4</span>];
+<span class="token-keyword">const</span> unique = [...<span class="token-keyword">new</span> Set(numbers)]; <span class="token-comment">// [1, 2, 3, 4]</span>
+
+<span class="token-comment">// 5. 배열 평탄화</span>
+<span class="token-keyword">const</span> nested = [[<span class="token-number">1</span>, <span class="token-number">2</span>], [<span class="token-number">3</span>, [<span class="token-number">4</span>, <span class="token-number">5</span>]]];
+<span class="token-keyword">const</span> flat1 = nested.flat();      <span class="token-comment">// [1, 2, 3, [4, 5]]</span>
+<span class="token-keyword">const</span> flat2 = nested.flat(<span class="token-number">2</span>);     <span class="token-comment">// [1, 2, 3, 4, 5]</span>
+<span class="token-keyword">const</span> flatInf = nested.flat(Infinity); <span class="token-comment">// 모든 중첩 해제</span></code></pre>
+        </section>
+
+        <!-- Slide 14: 마무리 -->
+        <section class="slide" data-slide-id="13">
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 2rem;">
+                <h1><i class="fas fa-trophy"></i> 완성!</h1>
+                <p style="font-size: 1.5rem;">이제 당신은 JavaScript 배열 마스터입니다! 🎉</p>
+                
+                <div style="background: var(--bg-code); padding: 2rem; border-radius: 1rem; border: 1px solid var(--border-light);">
+                    <h3 style="margin-bottom: 1rem;">핵심 정리</h3>
+                    <ul style="text-align: left;">
+                        <li>배열은 순서가 있는 데이터의 집합</li>
+                        <li>인덱스는 0부터 시작</li>
+                        <li>push/pop, shift/unshift로 요소 추가/제거</li>
+                        <li>map, filter, reduce로 데이터 변환</li>
+                        <li>메소드 체이닝으로 복잡한 작업도 간단히</li>
+                    </ul>
+                </div>
+                
+                <p class="text-muted">더 깊이 학습하려면 MDN 문서를 참고하세요!</p>
+            </div>
+        </section>
+
+        <!-- UI Components -->
+        <div class="progress-bar"></div>
+        <div class="slide-counter">
+            <span id="current-slide">1</span> / <span id="total-slides">14</span>
+        </div>
+        <div class="nav-controls">
+            <button class="nav-btn" id="prev-btn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="nav-btn" id="next-btn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        class PresentationController {
+            constructor(selector) {
+                this.container = document.querySelector(selector);
+                this.slides = Array.from(this.container.querySelectorAll('.slide'));
+                this.currentSlideIndex = 0;
+                this.activeTimers = [];
+                
+                this.init();
+            }
+
+            init() {
+                this.setupUI();
+                this.updateSlideVisibility();
+                this.setupEventListeners();
+                this.runSlideAnimations(this.currentSlideIndex);
+            }
+
+            setupUI() {
+                this.progressBar = this.container.querySelector('.progress-bar');
+                this.currentSlideEl = this.container.querySelector('#current-slide');
+                this.totalSlidesEl = this.container.querySelector('#total-slides');
+                this.prevBtn = this.container.querySelector('#prev-btn');
+                this.nextBtn = this.container.querySelector('#next-btn');
+                
+                this.totalSlidesEl.textContent = this.slides.length;
+            }
+
+            setupEventListeners() {
+                this.prevBtn.addEventListener('click', () => this.prev());
+                this.nextBtn.addEventListener('click', () => this.next());
+                
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') this.prev();
+                    if (e.key === 'ArrowRight') this.next();
+                });
+            }
+
+            goTo(index) {
+                if (index < 0 || index >= this.slides.length) return;
+                
+                this.clearAnimations();
+                this.currentSlideIndex = index;
+                this.updateSlideVisibility();
+                this.runSlideAnimations(index);
+            }
+
+            next() { this.goTo(this.currentSlideIndex + 1); }
+            prev() { this.goTo(this.currentSlideIndex - 1); }
+
+            updateSlideVisibility() {
+                this.slides.forEach((slide, index) => {
+                    slide.classList.toggle('active', index === this.currentSlideIndex);
+                });
+                
+                // Update progress
+                const progress = ((this.currentSlideIndex + 1) / this.slides.length) * 100;
+                this.progressBar.style.width = `${progress}%`;
+                this.currentSlideEl.textContent = this.currentSlideIndex + 1;
+                
+                // Update nav buttons
+                this.prevBtn.style.opacity = this.currentSlideIndex === 0 ? '0.5' : '1';
+                this.nextBtn.style.opacity = this.currentSlideIndex === this.slides.length - 1 ? '0.5' : '1';
+            }
+
+            clearAnimations() {
+                this.activeTimers.forEach(timer => clearTimeout(timer));
+                this.activeTimers = [];
+                
+                // Cleanup previous slide
+                const slideId = this.slides[this.currentSlideIndex].dataset.slideId;
+                if (this[`cleanup_${slideId}`]) {
+                    this[`cleanup_${slideId}`]();
+                }
+            }
+
+            runSlideAnimations(index) {
+                const slideId = this.slides[index].dataset.slideId;
+                if (this[`animate_${slideId}`]) {
+                    this[`animate_${slideId}`]();
+                }
+            }
+
+            // Slide 3: Access Demo
+            animate_3() {
+                const visual = document.getElementById('access-visual');
+                const output = document.getElementById('access-output');
+                const data = ['🍎', '🍌', '🍓', '🍊', '🍇'];
+                
+                visual.innerHTML = '';
+                data.forEach((item, index) => {
+                    const el = document.createElement('div');
+                    el.className = 'array-element';
+                    el.innerHTML = `${item}<span class="index-label">[${index}]</span>`;
+                    el.addEventListener('click', () => {
+                        document.querySelectorAll('#access-visual .array-element').forEach(e => {
+                            e.classList.remove('highlighted');
+                        });
+                        el.classList.add('highlighted');
+                        output.textContent = `fruits[${index}] = '${item}'`;
+                    });
+                    visual.appendChild(el);
+                });
+            }
+
+            cleanup_3() {
+                document.getElementById('access-output').textContent = '요소를 클릭하면 결과가 표시됩니다';
+            }
+
+            // Slide 4: Push/Pop Demo
+            animate_4() {
+                const visual = document.getElementById('push-pop-visual');
+                const output = document.getElementById('push-pop-output');
+                const pushBtn = document.getElementById('push-btn');
+                const popBtn = document.getElementById('pop-btn');
+                let data = ['🍎', '🍌', '🍓'];
+                
+                const render = () => {
+                    visual.innerHTML = '';
+                    data.forEach((item, index) => {
+                        const el = document.createElement('div');
+                        el.className = 'array-element';
+                        el.innerHTML = `${item}<span class="index-label">[${index}]</span>`;
+                        visual.appendChild(el);
+                    });
+                };
+                
+                pushBtn.onclick = () => {
+                    if (data.length >= 6) return;
+                    data.push('🍒');
+                    render();
+                    visual.lastElementChild.classList.add('push-in');
+                    output.textContent = `push('🍒') → 길이: ${data.length}`;
+                };
+                
+                popBtn.onclick = () => {
+                    if (data.length === 0) return;
+                    const removed = data[data.length - 1];
+                    visual.lastElementChild.classList.add('pop-out');
+                    setTimeout(() => {
+                        data.pop();
+                        render();
+                        output.textContent = `pop() → 제거됨: '${removed}'`;
+                    }, 500);
+                };
+                
+                render();
+            }
+
+            // Slide 5: Shift/Unshift Demo
+            animate_5() {
+                const visual = document.getElementById('shift-unshift-visual');
+                const output = document.getElementById('shift-unshift-output');
+                const unshiftBtn = document.getElementById('unshift-btn');
+                const shiftBtn = document.getElementById('shift-btn');
+                let data = ['🍎', '🍌', '🍓'];
+                
+                const render = () => {
+                    visual.innerHTML = '';
+                    data.forEach((item, index) => {
+                        const el = document.createElement('div');
+                        el.className = 'array-element';
+                        el.innerHTML = `${item}<span class="index-label">[${index}]</span>`;
+                        visual.appendChild(el);
+                    });
+                };
+                
+                unshiftBtn.onclick = () => {
+                    if (data.length >= 6) return;
+                    data.unshift('🥝');
+                    render();
+                    visual.firstElementChild.classList.add('push-in');
+                    output.textContent = `unshift('🥝') → 길이: ${data.length}`;
+                };
+                
+                shiftBtn.onclick = () => {
+                    if (data.length === 0) return;
+                    const removed = data[0];
+                    visual.firstElementChild.classList.add('pop-out');
+                    setTimeout(() => {
+                        data.shift();
+                        render();
+                        output.textContent = `shift() → 제거됨: '${removed}'`;
+                    }, 500);
+                };
+                
+                render();
+            }
+        }
+
+        // Initialize presentation
+        document.addEventListener('DOMContentLoaded', () => {
+            new PresentationController('#presentation-container');
+        });
+    </script>
+</body>
+</html>

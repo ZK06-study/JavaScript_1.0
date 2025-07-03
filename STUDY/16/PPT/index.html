@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[16장] 내장 객체 심층 탐구</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="progress-bar"></div>
+
+    <main id="presentation-container">
+        <!-- Slide 1: Title -->
+        <section class="slide active" data-slide-id="0">
+            <div class="slide-content">
+                <h1><i class="fa-solid fa-box-archive"></i> 16장. 내장 객체 심층 탐구</h1>
+                <p class="subtitle">자바스크립트의 강력한 도구 상자, 내장 객체 파헤치기</p>
+                <div class="keywords">
+                    <span>#래퍼객체</span>
+                    <span>#전역객체</span>
+                    <span>#String</span>
+                    <span>#Math</span>
+                    <span>#Date</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2: Object Types -->
+        <section class="slide" data-slide-id="1">
+            <div class="slide-content">
+                <h2><i class="fa-solid fa-diagram-project"></i> 자바스크립트 객체의 3가지 분류</h2>
+                <div class="comparison-container three-parts">
+                    <div class="code-block">
+                        <h4><i class="fa-solid fa-user"></i> 사용자 정의 객체</h4>
+                        <p>개발자가 필요에 의해 생성한 객체</p>
+                        <pre><code>const user = { name: 'Kim' };</code></pre>
+                    </div>
+                    <div class="code-block">
+                        <h4><i class="fa-solid fa-gears"></i> 내장 객체 (네이티브)</h4>
+                        <p>JS 엔진에 내장된 객체 (e.g., String, Number, Date)</p>
+                         <pre><code>const now = new Date();</code></pre>
+                    </div>
+                    <div class="code-block">
+                        <h4><i class="fa-solid fa-server"></i> 호스트 객체</h4>
+                        <p>실행 환경이 제공하는 객체 (e.g., window, document)</p>
+                        <pre><code>window.alert('Hello');</code></pre>
+                    </div>
+                </div>
+                <p class="highlight">오늘은 자바스크립트 언어 자체에 포함된 <strong>내장 객체</strong>에 집중합니다.</p>
+            </div>
+        </section>
+
+        <!-- Slide 3: Wrapper Object -->
+        <section class="slide" data-slide-id="2">
+            <div class="slide-content">
+                <h2><i class="fa-solid fa-wand-magic-sparkles"></i> 원시 값을 감싸는 마법, 래퍼 객체</h2>
+                <p>원시 값(string, number, boolean)이 속성/메서드를 가질 수 있는 이유입니다.</p>
+                <pre><code>const str = 'hello'; // 원시 값
+
+// str.length에 접근하는 순간!
+// 1. 임시 String 래퍼 객체 생성: new String('hello')
+// 2. .length 속성 사용
+// 3. 임시 객체 소멸
+
+console.log(str.length); // 5
+console.log(str.toUpperCase()); // "HELLO"</code></pre>
+                <p class="note">덕분에 우리는 원시 값을 객체처럼 편리하게 다룰 수 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- Slide 4: Global Object -->
+        <section class="slide" data-slide-id="3">
+            <div class="slide-content">
+                <h2><i class="fa-solid fa-globe"></i> 글로벌 파워, 전역 객체</h2>
+                <p>모든 객체의 최상위, 전역 변수와 함수를 담는 보이지 않는 컨테이너입니다.</p>
+                <div class="comparison-container">
+                     <div class="code-block">
+                        <h4><i class="fa-solid fa-window-maximize"></i> 브라우저 환경</h4>
+                        <pre><code>window.isNaN(123); // false
+// 전역 객체가 window</code></pre>
+                    </div>
+                    <div class="code-block">
+                        <h4><i class="fa-brands fa-node-js"></i> Node.js 환경</h4>
+                        <pre><code>global.setTimeout(() => {}, 1000);
+// 전역 객체가 global</code></pre>
+                    </div>
+                </div>
+                 <p class="highlight"><code>parseInt()</code>, <code>isNaN()</code>, <code>undefined</code>, <code>Infinity</code> 등은 모두 전역 객체의 속성입니다.</p>
+            </div>
+        </section>
+        
+        <!-- Slide 5: String Analyzer -->
+        <section class="slide" data-slide-id="4">
+            <div class="slide-content">
+                <h2><i class="fa-solid fa-magnifying-glass-chart"></i> 인터랙티브: 문자열 분석기</h2>
+                <p><code>String</code> 내장 객체의 강력함을 직접 체험해보세요. 문장을 입력하고 분석 버튼을 누르세요.</p>
+                <div id="string-analyzer" class="interactive-demo-vertical">
+                    <div class="input-area">
+                        <input type="text" id="string-input" placeholder="e.g., JavaScript is fun!">
+                        <button id="string-analyze-btn" class="demo-btn">분석</button>
+                    </div>
+                    <div id="string-output" class="output-area grid-output">
+                        <p>분석 결과가 여기에 표시됩니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Number & Math -->
+        <section class="slide" data-slide-id="5">
+            <div class="slide-content">
+                <h2><i class="fa-solid fa-calculator"></i> 숫자의 모든 것, Number & Math</h2>
+                <p><code>Number</code>는 숫자 처리, <code>Math</code>는 수학적 계산을 위한 기능들을 제공합니다.</p>
+                <div class="comparison-container">
+                    <div class="code-block">
+                        <h4><code>Number</code> 객체</h4>
+                        <pre><code>const num = 123.456;
+num.toFixed(2); // "123.46" (문자열 반환)
+
+Number.isInteger(123); // true
+Number.parseInt('100px'); // 100</code></pre>
+                    </div>
+                    <div class="code-block">
+                        <h4><code>Math</code> 객체</h4>
+                        <pre><code>Math.max(1, 5, 2);    // 5
+Math.random();        // 0과 1 사이의 난수
+Math.round(1.6);      // 2 (반올림)
+Math.floor(1.6);      // 1 (내림)</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: Date -->
+        <section class="slide" data-slide-id="6">
+            <div class="slide-content">
+                <h2><i class="fa-regular fa-calendar-days"></i> 시간 여행자, Date 객체</h2>
+                <p>날짜와 시간을 생성하고, 원하는 형식으로 가공할 수 있습니다.</p>
+                <pre><code>const now = new Date(); // 현재 시간
+
+console.log(now.getFullYear()); // 연도 (e.g., 2023)
+console.log(now.getMonth() + 1);  // 월 (0부터 시작하므로 +1)
+console.log(now.getDate());     // 일
+console.log(now.getDay());      // 요일 (일요일=0, 월요일=1, ...)
+
+// 사용자의 지역에 맞는 날짜/시간 형식
+console.log(now.toLocaleString());</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 8: D-Day Counter -->
+        <section class="slide" data-slide-id="7">
+            <div class="slide-content">
+                <h2><i class="fa-solid fa-stopwatch-20"></i> 인터랙티브: D-Day 카운터</h2>
+                <p><code>Date</code> 객체를 활용하여 목표 날짜까지 남은 날을 계산해봅시다.</p>
+                <div id="dday-counter" class="interactive-demo-vertical">
+                    <div class="input-area">
+                        <label for="dday-input">목표 날짜:</label>
+                        <input type="date" id="dday-input">
+                    </div>
+                    <div id="dday-output" class="output-area">
+                        <p>날짜를 선택해주세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Slide 9: RegExp -->
+        <section class="slide" data-slide-id="8">
+             <div class="slide-content">
+                <h2><i class="fa-solid fa-wand-magic-sparkles"></i> 패턴의 마법사, RegExp 객체</h2>
+                <p>정규표현식은 문자열에서 특정 패턴을 검색하고 치환하는 강력한 도구입니다.</p>
+                <pre><code>const str = 'My email is user@example.com';
+const emailRegex = /[\w.-]+@[\w.-]+\.\w{2,4}/;
+
+// 정규식 테스트
+emailRegex.test(str); // true
+
+// 패턴과 일치하는 문자열 찾기
+str.match(emailRegex); 
+// ["user@example.com", index: 12, ...]
+
+// 패턴을 다른 문자열로 교체
+str.replace(emailRegex, '******@*****.***');
+// "My email is ******@*****.***"</code></pre>
+            </div>
+        </section>
+
+        <!-- Slide 10: Summary -->
+        <section class="slide" data-slide-id="9">
+            <div class="slide-content">
+                <h2><i class="fa-solid fa-clipboard-check"></i> 핵심 정리</h2>
+                <ul class="summary-list">
+                    <li><i class="fa-solid fa-box"></i> <strong>래퍼 객체:</strong> 원시 값을 객체처럼 다룰 수 있게 해주는 임시 도우미</li>
+                    <li><i class="fa-solid fa-globe"></i> <strong>전역 객체:</strong> `isNaN`, `parseInt` 등을 포함하는 최상위 객체</li>
+                    <li><i class="fa-solid fa-font"></i> <strong>String:</strong> 문자열 조작을 위한 필수 메서드 모음</li>
+                    <li><i class="fa-solid fa-calculator"></i> <strong>Number & Math:</strong> 숫자 처리와 수학 계산의 핵심</li>
+                    <li><i class="fa-solid fa-calendar"></i> <strong>Date:</strong> 날짜와 시간 관리를 위한 표준 객체</li>
+                    <li><i class="fa-solid fa-wand-magic-sparkles"></i> <strong>RegExp:</strong> 복잡한 문자열 패턴 검색 및 처리의 전문가</li>
+                </ul>
+                <p class="final-message">내장 객체를 잘 활용하여 더 효율적이고 우아한 코드를 작성하세요!</p>
+            </div>
+        </section>
+    </main>
+
+    <div class="navigation">
+        <button id="prev-btn" title="이전 슬라이드 (←)"><i class="fas fa-arrow-left"></i></button>
+        <span id="slide-counter">1 / 10</span>
+        <button id="next-btn" title="다음 슬라이드 (→)"><i class="fas fa-arrow-right"></i></button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

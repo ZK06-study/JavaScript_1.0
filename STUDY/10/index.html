@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript 객체 - 인터랙티브 프레젠테이션</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <style>
+        :root {
+            /* Color Palette (Dark Mode) */
+            --bg-dark: #0a0a0a;
+            --bg-card: #1a1a1a;
+            --bg-code: #282c34;
+            --text-primary: #E0E0E0;
+            --text-secondary: #A0A0A0;
+            --accent-blue: #2979FF;
+            --accent-green: #00E676;
+            --accent-orange: #FF6D00;
+            --accent-purple: #651FFF;
+            --border-color: #333333;
+            
+            /* Typography */
+            --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-code: 'Consolas', 'Monaco', 'Courier New', monospace;
+            
+            /* Transitions */
+            --transition-speed: 400ms;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            overflow: hidden;
+        }
+        
+        #presentation-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all var(--transition-speed) ease-in-out;
+            pointer-events: none;
+        }
+        
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            pointer-events: auto;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-blue);
+        }
+        
+        h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        
+        p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            text-align: center;
+            max-width: 800px;
+        }
+        
+        ul {
+            list-style: none;
+            padding: 0;
+            font-size: 1.2rem;
+        }
+        
+        li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        li i {
+            color: var(--accent-green);
+        }
+        
+        /* Code blocks */
+        pre, code {
+            font-family: var(--font-code);
+        }
+        
+        pre {
+            background-color: var(--bg-code);
+            padding: 1.5rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            max-width: 900px;
+            width: 100%;
+            margin: 1rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        code {
+            background-color: var(--bg-code);
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        
+        /* Cards */
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            margin: 1rem;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Navigation */
+        .nav-buttons {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+        
+        .nav-btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-primary);
+            transition: all 300ms ease;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--accent-blue);
+            transform: scale(1.1);
+        }
+        
+        .nav-btn:active {
+            transform: scale(0.95);
+        }
+        
+        /* Progress bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background-color: var(--accent-blue);
+            width: 0%;
+            transition: width var(--transition-speed) ease-out;
+            z-index: 1000;
+        }
+        
+        /* Slide counter */
+        .slide-counter {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Interactive elements */
+        .interactive-demo {
+            background-color: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .btn {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 300ms ease;
+        }
+        
+        .btn:hover {
+            background-color: var(--accent-purple);
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .output {
+            background-color: var(--bg-code);
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: var(--font-code);
+            min-height: 50px;
+            white-space: pre-wrap;
+        }
+        
+        /* Two column layout */
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        .fade-in-delay {
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 0.3s forwards;
+        }
+        
+        /* Object visualization */
+        .object-viz {
+            background-color: var(--bg-card);
+            border: 2px solid var(--accent-blue);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem;
+            font-family: var(--font-code);
+        }
+        
+        .property {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .property:last-child {
+            border-bottom: none;
+        }
+        
+        .property-key {
+            color: var(--accent-green);
+        }
+        
+        .property-value {
+            color: var(--accent-orange);
+        }
+        
+        /* Quiz styles */
+        .quiz-container {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        .quiz-option {
+            background-color: var(--bg-code);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 300ms ease;
+        }
+        
+        .quiz-option:hover {
+            border-color: var(--accent-blue);
+            transform: translateX(5px);
+        }
+        
+        .quiz-option.correct {
+            border-color: var(--accent-green);
+            background-color: rgba(0, 230, 118, 0.1);
+        }
+        
+        .quiz-option.incorrect {
+            border-color: #ff5252;
+            background-color: rgba(255, 82, 82, 0.1);
+        }
+        
+        /* Prototype chain visualization */
+        .proto-chain {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .proto-object {
+            background-color: var(--bg-card);
+            border: 2px solid var(--accent-purple);
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: relative;
+        }
+        
+        .proto-arrow {
+            font-size: 2rem;
+            color: var(--accent-purple);
+        }
+
+        /* Table styles */
+        table {
+            background-color: var(--bg-card);
+            border-collapse: collapse;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 1rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--accent-blue);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background-color: rgba(41, 121, 255, 0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .two-columns {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar"></div>
+    <div class="slide-counter">1 / 12</div>
+    
+    <div id="presentation-container">
+        <!-- Slide 1: Title -->
+        <section class="slide active" data-slide-id="title">
+            <h1 class="fade-in">JavaScript 객체</h1>
+            <p class="fade-in-delay">데이터와 기능을 하나로 묶는 강력한 자료구조</p>
+            <div class="card fade-in-delay" style="animation-delay: 0.6s;">
+                <p><i class="fas fa-graduation-cap"></i> 객체의 개념부터 프로토타입까지 마스터하기</p>
+            </div>
+        </section>
+        
+        <!-- Slide 2: Learning Objectives -->
+        <section class="slide" data-slide-id="objectives">
+            <h2><i class="fas fa-bullseye"></i> 학습 목표</h2>
+            <ul>
+                <li class="fade-in"><i class="fa-solid fa-lightbulb"></i> 객체의 기본 개념과 생성 방법 이해</li>
+                <li class="fade-in" style="animation-delay: 0.2s;"><i class="fa-solid fa-gears"></i> 속성과 메소드를 효과적으로 다루기</li>
+                <li class="fade-in" style="animation-delay: 0.4s;"><i class="fa-solid fa-link"></i> 참조 타입의 특징과 복사 방법 습득</li>
+                <li class="fade-in" style="animation-delay: 0.6s;"><i class="fa-solid fa-sitemap"></i> 프로토타입과 상속 메커니즘 이해</li>
+                <li class="fade-in" style="animation-delay: 0.8s;"><i class="fa-solid fa-hammer"></i> 생성자 함수와 팩토리 패턴 활용</li>
+            </ul>
+        </section>
+        
+        <!-- Slide 3: Object Basics -->
+        <section class="slide" data-slide-id="basics">
+            <h2><i class="fas fa-cube"></i> 객체란 무엇인가?</h2>
+            <div class="two-columns">
+                <div>
+                    <h3>객체의 특징</h3>
+                    <ul>
+                        <li><i class="fas fa-key"></i> key-value 쌍으로 구성</li>
+                        <li><i class="fas fa-share-alt"></i> 참조 타입 (Reference Type)</li>
+                        <li><i class="fas fa-plus-circle"></i> 동적으로 속성 추가/삭제</li>
+                        <li><i class="fas fa-code"></i> 메소드 포함 가능</li>
+                    </ul>
+                </div>
+                <div class="object-viz">
+                    <div style="text-align: center; margin-bottom: 1rem;">person 객체</div>
+                    <div class="property">
+                        <span class="property-key">name:</span>
+                        <span class="property-value">"김철수"</span>
+                    </div>
+                    <div class="property">
+                        <span class="property-key">age:</span>
+                        <span class="property-value">30</span>
+                    </div>
+                    <div class="property">
+                        <span class="property-key">greet:</span>
+                        <span class="property-value">function() {...}</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Slide 4: Object Creation -->
+        <section class="slide" data-slide-id="creation">
+            <h2><i class="fas fa-hammer"></i> 객체 생성 방법</h2>
+            <div class="interactive-demo">
+                <div class="demo-controls">
+                    <button class="btn" onclick="showCreationMethod('literal')">객체 리터럴</button>
+                    <button class="btn" onclick="showCreationMethod('constructor')">생성자</button>
+                    <button class="btn" onclick="showCreationMethod('create')">Object.create</button>
+                </div>
+                <pre><code id="creation-code" class="language-javascript">// 객체 리터럴 (가장 일반적)
+const person = {
+    name: '김철수',
+    age: 30,
+    greet() {
+        return `안녕하세요, ${this.name}입니다!`;
+    }
+};
+
+console.log(person.greet()); // "안녕하세요, 김철수입니다!"</code></pre>
+            </div>
+        </section>
+        
+        <!-- Slide 5: Property Access -->
+        <section class="slide" data-slide-id="property-access">
+            <h2><i class="fas fa-hand-pointer"></i> 속성 접근과 조작</h2>
+            <div class="interactive-demo">
+                <h3>실시간 객체 조작 데모</h3>
+                <div class="demo-controls">
+                    <button class="btn" onclick="accessProperty('dot')">점 표기법</button>
+                    <button class="btn" onclick="accessProperty('bracket')">대괄호 표기법</button>
+                    <button class="btn" onclick="accessProperty('add')">속성 추가</button>
+                    <button class="btn" onclick="accessProperty('delete')">속성 삭제</button>
+                </div>
+                <div class="output" id="access-output">// 버튼을 클릭해보세요!</div>
+            </div>
+        </section>
+        
+        <!-- Slide 6: Methods and this -->
+        <section class="slide" data-slide-id="methods">
+            <h2><i class="fas fa-function"></i> 메소드와 this</h2>
+            <div class="interactive-demo">
+                <h3>this 바인딩 실험</h3>
+                <pre><code class="language-javascript">const calculator = {
+    result: 0,
+    add(num) {
+        this.result += num;
+        return this;  // 체이닝을 위해
+    },
+    multiply(num) {
+        this.result *= num;
+        return this;
+    },
+    getResult() {
+        return this.result;
+    }
+};</code></pre>
+                <div class="demo-controls">
+                    <button class="btn" onclick="runCalculator()">실행하기</button>
+                </div>
+                <div class="output" id="calc-output">// calculator.add(5).multiply(3).getResult()</div>
+            </div>
+        </section>
+        
+        <!-- Slide 7: Reference vs Value -->
+        <section class="slide" data-slide-id="reference">
+            <h2><i class="fas fa-copy"></i> 객체와 참조</h2>
+            <div class="interactive-demo">
+                <h3>참조 복사 vs 깊은 복사</h3>
+                <div id="reference-viz" style="display: flex; gap: 2rem; justify-content: center; margin: 2rem 0;">
+                    <!-- 동적으로 생성됨 -->
+                </div>
+                <div class="demo-controls">
+                    <button class="btn" onclick="demonstrateReference()">참조 복사 시연</button>
+                    <button class="btn" onclick="demonstrateDeepCopy()">깊은 복사 시연</button>
+                </div>
+                <div class="output" id="ref-output">// 복사 방법에 따른 차이를 확인해보세요</div>
+            </div>
+        </section>
+        
+        <!-- Slide 8: Prototype Visualization -->
+        <section class="slide" data-slide-id="prototype">
+            <h2><i class="fas fa-sitemap"></i> 프로토타입 체인</h2>
+            <div class="proto-chain" id="proto-chain-viz">
+                <div class="proto-object">
+                    <div style="text-align: center; font-weight: bold;">child</div>
+                    <div class="property">
+                        <span class="property-key">b:</span>
+                        <span class="property-value">2</span>
+                    </div>
+                </div>
+                <div class="proto-arrow">→</div>
+                <div class="proto-object">
+                    <div style="text-align: center; font-weight: bold;">parent</div>
+                    <div class="property">
+                        <span class="property-key">a:</span>
+                        <span class="property-value">1</span>
+                    </div>
+                </div>
+                <div class="proto-arrow">→</div>
+                <div class="proto-object">
+                    <div style="text-align: center; font-weight: bold;">Object.prototype</div>
+                    <div class="property">
+                        <span class="property-key">toString:</span>
+                        <span class="property-value">function</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <p>child.a를 호출하면? 프로토타입 체인을 따라 parent에서 찾습니다!</p>
+            </div>
+        </section>
+        
+        <!-- Slide 9: Constructor Functions -->
+        <section class="slide" data-slide-id="constructor">
+            <h2><i class="fas fa-industry"></i> 생성자 함수</h2>
+            <div class="two-columns">
+                <div>
+                    <pre><code class="language-javascript">function Person(name, age) {
+    this.name = name;
+    this.age = age;
+}
+
+Person.prototype.introduce = function() {
+    return `안녕하세요, ${this.name}입니다.`;
+};
+
+const person1 = new Person('김철수', 30);
+const person2 = new Person('이영희', 25);</code></pre>
+                </div>
+                <div>
+                    <h3>장점</h3>
+                    <ul>
+                        <li><i class="fas fa-check"></i> 메모리 효율성</li>
+                        <li><i class="fas fa-check"></i> 프로토타입 공유</li>
+                        <li><i class="fas fa-check"></i> instanceof 검사</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Slide 10: Practical Example -->
+        <section class="slide" data-slide-id="practical">
+            <h2><i class="fas fa-code"></i> 실전 예제: Todo 앱</h2>
+            <div class="interactive-demo">
+                <pre><code class="language-javascript">function Todo(text) {
+    this.id = Date.now();
+    this.text = text;
+    this.completed = false;
+    this.createdAt = new Date();
+}
+
+Todo.prototype.toggle = function() {
+    this.completed = !this.completed;
+    return this;
+};
+
+Todo.prototype.toString = function() {
+    const status = this.completed ? '✓' : '○';
+    return `${status} ${this.text}`;
+};</code></pre>
+                <div class="demo-controls">
+                    <input type="text" id="todo-input" placeholder="할 일 입력" style="padding: 0.5rem; border-radius: 4px;">
+                    <button class="btn" onclick="addTodo()">추가</button>
+                </div>
+                <div class="output" id="todo-output" style="text-align: left;">// Todo 목록</div>
+            </div>
+        </section>
+        
+        <!-- Slide 11: Quiz -->
+        <section class="slide" data-slide-id="quiz">
+            <h2><i class="fas fa-question-circle"></i> 퀴즈 타임!</h2>
+            <div class="quiz-container">
+                <h3>Q. 다음 중 객체의 속성에 접근하는 올바른 방법이 아닌 것은?</h3>
+                <div class="quiz-option" onclick="checkAnswer(this, false)">점 표기법 (obj.property)</div>
+                <div class="quiz-option" onclick="checkAnswer(this, false)">대괄호 표기법 (obj['property'])</div>
+                <div class="quiz-option" onclick="checkAnswer(this, true)">소괄호 표기법 (obj(property))</div>
+                <div class="quiz-option" onclick="checkAnswer(this, false)">계산된 속성명 (obj[variable])</div>
+                <p id="quiz-feedback" style="margin-top: 1rem; color: var(--accent-green);"></p>
+            </div>
+        </section>
+        
+        <!-- Slide 12: Summary -->
+        <section class="slide" data-slide-id="summary">
+            <h2><i class="fas fa-flag-checkered"></i> 핵심 정리</h2>
+            <div class="two-columns">
+                <div class="card">
+                    <h3>✅ 오늘 배운 내용</h3>
+                    <ul>
+                        <li><i class="fas fa-check"></i> 객체 생성과 조작</li>
+                        <li><i class="fas fa-check"></i> 메소드와 this 바인딩</li>
+                        <li><i class="fas fa-check"></i> 참조와 복사</li>
+                        <li><i class="fas fa-check"></i> 프로토타입 체인</li>
+                        <li><i class="fas fa-check"></i> 생성자 함수</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>🎯 다음 단계</h3>
+                    <ul>
+                        <li><i class="fas fa-arrow-right"></i> 클래스 문법 학습</li>
+                        <li><i class="fas fa-arrow-right"></i> 고급 프로토타입 패턴</li>
+                        <li><i class="fas fa-arrow-right"></i> 함수형 프로그래밍</li>
+                        <li><i class="fas fa-arrow-right"></i> 디자인 패턴 적용</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <div class="nav-buttons">
+        <button class="nav-btn" onclick="presentation.prev()">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="nav-btn" onclick="presentation.next()">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <script>
+        class PresentationController {
+            constructor(selector) {
+                this.container = document.querySelector(selector);
+                this.slides = Array.from(this.container.children);
+                this.currentSlideIndex = 0;
+                this.activeTimers = [];
+                this.todos = [];
+                
+                this.init();
+            }
+            
+            init() {
+                this.updateSlideVisibility();
+                this.updateProgress();
+                this.updateCounter();
+                
+                // 키보드 이벤트
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowRight') this.next();
+                    if (e.key === 'ArrowLeft') this.prev();
+                });
+                
+                // 초기 데모 데이터 설정
+                this.setupDemoData();
+            }
+            
+            setupDemoData() {
+                // Reference 데모용 객체
+                this.demoObj = {
+                    name: '원본',
+                    data: { value: 100 }
+                };
+            }
+            
+            goTo(index) {
+                if (index < 0 || index >= this.slides.length) return;
+                
+                this.clearAnimations();
+                this.currentSlideIndex = index;
+                this.updateSlideVisibility();
+                this.updateProgress();
+                this.updateCounter();
+                this.runSlideAnimations(this.currentSlideIndex);
+            }
+            
+            next() { 
+                this.goTo(this.currentSlideIndex + 1); 
+            }
+            
+            prev() { 
+                this.goTo(this.currentSlideIndex - 1); 
+            }
+            
+            updateSlideVisibility() {
+                this.slides.forEach((slide, index) => {
+                    slide.classList.toggle('active', index === this.currentSlideIndex);
+                });
+            }
+            
+            updateProgress() {
+                const progress = ((this.currentSlideIndex + 1) / this.slides.length) * 100;
+                document.querySelector('.progress-bar').style.width = `${progress}%`;
+            }
+            
+            updateCounter() {
+                document.querySelector('.slide-counter').textContent = 
+                    `${this.currentSlideIndex + 1} / ${this.slides.length}`;
+            }
+            
+            clearAnimations() {
+                this.activeTimers.forEach(timerId => clearTimeout(timerId));
+                this.activeTimers = [];
+            }
+            
+            runSlideAnimations(index) {
+                const slideId = this.slides[index].dataset.slideId;
+                
+                // 특정 슬라이드의 애니메이션
+                if (slideId === 'reference') {
+                    this.initializeReferenceDemo();
+                }
+            }
+            
+            initializeReferenceDemo() {
+                const vizContainer = document.getElementById('reference-viz');
+                vizContainer.innerHTML = `
+                    <div class="object-viz">
+                        <div style="text-align: center; font-weight: bold;">원본 객체</div>
+                        <div class="property">
+                            <span class="property-key">name:</span>
+                            <span class="property-value" id="original-name">"원본"</span>
+                        </div>
+                        <div class="property">
+                            <span class="property-key">data.value:</span>
+                            <span class="property-value" id="original-value">100</span>
+                        </div>
+                    </div>
+                    <div class="object-viz" id="copy-viz" style="opacity: 0.3;">
+                        <div style="text-align: center; font-weight: bold;">복사본</div>
+                        <div class="property">
+                            <span class="property-key">name:</span>
+                            <span class="property-value" id="copy-name">-</span>
+                        </div>
+                        <div class="property">
+                            <span class="property-key">data.value:</span>
+                            <span class="property-value" id="copy-value">-</span>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        // 프레젠테이션 인스턴스 생성
+        const presentation = new PresentationController('#presentation-container');
+        
+        // 데모 함수들
+        function showCreationMethod(method) {
+            const codeElement = document.getElementById('creation-code');
+            const codes = {
+                literal: `// 객체 리터럴 (가장 일반적)
+const person = {
+    name: '김철수',
+    age: 30,
+    greet() {
+        return \`안녕하세요, \${this.name}입니다!\`;
+    }
+};
+
+console.log(person.greet()); // "안녕하세요, 김철수입니다!"`,
+                
+                constructor: `// 생성자 함수
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+}
+
+Person.prototype.greet = function() {
+    return \`안녕하세요, \${this.name}입니다!\`;
+};
+
+const person = new Person('김철수', 30);
+console.log(person.greet()); // "안녕하세요, 김철수입니다!"`,
+                
+                create: `// Object.create()
+const personPrototype = {
+    greet() {
+        return \`안녕하세요, \${this.name}입니다!\`;
+    }
+};
+
+const person = Object.create(personPrototype);
+person.name = '김철수';
+person.age = 30;
+
+console.log(person.greet()); // "안녕하세요, 김철수입니다!"`
+            };
+            
+            codeElement.textContent = codes[method];
+        }
+        
+        function accessProperty(type) {
+            const output = document.getElementById('access-output');
+            const obj = { name: '김철수', age: 30, 'special key': '특수 키' };
+            
+            const outputs = {
+                dot: `const person = { name: '김철수', age: 30 };
+console.log(person.name);    // '김철수'
+console.log(person.age);     // 30`,
+                
+                bracket: `const person = { name: '김철수', 'special key': '특수 키' };
+console.log(person['name']);        // '김철수'
+console.log(person['special key']); // '특수 키'
+
+// 변수로 접근
+const prop = 'name';
+console.log(person[prop]);          // '김철수'`,
+                
+                add: `const person = { name: '김철수' };
+
+// 속성 추가
+person.age = 30;              // 점 표기법
+person['job'] = '개발자';      // 대괄호 표기법
+
+console.log(person);
+// { name: '김철수', age: 30, job: '개발자' }`,
+                
+                delete: `const person = { name: '김철수', age: 30, job: '개발자' };
+
+// 속성 삭제
+delete person.job;
+
+console.log(person);
+// { name: '김철수', age: 30 }`
+            };
+            
+            output.textContent = outputs[type];
+        }
+        
+        function runCalculator() {
+            const output = document.getElementById('calc-output');
+            const calculator = {
+                result: 0,
+                add(num) {
+                    this.result += num;
+                    return this;
+                },
+                multiply(num) {
+                    this.result *= num;
+                    return this;
+                },
+                getResult() {
+                    return this.result;
+                }
+            };
+            
+            const result = calculator.add(5).multiply(3).getResult();
+            
+            output.textContent = `calculator.add(5).multiply(3).getResult()
+// 단계별 실행:
+// 1. add(5): result = 0 + 5 = 5
+// 2. multiply(3): result = 5 * 3 = 15
+// 3. getResult(): 15
+
+결과: ${result}`;
+        }
+        
+        function demonstrateReference() {
+            const output = document.getElementById('ref-output');
+            const original = presentation.demoObj;
+            const copy = original; // 참조 복사
+            
+            // UI 업데이트
+            document.getElementById('copy-viz').style.opacity = '1';
+            document.getElementById('copy-name').textContent = '"원본"';
+            document.getElementById('copy-value').textContent = '100';
+            
+            // 복사본 수정
+            copy.name = '변경됨';
+            copy.data.value = 200;
+            
+            // UI 업데이트
+            setTimeout(() => {
+                document.getElementById('original-name').textContent = '"변경됨"';
+                document.getElementById('original-value').textContent = '200';
+                document.getElementById('copy-name').textContent = '"변경됨"';
+                document.getElementById('copy-value').textContent = '200';
+                
+                output.textContent = `const copy = original; // 참조 복사
+copy.name = '변경됨';
+copy.data.value = 200;
+
+// 원본도 함께 변경됨!
+console.log(original.name);        // '변경됨'
+console.log(original.data.value);  // 200`;
+            }, 500);
+        }
+        
+        function demonstrateDeepCopy() {
+            const output = document.getElementById('ref-output');
+            
+            // 원본 복원
+            presentation.demoObj = { name: '원본', data: { value: 100 } };
+            const original = presentation.demoObj;
+            const deepCopy = JSON.parse(JSON.stringify(original));
+            
+            // UI 업데이트
+            document.getElementById('original-name').textContent = '"원본"';
+            document.getElementById('original-value').textContent = '100';
+            document.getElementById('copy-viz').style.opacity = '1';
+            document.getElementById('copy-name').textContent = '"원본"';
+            document.getElementById('copy-value').textContent = '100';
+            
+            // 복사본만 수정
+            deepCopy.name = '복사본 변경';
+            deepCopy.data.value = 300;
+            
+            // UI 업데이트
+            setTimeout(() => {
+                document.getElementById('copy-name').textContent = '"복사본 변경"';
+                document.getElementById('copy-value').textContent = '300';
+                
+                output.textContent = `const deepCopy = JSON.parse(JSON.stringify(original));
+deepCopy.name = '복사본 변경';
+deepCopy.data.value = 300;
+
+// 원본은 그대로!
+console.log(original.name);        // '원본'
+console.log(original.data.value);  // 100
+console.log(deepCopy.name);        // '복사본 변경'
+console.log(deepCopy.data.value);  // 300`;
+            }, 500);
+        }
+        
+        // Todo 데모
+        function Todo(text) {
+            this.id = Date.now();
+            this.text = text;
+            this.completed = false;
+            this.createdAt = new Date();
+        }
+        
+        Todo.prototype.toggle = function() {
+            this.completed = !this.completed;
+            return this;
+        };
+        
+        Todo.prototype.toString = function() {
+            const status = this.completed ? '✓' : '○';
+            return `${status} ${this.text}`;
+        };
+        
+        function addTodo() {
+            const input = document.getElementById('todo-input');
+            const output = document.getElementById('todo-output');
+            
+            if (input.value.trim()) {
+                const todo = new Todo(input.value.trim());
+                presentation.todos.push(todo);
+                
+                // Todo 목록 표시
+                const todoList = presentation.todos
+                    .map((t, i) => `${i + 1}. ${t.toString()}`)
+                    .join('\n');
+                
+                output.textContent = `// Todo 목록
+${todoList}
+
+// 클릭해서 토글: presentation.todos[0].toggle()`;
+                
+                input.value = '';
+            }
+        }
+        
+        // Quiz 함수
+        function checkAnswer(element, isCorrect) {
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+                opt.style.pointerEvents = 'none';
+            });
+            
+            if (isCorrect) {
+                element.classList.add('correct');
+                document.getElementById('quiz-feedback').textContent = 
+                    '🎉 정답입니다! 소괄호는 함수 호출에 사용됩니다.';
+            } else {
+                element.classList.add('incorrect');
+                document.getElementById('quiz-feedback').textContent = 
+                    '❌ 틀렸습니다. 다시 생각해보세요!';
+                setTimeout(() => {
+                    options.forEach(opt => {
+                        opt.classList.remove('incorrect');
+                        opt.style.pointerEvents = 'auto';
+                    });
+                    document.getElementById('quiz-feedback').textContent = '';
+                }, 2000);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>값(Value) 심층 탐구 - 인터랙티브 프레젠테이션</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0e1a;
+            --bg-card: #131825;
+            --bg-card-hover: #1a2033;
+            --bg-code: #1e2433;
+            --text-primary: #e8ecf4;
+            --text-secondary: #a8b3cf;
+            --text-muted: #6b7794;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #ec4899;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --border-color: #2a3142;
+            --border-light: #3a4252;
+            --font-main: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            --font-code: 'JetBrains Mono', 'Fira Code', monospace;
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            --transition-speed: 300ms;
+            --transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.2), 0 6px 6px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.3);
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 1rem;
+            --radius-xl: 1.5rem;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #0f172a 100%);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            font-size: 16px;
+            line-height: 1.6;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #presentation-container {
+            width: 95%;
+            max-width: 1400px;
+            height: 90vh;
+            max-height: 900px;
+            position: relative;
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: var(--spacing-2xl);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity var(--transition-speed) var(--transition-ease),
+                        transform var(--transition-speed) var(--transition-ease);
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .slide h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: var(--spacing-lg);
+            background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        .slide h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            margin-bottom: var(--spacing-xl);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .slide h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .slide p {
+            font-size: 1.125rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-lg);
+            max-width: 800px;
+        }
+
+        .slide ul {
+            list-style: none;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .slide li {
+            font-size: 1.125rem;
+            margin-bottom: var(--spacing-md);
+            padding-left: var(--spacing-xl);
+            position: relative;
+            color: var(--text-secondary);
+        }
+
+        .slide li::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: var(--accent-purple);
+            font-size: 0.75rem;
+        }
+
+        code {
+            font-family: var(--font-code);
+            background: var(--bg-code);
+            color: var(--accent-pink);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            font-size: 0.95em;
+        }
+
+        pre {
+            background: var(--bg-code);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            overflow-x: auto;
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+            position: relative;
+        }
+
+        pre code {
+            background: none;
+            color: var(--text-primary);
+            padding: 0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .token-keyword { color: var(--accent-purple); }
+        .token-string { color: var(--accent-green); }
+        .token-number { color: var(--accent-orange); }
+        .token-comment { color: var(--text-muted); font-style: italic; }
+        .token-function { color: var(--accent-blue); }
+        .token-operator { color: var(--accent-pink); }
+        
+        .interactive-demo {
+            background: rgba(30, 36, 51, 0.6);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+            backdrop-filter: blur(10px);
+        }
+        
+        .code-example {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+            align-items: start;
+        }
+
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-blue) 0%, var(--accent-purple) 50%, var(--accent-pink) 100%);
+            width: 0%;
+            transition: width var(--transition-speed) var(--transition-ease);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .nav-controls {
+            position: absolute;
+            bottom: var(--spacing-lg);
+            right: var(--spacing-lg);
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .nav-btn {
+            background: var(--bg-card-hover);
+            border: 1px solid var(--border-light);
+            color: var(--text-primary);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-speed) var(--transition-ease);
+            font-size: 1.25rem;
+        }
+
+        .nav-btn:hover {
+            background: var(--accent-blue);
+            transform: scale(1.1);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .slide-counter {
+            position: absolute;
+            top: var(--spacing-lg);
+            right: var(--spacing-lg);
+            background: var(--bg-card-hover);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            border: 1px solid var(--border-light);
+        }
+
+        @media (max-width: 768px) {
+            .slide { padding: var(--spacing-lg); }
+            .code-example { grid-template-columns: 1fr; }
+            .slide h1 { font-size: 2rem; }
+            .slide h2 { font-size: 1.5rem; }
+        }
+
+        .text-center { text-align: center; }
+        .highlight { color: var(--accent-pink); font-weight: 600; }
+
+        .token-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+            font-family: var(--font-code);
+            font-size: 1.1rem;
+            padding: var(--spacing-lg);
+            background: var(--bg-code);
+            border-radius: var(--radius-md);
+        }
+        .token {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-ease);
+        }
+        .token.expression {
+            background-color: rgba(59, 130, 246, 0.2);
+            border: 1px solid var(--accent-blue);
+            color: #90caf9;
+        }
+        .token.statement {
+            background-color: rgba(236, 72, 153, 0.2);
+            border: 1px solid var(--accent-pink);
+            color: #f48fb1;
+        }
+        .token:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        .token-explanation {
+            margin-top: var(--spacing-lg);
+            padding: var(--spacing-lg);
+            background: var(--bg-card-hover);
+            border-left: 4px solid var(--accent-green);
+            border-radius: var(--radius-md);
+            min-height: 80px;
+        }
+    </style>
+</head>
+<body>
+    <div id="presentation-container">
+        
+        <!-- Slide 1: Title -->
+        <section class="slide active" data-slide-id="0">
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 2rem;">
+                <h1><i class="fas fa-gem"></i> JavaScript 값(Value) 심층 탐구</h1>
+                <p class="text-center" style="font-size: 1.5rem; max-width: 700px;">
+                    모든 코드의 기본 재료, <span class="highlight">값(Value), 표현식(Expression), 문(Statement)</span>의 본질 이해하기
+                </p>
+                <p class="text-muted">← → 키보드 화살표로 이동</p>
+            </div>
+        </section>
+
+        <!-- Slide 2: Why 'Value' Matters? -->
+        <section class="slide" data-slide-id="1">
+            <h2><i class="fas fa-seedling"></i> 왜 '값'을 알아야 할까요?</h2>
+            <p>프로그래밍은 결국 <span class="highlight">데이터(자료)를 처리하는 과정</span>입니다. '값'은 바로 그 데이터가 코드 세상에서 표현되는 방식입니다.</p>
+            <div class="code-example">
+                <div style="background: var(--bg-code); padding: var(--spacing-lg); border-radius: var(--radius-md);">
+                    <h3>현실 세계</h3>
+                    <ul style="margin-top: var(--spacing-md);">
+                        <li>"안녕하세요" 라는 인사말</li>
+                        <li>친구의 나이: 30세</li>
+                        <li>'오늘 날씨는 맑음'이라는 사실</li>
+                    </ul>
+                </div>
+                <div style="background: var(--bg-code); padding: var(--spacing-lg); border-radius: var(--radius-md);">
+                    <h3>코드 세상 (JavaScript)</h3>
+                    <ul style="margin-top: var(--spacing-md);">
+                        <li>문자열 값: <code>"안녕하세요"</code></li>
+                        <li>숫자 값: <code>30</code></li>
+                        <li>불리언 값: <code>true</code></li>
+                    </ul>
+                </div>
+            </div>
+            <p style="margin-top: var(--spacing-xl);">값의 본질과, 값이 어떻게 만들어지고(표현식) 사용되는지(문) 이해하는 것은 모든 코드의 동작 원리를 꿰뚫는 핵심 열쇠입니다.</p>
+        </section>
+
+        <!-- Slide 3: The Essence of Value -->
+        <section class="slide" data-slide-id="2">
+            <h2><i class="fas fa-memory"></i> 값(Value)의 본질</h2>
+            <p>값은 <span class="highlight">식이 평가(evaluate)되어 생성된 결과</span>이며, 가장 기본적인 데이터 단위입니다. 모든 값은 데이터 타입을 가지며 메모리에 저장됩니다.</p>
+            <pre><code><span class="token-keyword">let</span> age = <span class="token-number">30</span>;
+<span class="token-comment">// 1. `30`이라는 숫자 리터럴이 평가되어 숫자 값 `30`을 메모리에 생성합니다.</span>
+<span class="token-comment">// 2. 변수 `age`는 이 메모리 주소를 기억(참조)합니다.</span>
+</code></pre>
+            <div style="text-align: center; margin-top: 2rem; background: var(--bg-card-hover); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+                <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" style="max-width: 500px; width: 100%; height: auto; font-family: var(--font-main);">
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="8" refY="3.5" orient="auto" fill="var(--text-secondary)">
+                            <polygon points="0 0, 10 3.5, 0 7"></polygon>
+                        </marker>
+                    </defs>
+
+                    <!-- Variable Box -->
+                    <rect x="30" y="75" width="120" height="50" rx="8" fill="var(--bg-code)" stroke="var(--border-color)" stroke-width="1"></rect>
+                    <text x="90" y="102" text-anchor="middle" font-size="16px" fill="var(--text-primary)" font-family="var(--font-code)">let age</text>
+                    
+                    <!-- Arrow -->
+                    <line x1="150" y1="100" x2="240" y2="100" stroke="var(--text-secondary)" stroke-width="2" marker-end="url(#arrowhead)"></line>
+
+                    <!-- Memory Box -->
+                    <g>
+                        <rect x="250" y="50" width="120" height="100" rx="8" fill="var(--bg-code)" stroke="var(--border-color)" stroke-width="1"></rect>
+                        <text x="310" y="70" text-anchor="middle" font-size="12px" fill="var(--text-muted)">메모리 주소: 0x1A2B</text>
+                        <rect x="260" y="80" width="100" height="60" rx="5" fill="rgba(59, 130, 246, 0.2)" stroke="var(--accent-blue)" stroke-width="1.5"></rect>
+                        <text x="310" y="115" text-anchor="middle" font-size="24px" font-weight="700" fill="var(--text-primary)" font-family="var(--font-code)">30</text>
+                    </g>
+                </svg>
+                <p class="text-muted" style="margin-top: 0.5rem;">변수는 값이 저장된 '메모리 공간의 이름표'와 같습니다.</p>
+            </div>
+        </section>
+
+
+        <!-- Slide 4: Literal -->
+        <section class="slide" data-slide-id="3">
+            <h2><i class="fas fa-keyboard"></i> 리터럴 (Literal): 값을 만드는 표기법</h2>
+            <p>리터럴은 <span class="highlight">사람이 이해할 수 있는 문자 또는 약속된 기호</span>를 사용해 값을 생성하는 표기법입니다. 자바스크립트 엔진은 코드가 실행되는 시점(런타임)에 리터럴을 평가해 값을 생성합니다.</p>
+            <pre><code><span class="token-comment">// 개발자가 코드에 `100`이라고 적으면(리터럴), 엔진은 숫자 값 100을 생성</span>
+<span class="token-number">100</span>             <span class="token-comment">// 숫자 리터럴</span>
+<span class="token-string">'Hello'</span>         <span class="token-comment">// 문자열 리터럴</span>
+<span class="token-keyword">true</span>            <span class="token-comment">// 불리언 리터럴</span>
+{ name: <span class="token-string">'Kim'</span> } <span class="token-comment">// 객체 리터럴</span>
+[ <span class="token-number">1</span>, <span class="token-number">2</span>, <span class="token-number">3</span> ]     <span class="token-comment">// 배열 리터럴</span>
+<span class="token-keyword">function</span>() {}   <span class="token-comment">// 함수 리터럴</span></code></pre>
+            <p>즉, 리터럴은 값을 생성하기 위한 '약속된 틀'입니다.</p>
+        </section>
+
+        <!-- Slide 5: Expression -->
+        <section class="slide" data-slide-id="4">
+            <h2><i class="fas fa-calculator"></i> 표현식 (Expression): 값을 만드는 공장</h2>
+            <p>표현식은 <span class="highlight">값으로 평가될 수 있는 모든 코드</span>입니다. 즉, 표현식은 실행하면 결국 하나의 값으로 귀결됩니다.</p>
+            <p>값이 위치할 수 있는 곳이라면 어디든 표현식이 위치할 수 있습니다.</p>
+            <pre><code><span class="token-comment">// 리터럴 표현식</span>
+<span class="token-number">10</span>
+<span class="token-string">'Hello'</span>
+
+<span class="token-comment">// 식별자 표현식 (변수, 함수 이름 등) -> 변수가 참조하는 값으로 평가됨</span>
+sum
+person.name
+
+<span class="token-comment">// 연산자 표현식 -> 연산 결과가 값으로 평가됨</span>
+<span class="token-number">5</span> + <span class="token-number">5</span>
+
+<span class="token-comment">// 함수/메서드 호출 표현식 -> 반환(return) 값이 값으로 평가됨</span>
+square(<span class="token-number">3</span>)</code></pre>
+        </section>
+        
+        <!-- Slide 6: Statement -->
+        <section class="slide" data-slide-id="5">
+            <h2><i class="fas fa-file-code"></i> 문 (Statement): 행동을 지시하는 명령</h2>
+            <p>문은 <span class="highlight">컴퓨터에 내리는 명령</span>이며, 프로그램을 구성하는 기본 단위이자 최소 실행 단위입니다.</p>
+            <p>문은 여러 토큰(token)으로 구성됩니다. 토큰은 문법적으로 더 이상 나눌 수 없는 코드의 기본 요소를 의미합니다. (e.g. <code>var</code>, <code>x</code>, <code>=</code>, <code>5</code>, <code>;</code>)</p>
+            <pre><code><span class="token-comment">// 변수 선언문 (값을 저장할 공간을 확보하라는 명령)</span>
+<span class="token-keyword">var</span> x;
+
+<span class="token-comment">// 할당문 (값을 변수에 저장하라는 명령)</span>
+x = <span class="token-number">5</span>;
+
+<span class="token-comment">// 조건문 (조건에 따라 실행 흐름을 제어하라는 명령)</span>
+<span class="token-keyword">if</span> (x > <span class="token-number">1</span>) { console.log(x); }
+
+<span class="token-comment">// 반복문 (특정 코드를 반복 실행하라는 명령)</span>
+<span class="token-keyword">for</span> (<span class="token-keyword">var</span> i = <span class="token-number">0</span>; i < <span class="token-number">2</span>; i++) { console.log(i); }</code></pre>
+        </section>
+        
+        <!-- Slide 7: Expression vs Statement Distinction -->
+        <section class="slide" data-slide-id="6">
+            <h2><i class="fas fa-balance-scale"></i> 표현식 vs 문: 결정적 차이</h2>
+            <p>가장 큰 차이점은 <span class="highlight">"값으로 평가될 수 있는가?"</span> 입니다. 표현식은 값으로 대체될 수 있지만, 문은 그렇지 않습니다.</p>
+            <div class="code-example">
+                <div>
+                    <h3>표현식인 문 (Expression Statement)</h3>
+                    <p>문이지만 그 자체가 값으로 평가되는 특별한 케이스입니다. 대표적으로 할당문이 있습니다.</p>
+                    <pre><code><span class="token-comment">// 할당문은 '할당된 값'으로 평가됨</span>
+x = <span class="token-number">100</span>;</code></pre>
+                </div>
+                <div>
+                    <h3>표현식이 아닌 문 (Statement)</h3>
+                    <p>값으로 평가되지 않고, 명령을 수행할 뿐입니다. 변수 선언문, 조건문, 반복문 등이 해당됩니다.</p>
+                    <pre><code><span class="token-comment">// 변수 선언문은 값으로 평가 안됨</span>
+<span class="token-keyword">var</span> y;</code></pre>
+                </div>
+            </div>
+             <p style="margin-top: var(--spacing-xl);"><b>핵심 판별법:</b> 변수에 할당할 수 있다면 표현식, 없다면 표현식이 아닌 문입니다.</p>
+        </section>
+
+        <!-- Slide 8: Interactive Demo -->
+        <section class="slide" data-slide-id="7">
+            <h2><i class="fas fa-vial"></i> 인터랙티브 테스트</h2>
+            <p>아래 입력 칸에 코드를 넣고 변수에 할당해보며 차이를 직접 확인해보세요.</p>
+            
+            <div class="interactive-demo">
+                <pre><code><span class="token-keyword">let</span> result = <span id="test-input" contenteditable="true" style="display: inline-block; min-width: 100px; background: #333; border-radius: 4px; padding: 2px 6px; outline: none; color: var(--text-primary);">x = 100</span>;</code></pre>
+                <div id="test-output" style="margin-top: 1rem; padding: 1rem; background: var(--bg-code); border-radius: 8px; font-family: var(--font-code); border-left: 4px solid var(--accent-blue);">결과가 여기에 표시됩니다.</div>
+                 <div style="margin-top: 1rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn-example btn btn-secondary">x = 100</button>
+                    <button class="btn-example btn btn-secondary">var y</button>
+                    <button class="btn-example btn btn-secondary">10 + 20</button>
+                    <button class="btn-example btn btn-secondary">if (true) {}</button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Slide 9: Semicolon & ASI -->
+        <section class="slide" data-slide-id="8">
+            <h2><i class="fas fa-pen-fancy"></i> 세미콜론(;)과 문의 종료</h2>
+            <p>세미콜론은 <span class="highlight">문의 종료</span>를 나타냅니다. 자바스크립트는 세미콜론을 선택적으로 사용할 수 있습니다.</p>
+            <pre><code><span class="token-keyword">let</span> a = <span class="token-number">1</span>;  <span class="token-comment">// 세미콜론으로 문 종료</span>
+<span class="token-keyword">let</span> b = <span class="token-number">2</span>   <span class="token-comment">// 세미콜론 생략 가능</span></code></pre>
+            <h3>자동 세미콜론 삽입 (ASI)</h3>
+            <p>개발자가 세미콜론을 붙이지 않아도, 자바스크립트 엔진이 문의 끝이라고 예측되는 지점에 <span class="highlight">자동으로 세미콜론을 삽입</span>해줍니다.</p>
+            <p>하지만 ASI의 동작이 개발자의 의도와 다를 수 있어 예기치 않은 버그를 만들 수 있으므로, <span class="highlight">문의 끝에는 항상 세미콜론을 붙이는 것을 권장</span>합니다.</p>
+        </section>
+
+        <!-- Slide 10: Advanced: Completion Value -->
+        <section class="slide" data-slide-id="9">
+            <h2><i class="fas fa-graduation-cap"></i> 심화: 완료 값 (Completion Value)</h2>
+            <p>모든 문은 실행 후 <span class="highlight">완료 값</span>이라는 것을 생성합니다. 이는 ECMAScript 사양에 정의된 내부적인 값입니다.</p>
+            <p>하지만 이 완료 값은 개발자가 직접 접근하거나 사용할 수 없으며, 대부분의 경우 `undefined`입니다. 이것이 `if`문이나 `for`문 같은 '표현식이 아닌 문'을 변수에 할당할 수 없는 근본적인 이유입니다.</p>
+             <pre><code><span class="token-comment">// if 문은 표현식이 아니므로 변수에 할당 시 에러 발생</span>
+<span class="token-comment">// let x = if (true) { 1 } // -> SyntaxError</span>
+
+<span class="token-keyword">let</span> x;
+<span class="token-keyword">if</span> (<span class="token-keyword">true</span>) { x = <span class="token-number">10</span>; } <span class="token-comment">// if문 자체는 x에 할당될 수 없음</span>
+
+<span class="token-comment">// 개발자 도구 콘솔에서 확인 가능</span>
+<span class="token-keyword">if</span> (<span class="token-keyword">true</span>) { <span class="token-number">42</span> }
+<span class="token-comment">// 콘솔 결과: 42 (if문의 완료 값은 마지막 문의 완료 값)</span>
+
+<span class="token-keyword">var</span> y = <span class="token-number">10</span>;
+<span class="token-comment">// 콘솔 결과: undefined (변수 선언문의 완료 값)</span></code></pre>
+        </section>
+        
+        <!-- Slide 11: Visualization -->
+        <section class="slide" data-slide-id="10">
+            <h2><i class="fas fa-eye"></i> 문과 표현식 시각화</h2>
+            <p>코드는 여러 <span class="highlight">토큰</span>으로 이루어져 있습니다. 토큰이 모여 표현식과 문을 형성합니다. 아래 예제를 클릭해보세요.</p>
+            <div class="token-container" id="token-visualizer"></div>
+            <div class="token-explanation" id="token-explanation">
+                <p>토큰을 클릭하여 표현식인지 문인지 확인해보세요.</p>
+            </div>
+        </section>
+
+        <!-- Slide 12: Summary -->
+        <section class="slide" data-slide-id="11">
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 2rem;">
+                <h1><i class="fas fa-check-circle"></i> 핵심 정리</h1>
+                <div style="background: var(--bg-code); padding: 2rem; border-radius: 1rem; border: 1px solid var(--border-light); max-width: 800px; width: 100%;">
+                    <ul style="text-align: left;">
+                        <li><span class="highlight">값(Value)</span>: 식이 평가되어 메모리에 저장된 데이터.</li>
+                        <li><span class="highlight">리터럴(Literal)</span>: 값을 생성하는 코드상의 표기법.</li>
+                        <li><span class="highlight">표현식(Expression)</span>: 실행 시 하나의 값으로 평가되는 모든 코드.</li>
+                        <li><span class="highlight">문(Statement)</span>: 행동을 지시하는 명령의 단위.</li>
+                        <li>표현식은 <span class="highlight">값으로 평가</span>되지만, 문은 <span class="highlight">명령을 수행</span>합니다. (값으로 평가되지 않음)</li>
+                        <li>변수에 할당할 수 있다면 표현식, 없다면 표현식이 아닌 문입니다.</li>
+                    </ul>
+                </div>
+                <p class="text-muted">이 개념들을 정확히 이해하는 것이 JavaScript를 깊이있게 다루는 첫 걸음입니다!</p>
+            </div>
+        </section>
+
+
+        <!-- UI Components -->
+        <div class="progress-bar"></div>
+        <div class="slide-counter">
+            <span id="current-slide">1</span> / <span id="total-slides">12</span>
+        </div>
+        <div class="nav-controls">
+            <button class="nav-btn" id="prev-btn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="nav-btn" id="next-btn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        class PresentationController {
+            constructor(selector) {
+                this.container = document.querySelector(selector);
+                this.slides = Array.from(this.container.querySelectorAll('.slide'));
+                this.currentSlideIndex = 0;
+                this.activeTimers = [];
+                
+                this.init();
+            }
+
+            init() {
+                this.setupUI();
+                this.updateSlideVisibility();
+                this.setupEventListeners();
+                this.runSlideAnimations(this.currentSlideIndex);
+            }
+
+            setupUI() {
+                this.progressBar = this.container.querySelector('.progress-bar');
+                this.currentSlideEl = this.container.querySelector('#current-slide');
+                this.totalSlidesEl = this.container.querySelector('#total-slides');
+                this.prevBtn = this.container.querySelector('#prev-btn');
+                this.nextBtn = this.container.querySelector('#next-btn');
+                
+                this.totalSlidesEl.textContent = this.slides.length;
+            }
+
+            setupEventListeners() {
+                this.prevBtn.addEventListener('click', () => this.prev());
+                this.nextBtn.addEventListener('click', () => this.next());
+                
+                document.addEventListener('keydown', (e) => {
+                    if (e.target.isContentEditable) return;
+                    if (e.key === 'ArrowLeft') this.prev();
+                    if (e.key === 'ArrowRight') this.next();
+                });
+            }
+
+            goTo(index) {
+                if (index < 0 || index >= this.slides.length) return;
+                
+                this.clearAnimations();
+                this.currentSlideIndex = index;
+                this.updateSlideVisibility();
+                this.runSlideAnimations(index);
+            }
+
+            next() { this.goTo(this.currentSlideIndex + 1); }
+            prev() { this.goTo(this.currentSlideIndex - 1); }
+
+            updateSlideVisibility() {
+                this.slides.forEach((slide, index) => {
+                    slide.classList.toggle('active', index === this.currentSlideIndex);
+                });
+                
+                const progress = ((this.currentSlideIndex + 1) / this.slides.length) * 100;
+                this.progressBar.style.width = `${progress}%`;
+                this.currentSlideEl.textContent = this.currentSlideIndex + 1;
+                
+                this.prevBtn.style.opacity = this.currentSlideIndex === 0 ? '0.5' : '1';
+                this.nextBtn.style.opacity = this.currentSlideIndex === this.slides.length - 1 ? '0.5' : '1';
+            }
+
+            clearAnimations() {
+                this.activeTimers.forEach(timer => clearTimeout(timer));
+                this.activeTimers = [];
+                
+                const slideId = this.slides[this.currentSlideIndex].dataset.slideId;
+                if (this[`cleanup_${slideId}`]) {
+                    this[`cleanup_${slideId}`]();
+                }
+            }
+
+            runSlideAnimations(index) {
+                const slideId = this.slides[index].dataset.slideId;
+                if (this[`animate_${slideId}`]) {
+                    this[`animate_${slideId}`]();
+                }
+            }
+            
+            // Slide 8: Interactive Demo
+            animate_7() {
+                const input = document.getElementById('test-input');
+                const output = document.getElementById('test-output');
+                const exampleBtns = document.querySelectorAll('.btn-example');
+
+                const testCode = () => {
+                    const code = input.textContent;
+                    try {
+                        // Using new Function is a way to evaluate code in a local scope
+                        // Note: In a real app, never use new Function with user-provided strings due to security risks.
+                        const func = new Function(`let x; return (${code});`);
+                        const result = func();
+                        output.style.borderColor = 'var(--accent-green)';
+                        output.innerHTML = `✅ <strong>표현식</strong>입니다. 코드가 평가되어 값 <code>${JSON.stringify(result)}</code>를 반환했습니다.`;
+                    } catch (e) {
+                        output.style.borderColor = 'var(--accent-pink)';
+                        if (e instanceof SyntaxError) {
+                            output.innerHTML = `❌ <strong>표현식이 아닌 문</strong>입니다. 변수에 할당할 수 없어 SyntaxError가 발생했습니다.<br><small>${e.message}</small>`;
+                        } else {
+                            output.innerHTML = `⚙️ 코드를 실행하는 중 오류가 발생했습니다.<br><small>${e.message}</small>`;
+                        }
+                    }
+                };
+                
+                exampleBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        input.textContent = btn.textContent;
+                        testCode();
+                    });
+                });
+
+                input.addEventListener('input', testCode);
+                testCode(); // Initial run
+            }
+            
+            cleanup_7() {
+                const input = document.getElementById('test-input');
+                const new_input = input.cloneNode(true);
+                input.parentNode.replaceChild(new_input, input);
+                new_input.textContent = 'x = 100';
+                 document.querySelectorAll('.btn-example').forEach(btn => {
+                    const new_btn = btn.cloneNode(true);
+                    btn.parentNode.replaceChild(new_btn, btn);
+                });
+            }
+
+            // Slide 11: Visualization
+            animate_10() {
+                const visualizer = document.getElementById('token-visualizer');
+                const explanation = document.getElementById('token-explanation');
+                
+                const tokens = [
+                    { text: 'var', type: 'statement', desc: '`var score;`는 변수 선언문입니다. 값으로 평가되지 않습니다.'},
+                    { text: 'score', type: 'expression', desc: '`score`는 식별자 표현식입니다. 변수가 가진 값으로 평가됩니다.'},
+                    { text: '=', type: 'statement', desc: '`score = ...`는 할당문입니다. 할당된 값으로 평가되므로 표현식인 문입니다.'},
+                    { text: '10', type: 'expression', desc: '`10`은 숫자 리터럴로, 값 10으로 평가되는 표현식입니다.'},
+                    { text: '+', type: 'expression', desc: '`10 + 20`은 덧셈 연산자 표현식입니다. 값 30으로 평가됩니다.'},
+                    { text: '20', type: 'expression', desc: '`20`은 숫자 리터럴로, 값 20으로 평가되는 표현식입니다.'},
+                    { text: ';', type: 'statement', desc: '세미콜론은 문의 종료를 나타냅니다.'},
+                ];
+
+                visualizer.innerHTML = '';
+                tokens.forEach(tokenInfo => {
+                    const tokenEl = document.createElement('div');
+                    tokenEl.className = `token ${tokenInfo.type}`;
+                    tokenEl.textContent = tokenInfo.text;
+                    tokenEl.onclick = () => {
+                        explanation.innerHTML = `<p>${tokenInfo.desc}</p>`;
+                        document.querySelectorAll('#token-visualizer .token').forEach(t => t.style.transform = '');
+                        tokenEl.style.transform = 'scale(1.1)';
+                    };
+                    visualizer.appendChild(tokenEl);
+                });
+                
+                explanation.innerHTML = '<p>토큰을 클릭하여 표현식인지 문인지 확인해보세요.</p>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new PresentationController('#presentation-container');
+        });
+    </script>
+</body>
+</html> 

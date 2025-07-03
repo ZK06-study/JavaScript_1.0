@@ -3,572 +3,907 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>제어 구문 - JavaScript 학습</title>
-    
-    <!-- 폰트 -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- 아이콘 -->
+    <title>JavaScript 제어문 - 인터랙티브 프레젠테이션</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- 코드 하이라이팅 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-    
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            /* Color Palette (Dark Mode) */
+            --bg-dark: #0f0f23;
+            --bg-card: #1a1a2e;
+            --bg-code: #16213e;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a8a8b3;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-yellow: #f59e0b;
+            --accent-red: #ef4444;
+            --border-color: #2a2a3e;
+            
+            /* Typography */
+            --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-code: 'Consolas', 'Monaco', 'Courier New', monospace;
+            
+            /* Transitions */
+            --transition-speed: 300ms;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            overflow: hidden;
+        }
+        
+        /* Presentation Container */
+        #presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        /* Slides */
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity var(--transition-speed) ease-in-out,
+                        transform var(--transition-speed) ease-in-out;
+            pointer-events: none;
+        }
+        
+        .slide.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        
+        .slide-content {
+            max-width: 1200px;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        /* Typography */
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+        
+        h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--accent-blue);
+        }
+        
+        p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Icons */
+        h2 i, h3 i {
+            margin-right: 0.5rem;
+            color: var(--accent-yellow);
+        }
+        
+        /* Card Component */
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: transform var(--transition-speed) ease,
+                        box-shadow var(--transition-speed) ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* Code Blocks */
+        pre {
+            background-color: var(--bg-code);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            text-align: left;
+            margin: 20px 0;
+        }
+        
+        code {
+            font-family: var(--font-code);
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+        
+        .code-highlight {
+            background-color: rgba(59, 130, 246, 0.2);
+            border-radius: 4px;
+            padding: 2px 4px;
+            transition: background-color var(--transition-speed);
+        }
+        
+        /* Lists */
+        ul {
+            text-align: left;
+            max-width: 800px;
+            margin: 0 auto 1.5rem;
+        }
+        
+        li {
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            list-style: none;
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        li i {
+            position: absolute;
+            left: 0;
+            top: 0.2rem;
+            color: var(--accent-green);
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background-color: var(--accent-blue);
+            width: 0%;
+            transition: width var(--transition-speed) ease-out;
+            z-index: 1000;
+        }
+        
+        /* Navigation */
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+        
+        .nav-btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--accent-blue);
+            transform: scale(1.1);
+        }
+        
+        /* Interactive Demo */
+        .demo-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start;
+            margin: 30px 0;
+        }
+        
+        .demo-code {
+            flex: 1;
+            max-width: 500px;
+        }
+        
+        .demo-output {
+            flex: 1;
+            max-width: 400px;
+            background-color: var(--bg-code);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 200px;
+        }
+        
+        .output-line {
+            font-family: var(--font-code);
+            margin-bottom: 8px;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all var(--transition-speed);
+        }
+        
+        .output-line.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        /* Buttons */
+        .btn {
+            background-color: var(--accent-blue);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            background-color: var(--accent-green);
+            transform: translateY(-2px);
+        }
+        
+        /* Quiz */
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .quiz-question {
+            background-color: var(--bg-card);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .quiz-option {
+            background-color: var(--bg-code);
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            border: 2px solid transparent;
+        }
+        
+        .quiz-option:hover {
+            border-color: var(--accent-blue);
+            transform: scale(1.02);
+        }
+        
+        .quiz-option.correct {
+            border-color: var(--accent-green);
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+        
+        .quiz-option.incorrect {
+            border-color: var(--accent-red);
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+        
+        /* Slide indicator */
+        .slide-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Code animation */
+        @keyframes codeExecution {
+            0% { background-color: transparent; }
+            50% { background-color: rgba(59, 130, 246, 0.3); }
+            100% { background-color: transparent; }
+        }
+        
+        .code-executing {
+            animation: codeExecution 1s ease-in-out;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            .demo-container { flex-direction: column; }
+            .quiz-options { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
-    <!-- 네비게이션 바 -->
-    <nav class="navbar">
-        <div class="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-        <div class="slide-counter">
-            <span id="current-slide">1</span> / <span id="total-slides">12</span>
-        </div>
-    </nav>
-
-    <!-- 메인 컨테이너 -->
-    <main class="presentation-container">
-        <!-- 슬라이드 1: 제목 -->
-        <section class="slide active" data-slide="1">
-            <div class="slide-content title-slide">
-                <div class="title-icon">
-                    <i class="fas fa-code-branch"></i>
-                </div>
-                <h1>제어 구문</h1>
-                <h2>Control Statements</h2>
-                <p class="subtitle">조건문과 반복문으로 프로그램의 논리 구조 만들기</p>
-                <div class="learning-objectives">
-                    <h3><i class="fas fa-target"></i> 학습 목표</h3>
+    <div class="progress-bar"></div>
+    
+    <div id="presentation-container">
+        <!-- Slide 1: Title -->
+        <section class="slide active" data-slide-id="0">
+            <div class="slide-content">
+                <h1><i class="fas fa-code-branch"></i> JavaScript 제어문</h1>
+                <p>프로그램의 논리적 흐름을 제어하는 핵심 구문</p>
+                <div class="card">
+                    <h3><i class="fas fa-bullseye"></i> 학습 목표</h3>
                     <ul>
-                        <li>조건문(if, switch)을 이용한 분기 처리</li>
-                        <li>반복문(while, for)을 이용한 반복 처리</li>
-                        <li>break, continue를 이용한 실행 흐름 제어</li>
+                        <li><i class="fas fa-check"></i> 조건문(if...else, switch)으로 분기 처리하기</li>
+                        <li><i class="fas fa-check"></i> 반복문(while, for)으로 효율적인 코드 작성하기</li>
+                        <li><i class="fas fa-check"></i> break와 continue로 흐름 제어하기</li>
+                        <li><i class="fas fa-check"></i> 실제 문제 해결에 제어문 활용하기</li>
                     </ul>
                 </div>
             </div>
         </section>
-
-        <!-- 슬라이드 2: 제어 구문이란? -->
-        <section class="slide" data-slide="2">
+        
+        <!-- Slide 2: Why Control Statements? -->
+        <section class="slide" data-slide-id="1">
             <div class="slide-content">
-                <h1><i class="fas fa-question-circle"></i> 제어 구문이란?</h1>
-                <div class="content-grid">
-                    <div class="concept-card">
-                        <div class="card-header">
-                            <i class="fas fa-route"></i>
-                            <h3>프로그램의 논리 구조</h3>
-                        </div>
-                        <p>실제 프로그램은 단순한 계산이 아닌 <strong>복잡한 논리 구조</strong>를 가지고 있습니다.</p>
-                    </div>
-                    <div class="concept-card">
-                        <div class="card-header">
-                            <i class="fas fa-sitemap"></i>
-                            <h3>경우의 수 처리</h3>
-                        </div>
-                        <p>다양한 상황과 조건에 따라 <strong>다른 동작</strong>을 수행해야 합니다.</p>
-                    </div>
-                </div>
-                <div class="example-container">
-                    <h3><i class="fas fa-lightbulb"></i> 실생활 예시</h3>
-                    <div class="example-grid">
-                        <div class="example-item">
-                            <i class="fas fa-mouse-pointer"></i>
-                            <p><strong>클릭 이벤트:</strong> 왼쪽/오른쪽/더블클릭에 따른 다른 동작</p>
-                        </div>
-                        <div class="example-item">
-                            <i class="fas fa-gamepad"></i>
-                            <p><strong>게임:</strong> 아이템 종류에 따른 효과 적용</p>
-                        </div>
-                        <div class="example-item">
-                            <i class="fas fa-paper-plane"></i>
-                            <p><strong>폼 검증:</strong> 입력값 유효성에 따른 처리</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 슬라이드 3: 조건문 소개 -->
-        <section class="slide" data-slide="3">
-            <div class="slide-content">
-                <h1><i class="fas fa-code-branch"></i> 조건문 (Conditional Statement)</h1>
-                <div class="concept-visual">
-                    <div class="flowchart-container" id="conditional-flowchart">
-                        <!-- JavaScript로 동적 생성 -->
-                    </div>
-                </div>
-                <div class="concept-explanation">
-                    <div class="explanation-card">
-                        <h3>조건문의 역할</h3>
-                        <p>특정 조건을 만족할 때와 그렇지 않을 때 <strong>다른 코드를 실행</strong>하도록 합니다.</p>
-                    </div>
-                    <div class="syntax-preview">
-                        <h4>기본 형태</h4>
-                        <div class="code-preview">
-                            <pre><code class="language-javascript">if (조건) {
-  // 조건이 참일 때 실행
-} else {
-  // 조건이 거짓일 때 실행
-}</code></pre>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 슬라이드 4: if...else 기본 -->
-        <section class="slide" data-slide="4">
-            <div class="slide-content">
-                <h1><i class="fas fa-code"></i> if...else 구문</h1>
-                <div class="code-demonstration">
-                    <div class="demo-header">
-                        <h3><i class="fas fa-dice"></i> 주사위 게임 예제</h3>
-                    </div>
-                    <div class="code-container">
-                        <pre><code class="language-javascript">function roll() {
-  return Math.ceil(Math.random() * 6);
-}
-
-function game() {
-  const result = roll();
-  alert(`결과: ${result}`);
-
-  // if...else 구문
-  if (result >= 4) {
-    // 조건이 true이면 실행
-    alert('당신이 이겼습니다!');
-  } else {
-    // 조건이 false이면 실행
-    alert('당신이 졌습니다.');
-  }
-}
-
-game();</code></pre>
-                    </div>
-                    <div class="interactive-demo" id="dice-game-demo">
-                        <!-- JavaScript로 인터랙티브 데모 생성 -->
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 슬라이드 5: if...else 변형 -->
-        <section class="slide" data-slide="5">
-            <div class="slide-content">
-                <h1><i class="fas fa-edit"></i> if...else 변형</h1>
-                <div class="syntax-variations">
-                    <div class="variation-card">
-                        <h3><i class="fas fa-minus"></i> else 생략</h3>
-                        <pre><code class="language-javascript">if (result === 6) {
-  alert('당신은 운이 좋군요!');
-}</code></pre>
-                    </div>
-                    <div class="variation-card">
-                        <h3><i class="fas fa-compress"></i> 중괄호 생략</h3>
-                        <pre><code class="language-javascript">if (result === 6) alert('당신은 운이 좋군요!');</code></pre>
-                        <div class="warning-note">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <span>한 줄일 때만 가능</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="best-practice">
-                    <h3><i class="fas fa-star"></i> 권장 사항</h3>
+                <h2><i class="fas fa-question-circle"></i> 왜 제어문이 필요할까?</h2>
+                <div class="card">
+                    <h3>실제 프로그램의 복잡한 논리</h3>
                     <ul>
-                        <li>가독성을 위해 중괄호 사용 권장</li>
-                        <li>조건이 복잡할 때는 여러 줄로 작성</li>
-                        <li>일관된 스타일 유지</li>
+                        <li><i class="fas fa-mouse"></i> 사용자 클릭 종류에 따라 다른 동작</li>
+                        <li><i class="fas fa-flask"></i> 아이템 종류에 따라 다른 효과</li>
+                        <li><i class="fas fa-paper-plane"></i> 입력값 검증 후 처리 분기</li>
+                        <li><i class="fas fa-redo"></i> 조건 만족까지 반복 실행</li>
                     </ul>
                 </div>
+                <p>제어문 없이는 단순한 순차 실행만 가능합니다!</p>
             </div>
         </section>
-
-        <!-- 슬라이드 6: 다중 조건문 -->
-        <section class="slide" data-slide="6">
+        
+        <!-- Slide 3: if...else Basic -->
+        <section class="slide" data-slide-id="2">
             <div class="slide-content">
-                <h1><i class="fas fa-layer-group"></i> 다중 조건문</h1>
-                <div class="multi-condition-demo">
-                    <div class="before-after">
-                        <div class="before">
-                            <h3><i class="fas fa-times"></i> 중첩된 형태</h3>
-                            <pre><code class="language-javascript">if (result >= 5) {
-  alert('당신이 이겼습니다!');
+                <h2><i class="fas fa-code-branch"></i> if...else 조건문</h2>
+                <div class="demo-container">
+                    <div class="demo-code">
+                        <pre><code id="if-demo-code">let score = 85;
+
+if (score >= 90) {
+    console.log('A 학점');
+} else if (score >= 80) {
+    console.log('B 학점');
 } else {
-  if (result >= 3) {
-    alert('비겼습니다.');
-  } else {
-    alert('당신이 졌습니다.');
-  }
+    console.log('C 학점');
 }</code></pre>
-                        </div>
-                        <div class="arrow">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-                        <div class="after">
-                            <h3><i class="fas fa-check"></i> 개선된 형태</h3>
-                            <pre><code class="language-javascript">if (result >= 5) {
-  alert('당신이 이겼습니다!');
-} else if (result >= 3) {
-  alert('비겼습니다.');
-} else {
-  alert('당신이 졌습니다.');
-}</code></pre>
-                        </div>
+                        <button class="btn" onclick="runIfDemo()">
+                            <i class="fas fa-play"></i> 실행
+                        </button>
                     </div>
-                    <div class="visual-flow" id="multi-condition-flow">
-                        <!-- JavaScript로 흐름도 생성 -->
+                    <div class="demo-output" id="if-demo-output">
+                        <h3>출력:</h3>
+                        <div id="if-output-lines"></div>
                     </div>
                 </div>
             </div>
         </section>
-
-        <!-- 슬라이드 7: switch 구문 -->
-        <section class="slide" data-slide="7">
+        
+        <!-- Slide 4: switch Statement -->
+        <section class="slide" data-slide-id="3">
             <div class="slide-content">
-                <h1><i class="fas fa-exchange-alt"></i> switch 구문</h1>
-                <div class="switch-explanation">
-                    <div class="when-to-use">
-                        <h3><i class="fas fa-lightbulb"></i> 언제 사용하나?</h3>
-                        <p>하나의 변수에 대해 <strong>많은 경우의 수</strong>가 있을 때</p>
+                <h2><i class="fas fa-list"></i> switch 구문</h2>
+                <div class="card">
+                    <p>하나의 변수에 대한 여러 경우의 수를 깔끔하게 처리</p>
+                </div>
+                <div class="demo-container">
+                    <div class="demo-code">
+                        <pre><code>function translateColor(color) {
+    let result;
+    switch (color) {
+        case 'red':
+            result = '빨강';
+            break;
+        case 'blue':
+            result = '파랑';
+            break;
+        case 'green':
+            result = '초록';
+            break;
+        default:
+            result = '알 수 없는 색';
+    }
+    return result;
+}</code></pre>
                     </div>
-                    <div class="comparison">
-                        <div class="if-version">
-                            <h4>if...else 버전</h4>
-                            <pre><code class="language-javascript">function translateColor(english) {
-  if (english === 'red') {
-    return '빨강색';
-  } else if (english === 'blue') {
-    return '파랑색';
-  } else if (english === 'purple' || english === 'violet') {
-    return '보라색';
-  } else {
-    return '일치하는 색깔이 없습니다.';
-  }
-}</code></pre>
-                        </div>
-                        <div class="switch-version">
-                            <h4>switch 버전</h4>
-                            <pre><code class="language-javascript">function translateColor(english) {
-  let result;
-  switch (english) {
-    case 'red':
-      result = '빨강색';
-      break;
-    case 'blue':
-      result = '파랑색';
-      break;
-    case 'purple':
-    case 'violet':
-      result = '보라색';
-      break;
-    default:
-      result = '일치하는 색깔이 없습니다.';
-  }
-  return result;
-}</code></pre>
-                        </div>
+                    <div class="demo-output">
+                        <h3>테스트:</h3>
+                        <input type="text" id="color-input" placeholder="색상 입력 (red/blue/green)" style="padding: 8px; margin: 10px 0; width: 80%;">
+                        <button class="btn" onclick="testSwitch()">변환</button>
+                        <div id="switch-result" style="margin-top: 20px; font-size: 1.5rem;"></div>
                     </div>
                 </div>
             </div>
         </section>
-
-        <!-- 슬라이드 8: break의 중요성 -->
-        <section class="slide" data-slide="8">
+        
+        <!-- Slide 5: while Loop -->
+        <section class="slide" data-slide-id="4">
             <div class="slide-content">
-                <h1><i class="fas fa-stop"></i> break의 중요성</h1>
-                <div class="break-demo">
-                    <div class="warning-box">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <h3>주의: break를 빼먹으면?</h3>
-                    </div>
-                    <div class="break-comparison">
-                        <div class="without-break">
-                            <h4><i class="fas fa-bug"></i> break 없음 (문제)</h4>
-                            <pre><code class="language-javascript">switch (english) {
-  case 'blue':
-    result = '파랑색';
-    // break가 없음!
-  case 'purple':
-    result = '보라색';
-    break;
+                <h2><i class="fas fa-sync"></i> while 반복문</h2>
+                <div class="card">
+                    <p>조건이 참인 동안 계속 반복 실행</p>
+                </div>
+                <div class="demo-container">
+                    <div class="demo-code">
+                        <pre><code id="while-code">let count = 0;
+
+while (count < 5) {
+    console.log(`카운트: ${count}`);
+    count++;
 }
 
-translateColor('blue'); // '보라색' (잘못된 결과)</code></pre>
-                        </div>
-                        <div class="with-break">
-                            <h4><i class="fas fa-check"></i> break 있음 (정상)</h4>
-                            <pre><code class="language-javascript">switch (english) {
-  case 'blue':
-                            result = '파랑색';
-    break; // 중요!
-  case 'purple':
-    result = '보라색';
-    break;
+console.log('반복 종료!');</code></pre>
+                        <button class="btn" onclick="runWhileDemo()">
+                            <i class="fas fa-play"></i> 실행
+                        </button>
+                    </div>
+                    <div class="demo-output" id="while-output">
+                        <h3>출력:</h3>
+                        <div id="while-output-lines"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Slide 6: for Loop -->
+        <section class="slide" data-slide-id="5">
+            <div class="slide-content">
+                <h2><i class="fas fa-list-ol"></i> for 반복문</h2>
+                <div class="card">
+                    <p>초기값, 조건, 갱신을 한 줄에 표현</p>
+                </div>
+                <div class="demo-container">
+                    <div class="demo-code">
+                        <pre><code>// 배열 순회하기
+const fruits = ['🍎', '🍌', '🍊', '🍇'];
+
+for (let i = 0; i < fruits.length; i++) {
+    console.log(`${i}: ${fruits[i]}`);
 }
 
-translateColor('blue'); // '파랑색' (올바른 결과)</code></pre>
-                        </div>
+// for...of 사용 (ES6)
+for (let fruit of fruits) {
+    console.log(`과일: ${fruit}`);
+}</code></pre>
+                        <button class="btn" onclick="runForDemo()">
+                            <i class="fas fa-play"></i> 실행
+                        </button>
                     </div>
-                    <div class="execution-flow" id="break-flow-demo">
-                        <!-- JavaScript로 실행 흐름 시각화 -->
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 슬라이드 9: 반복문 소개 -->
-        <section class="slide" data-slide="9">
-            <div class="slide-content">
-                <h1><i class="fas fa-sync"></i> 반복문 (Looping Statement)</h1>
-                <div class="loop-introduction">
-                    <div class="why-loops">
-                        <h3><i class="fas fa-question"></i> 왜 반복문이 필요한가?</h3>
-                        <div class="loop-examples">
-                            <div class="example">
-                                <i class="fas fa-table"></i>
-                                <p><strong>스프레드시트:</strong> 1000개 행의 데이터 처리</p>
-                            </div>
-                            <div class="example">
-                                <i class="fas fa-chess-board"></i>
-                                <p><strong>게임:</strong> 승부가 날 때까지 턴 반복</p>
-                            </div>
-                            <div class="example">
-                                <i class="fas fa-comments"></i>
-                                <p><strong>댓글:</strong> 모든 댓글을 화면에 표시</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="loop-types">
-                        <h3><i class="fas fa-list"></i> 반복문의 종류</h3>
-                        <div class="type-grid">
-                            <div class="type-card">
-                                <i class="fas fa-play"></i>
-                                <h4>while</h4>
-                                <p>조건이 참인 동안 반복</p>
-                            </div>
-                            <div class="type-card">
-                                <i class="fas fa-play-circle"></i>
-                                <h4>do...while</h4>
-                                <p>최소 한 번은 실행</p>
-                            </div>
-                            <div class="type-card">
-                                <i class="fas fa-forward"></i>
-                                <h4>for</h4>
-                                <p>횟수가 정해진 반복</p>
-                            </div>
-                        </div>
+                    <div class="demo-output" id="for-output">
+                        <h3>출력:</h3>
+                        <div id="for-output-lines"></div>
                     </div>
                 </div>
             </div>
         </section>
-
-        <!-- 슬라이드 10: while 구문 -->
-        <section class="slide" data-slide="10">
+        
+        <!-- Slide 7: break & continue -->
+        <section class="slide" data-slide-id="6">
             <div class="slide-content">
-                <h1><i class="fas fa-play"></i> while 구문</h1>
-                <div class="while-demo">
-                    <div class="syntax-explanation">
-                        <h3>기본 구조</h3>
-                        <pre><code class="language-javascript">let i = 0; // 초기값
-
-while (i < 5) { // 실행 조건
-  console.log(`현재 i의 값: ${i}`);
-  i++; // 갱신
+                <h2><i class="fas fa-stop-circle"></i> break & continue</h2>
+                <div class="demo-container">
+                    <div class="demo-code">
+                        <pre><code>// break: 반복 종료
+for (let i = 1; i <= 10; i++) {
+    if (i === 5) {
+        break;
+    }
+    console.log(i);
 }
 
-console.log('루프가 종료되었습니다.');</code></pre>
+// continue: 건너뛰기
+for (let i = 1; i <= 5; i++) {
+    if (i === 3) {
+        continue;
+    }
+    console.log(i);
+}</code></pre>
+                        <button class="btn" onclick="runBreakContinueDemo()">
+                            <i class="fas fa-play"></i> 실행
+                        </button>
                     </div>
-                    <div class="execution-visualization" id="while-execution">
-                        <!-- JavaScript로 실행 과정 시각화 -->
-                    </div>
-                    <div class="while-components">
-                        <div class="component">
-                            <i class="fas fa-play"></i>
-                            <h4>초기값</h4>
-                            <p>반복을 시작하기 전 설정</p>
-                        </div>
-                        <div class="component">
-                            <i class="fas fa-question-circle"></i>
-                            <h4>조건</h4>
-                            <p>매번 확인하는 반복 조건</p>
-                        </div>
-                        <div class="component">
-                            <i class="fas fa-arrow-up"></i>
-                            <h4>갱신</h4>
-                            <p>조건 변경을 위한 값 수정</p>
-                        </div>
+                    <div class="demo-output" id="break-continue-output">
+                        <h3>출력:</h3>
+                        <div id="break-continue-lines"></div>
                     </div>
                 </div>
             </div>
         </section>
-
-        <!-- 슬라이드 11: for 구문 -->
-        <section class="slide" data-slide="11">
+        
+        <!-- Slide 8: Practical Example -->
+        <section class="slide" data-slide-id="7">
             <div class="slide-content">
-                <h1><i class="fas fa-forward"></i> for 구문</h1>
-                <div class="for-demo">
-                    <div class="syntax-breakdown">
-                        <h3>구조 분해</h3>
-                        <div class="for-structure">
-                            <pre><code class="language-javascript">for (let i = 0; i < 5; i++) {
-     ↑초기값   ↑조건  ↑갱신
-  console.log(`현재 i의 값: ${i}`);
-}</code></pre>
-                        </div>
-                    </div>
-                    <div class="comparison-table">
-                        <h3>while vs for 비교</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>구분</th>
-                                    <th>while</th>
-                                    <th>for</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>사용 시기</strong></td>
-                                    <td>조건 중심 반복</td>
-                                    <td>횟수 정해진 반복</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>초기값</strong></td>
-                                    <td>별도 선언</td>
-                                    <td>괄호 내 선언</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>갱신</strong></td>
-                                    <td>블록 내부</td>
-                                    <td>괄호 내 명시</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="array-traversal">
-                        <h3><i class="fas fa-list"></i> 배열 순회</h3>
-                        <div class="traversal-methods">
-                            <div class="method">
-                                <h4>전통적인 for</h4>
-                                <pre><code class="language-javascript">const arr = [1, 2, 3, 4, 5];
-for (let i = 0; i < arr.length; i++) {
-  console.log(arr[i]);
-}</code></pre>
-                            </div>
-                            <div class="method">
-                                <h4>forEach 메소드</h4>
-                                <pre><code class="language-javascript">const arr = [1, 2, 3, 4, 5];
-arr.forEach((item, index) => {
-  console.log(item);
-});</code></pre>
-                            </div>
-                            <div class="method">
-                                <h4>for...of 구문</h4>
-                                <pre><code class="language-javascript">const arr = [1, 2, 3, 4, 5];
-for (let item of arr) {
-  console.log(item);
-}</code></pre>
-                            </div>
-                        </div>
+                <h2><i class="fas fa-gamepad"></i> 실전 예제: 숫자 맞추기 게임</h2>
+                <div class="card">
+                    <p>1부터 50 사이의 숫자를 맞춰보세요!</p>
+                    <div id="game-container">
+                        <input type="number" id="guess-input" min="1" max="50" placeholder="숫자 입력" style="padding: 10px; font-size: 1.2rem; margin: 10px;">
+                        <button class="btn" onclick="checkGuess()">
+                            <i class="fas fa-check"></i> 확인
+                        </button>
+                        <button class="btn" onclick="resetGame()" style="background-color: var(--accent-yellow);">
+                            <i class="fas fa-redo"></i> 새 게임
+                        </button>
+                        <div id="game-feedback" style="margin-top: 20px; font-size: 1.3rem;"></div>
+                        <div id="game-attempts" style="margin-top: 10px; color: var(--text-secondary);"></div>
                     </div>
                 </div>
             </div>
         </section>
-
-        <!-- 슬라이드 12: break & continue -->
-        <section class="slide" data-slide="12">
+        
+        <!-- Slide 9: Quiz -->
+        <section class="slide" data-slide-id="8">
             <div class="slide-content">
-                <h1><i class="fas fa-traffic-light"></i> break & continue</h1>
-                <div class="flow-control">
-                    <div class="control-explanation">
-                        <div class="break-section">
-                            <div class="control-header">
-                                <i class="fas fa-stop"></i>
-                                <h3>break</h3>
-                                <span class="description">루프를 완전히 종료</span>
-                            </div>
-                            <div class="code-example">
-                                <pre><code class="language-javascript">// 퀴즈 예제
-while (true) {
-  const answer = prompt('빨강의 보색은?');
-  if (answer === '초록') {
-    alert('정답입니다! 🎉');
-    break; // 루프 종료
-  } else {
-    alert('틀렸습니다! 다시 시도해보세요.');
-  }
+                <h2><i class="fas fa-question"></i> 퀴즈</h2>
+                <div class="quiz-container">
+                    <div class="quiz-question">
+                        <h3>Q1. 다음 코드의 출력 결과는?</h3>
+                        <pre><code>for (let i = 0; i < 3; i++) {
+    if (i === 1) continue;
+    console.log(i);
 }</code></pre>
-                            </div>
-                        </div>
-                        <div class="continue-section">
-                            <div class="control-header">
-                                <i class="fas fa-step-forward"></i>
-                                <h3>continue</h3>
-                                <span class="description">현재 반복을 건너뛰고 다음으로</span>
-                            </div>
-                            <div class="code-example">
-                                <pre><code class="language-javascript">// 7의 배수만 출력
-for (let i = 1; i < 100; i++) {
-  if (i % 7 !== 0) {
-    continue; // 나머지 코드 건너뛰기
-  }
-  console.log(`${i}는 7의 배수입니다.`);
-}</code></pre>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flow-visualization" id="break-continue-demo">
-                        <!-- JavaScript로 흐름 시각화 -->
-                    </div>
-                    <div class="function-control">
-                        <h3><i class="fas fa-function"></i> 함수 제어</h3>
-                        <div class="function-controls">
-                            <div class="control-item">
-                                <i class="fas fa-undo"></i>
-                                <h4>return</h4>
-                                <p>함수를 즉시 종료하고 값 반환</p>
-                            </div>
-                            <div class="control-item">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                <h4>throw</h4>
-                                <p>에러를 발생시키며 함수 종료</p>
-                            </div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" onclick="checkAnswer(this, false)">0, 1, 2</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, true)">0, 2</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, false)">1, 2</div>
+                            <div class="quiz-option" onclick="checkAnswer(this, false)">0, 1</div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-    </main>
-
-    <!-- 네비게이션 컨트롤 -->
-    <div class="nav-controls">
-        <button class="nav-btn" id="prev-btn">
+        
+        <!-- Slide 10: Summary -->
+        <section class="slide" data-slide-id="9">
+            <div class="slide-content">
+                <h2><i class="fas fa-flag-checkered"></i> 정리</h2>
+                <div class="card">
+                    <h3>오늘 배운 내용</h3>
+                    <ul>
+                        <li><i class="fas fa-code-branch"></i> <strong>if...else</strong>: 조건에 따른 분기 처리</li>
+                        <li><i class="fas fa-list"></i> <strong>switch</strong>: 하나의 변수, 여러 경우의 수</li>
+                        <li><i class="fas fa-sync"></i> <strong>while</strong>: 조건 기반 반복</li>
+                        <li><i class="fas fa-list-ol"></i> <strong>for</strong>: 카운터 기반 반복</li>
+                        <li><i class="fas fa-stop"></i> <strong>break/continue</strong>: 반복 흐름 제어</li>
+                    </ul>
+                </div>
+                <p style="font-size: 1.5rem; margin-top: 30px;">
+                    <i class="fas fa-rocket"></i> 제어문을 활용해 더 복잡한 로직을 구현해보세요!
+                </p>
+            </div>
+        </section>
+    </div>
+    
+    <div class="navigation">
+        <button class="nav-btn" onclick="presentation.prev()">
             <i class="fas fa-chevron-left"></i>
         </button>
-        <button class="nav-btn" id="next-btn">
+        <button class="nav-btn" onclick="presentation.next()">
             <i class="fas fa-chevron-right"></i>
         </button>
     </div>
-
-    <!-- 키보드 가이드 -->
-    <div class="keyboard-guide">
-        <div class="guide-item">
-            <kbd>←</kbd><kbd>→</kbd> 슬라이드 이동
-        </div>
-        <div class="guide-item">
-            <kbd>Home</kbd><kbd>End</kbd> 처음/끝
-        </div>
-        <div class="guide-item">
-            <kbd>Space</kbd> 다음 슬라이드
-        </div>
+    
+    <div class="slide-indicator">
+        <span id="current-slide">1</span> / <span id="total-slides">10</span>
     </div>
-
-    <!-- JavaScript 라이브러리 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
-    <script src="script.js"></script>
+    
+    <script>
+        // Presentation Controller Class
+        class PresentationController {
+            constructor(selector) {
+                this.container = document.querySelector(selector);
+                this.slides = Array.from(this.container.children);
+                this.currentSlideIndex = 0;
+                this.activeTimers = [];
+                
+                this.init();
+            }
+            
+            init() {
+                this.updateSlideVisibility();
+                this.updateProgressBar();
+                this.updateSlideIndicator();
+                
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') this.prev();
+                    if (e.key === 'ArrowRight') this.next();
+                });
+            }
+            
+            goTo(index) {
+                if (index < 0 || index >= this.slides.length) return;
+                
+                this.clearAnimations();
+                this.currentSlideIndex = index;
+                this.updateSlideVisibility();
+                this.updateProgressBar();
+                this.updateSlideIndicator();
+                this.runSlideAnimations(index);
+            }
+            
+            next() {
+                this.goTo(this.currentSlideIndex + 1);
+            }
+            
+            prev() {
+                this.goTo(this.currentSlideIndex - 1);
+            }
+            
+            updateSlideVisibility() {
+                this.slides.forEach((slide, index) => {
+                    slide.classList.toggle('active', index === this.currentSlideIndex);
+                });
+            }
+            
+            updateProgressBar() {
+                const progress = ((this.currentSlideIndex + 1) / this.slides.length) * 100;
+                document.querySelector('.progress-bar').style.width = `${progress}%`;
+            }
+            
+            updateSlideIndicator() {
+                document.getElementById('current-slide').textContent = this.currentSlideIndex + 1;
+                document.getElementById('total-slides').textContent = this.slides.length;
+            }
+            
+            clearAnimations() {
+                this.activeTimers.forEach(timerId => clearTimeout(timerId));
+                this.activeTimers = [];
+                
+                // Clear output areas
+                ['if-output-lines', 'while-output-lines', 'for-output-lines', 
+                 'break-continue-lines', 'game-feedback'].forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) element.innerHTML = '';
+                });
+            }
+            
+            runSlideAnimations(index) {
+                // Slide-specific animations can be added here
+            }
+        }
+        
+        // Initialize presentation
+        const presentation = new PresentationController('#presentation-container');
+        
+        // Demo Functions
+        function runIfDemo() {
+            const output = document.getElementById('if-output-lines');
+            output.innerHTML = '';
+            
+            const score = 85;
+            let result;
+            
+            if (score >= 90) {
+                result = 'A 학점';
+            } else if (score >= 80) {
+                result = 'B 학점';
+            } else {
+                result = 'C 학점';
+            }
+            
+            const line = document.createElement('div');
+            line.className = 'output-line';
+            line.textContent = result;
+            output.appendChild(line);
+            
+            setTimeout(() => line.classList.add('show'), 100);
+        }
+        
+        function testSwitch() {
+            const input = document.getElementById('color-input').value;
+            const result = document.getElementById('switch-result');
+            
+            function translateColor(color) {
+                let result;
+                switch (color) {
+                    case 'red':
+                        result = '빨강';
+                        break;
+                    case 'blue':
+                        result = '파랑';
+                        break;
+                    case 'green':
+                        result = '초록';
+                        break;
+                    default:
+                        result = '알 수 없는 색';
+                }
+                return result;
+            }
+            
+            result.textContent = translateColor(input);
+            result.style.color = input === 'red' ? '#ef4444' : 
+                                input === 'blue' ? '#3b82f6' : 
+                                input === 'green' ? '#10b981' : '#a8a8b3';
+        }
+        
+        function runWhileDemo() {
+            const output = document.getElementById('while-output-lines');
+            output.innerHTML = '';
+            
+            let count = 0;
+            let delay = 0;
+            
+            function addLine(text) {
+                setTimeout(() => {
+                    const line = document.createElement('div');
+                    line.className = 'output-line';
+                    line.textContent = text;
+                    output.appendChild(line);
+                    setTimeout(() => line.classList.add('show'), 50);
+                }, delay);
+                delay += 400;
+            }
+            
+            while (count < 5) {
+                addLine(`카운트: ${count}`);
+                count++;
+            }
+            
+            addLine('반복 종료!');
+        }
+        
+        function runForDemo() {
+            const output = document.getElementById('for-output-lines');
+            output.innerHTML = '';
+            
+            const fruits = ['🍎', '🍌', '🍊', '🍇'];
+            let delay = 0;
+            
+            function addLine(text) {
+                setTimeout(() => {
+                    const line = document.createElement('div');
+                    line.className = 'output-line';
+                    line.textContent = text;
+                    output.appendChild(line);
+                    setTimeout(() => line.classList.add('show'), 50);
+                }, delay);
+                delay += 300;
+            }
+            
+            // Regular for loop
+            for (let i = 0; i < fruits.length; i++) {
+                addLine(`${i}: ${fruits[i]}`);
+            }
+            
+            addLine('---');
+            
+            // for...of loop
+            for (let fruit of fruits) {
+                addLine(`과일: ${fruit}`);
+            }
+        }
+        
+        function runBreakContinueDemo() {
+            const output = document.getElementById('break-continue-lines');
+            output.innerHTML = '';
+            
+            let delay = 0;
+            
+            function addLine(text) {
+                setTimeout(() => {
+                    const line = document.createElement('div');
+                    line.className = 'output-line';
+                    line.textContent = text;
+                    output.appendChild(line);
+                    setTimeout(() => line.classList.add('show'), 50);
+                }, delay);
+                delay += 300;
+            }
+            
+            addLine('break 예제:');
+            for (let i = 1; i <= 10; i++) {
+                if (i === 5) break;
+                addLine(i.toString());
+            }
+            
+            delay += 500;
+            addLine('continue 예제:');
+            for (let i = 1; i <= 5; i++) {
+                if (i === 3) continue;
+                addLine(i.toString());
+            }
+        }
+        
+        // Number Guessing Game
+        let targetNumber = Math.floor(Math.random() * 50) + 1;
+        let attempts = 0;
+        
+        function checkGuess() {
+            const input = document.getElementById('guess-input');
+            const feedback = document.getElementById('game-feedback');
+            const attemptsDiv = document.getElementById('game-attempts');
+            const guess = parseInt(input.value);
+            
+            if (!guess || guess < 1 || guess > 50) {
+                feedback.textContent = '1부터 50 사이의 숫자를 입력하세요!';
+                feedback.style.color = 'var(--accent-yellow)';
+                return;
+            }
+            
+            attempts++;
+            
+            if (guess === targetNumber) {
+                feedback.innerHTML = `<i class="fas fa-trophy"></i> 정답! ${attempts}번 만에 맞추셨습니다!`;
+                feedback.style.color = 'var(--accent-green)';
+                input.disabled = true;
+            } else if (guess < targetNumber) {
+                feedback.innerHTML = `<i class="fas fa-arrow-up"></i> 더 큰 수입니다!`;
+                feedback.style.color = 'var(--accent-blue)';
+            } else {
+                feedback.innerHTML = `<i class="fas fa-arrow-down"></i> 더 작은 수입니다!`;
+                feedback.style.color = 'var(--accent-red)';
+            }
+            
+            attemptsDiv.textContent = `시도 횟수: ${attempts}`;
+        }
+        
+        function resetGame() {
+            targetNumber = Math.floor(Math.random() * 50) + 1;
+            attempts = 0;
+            document.getElementById('guess-input').value = '';
+            document.getElementById('guess-input').disabled = false;
+            document.getElementById('game-feedback').textContent = '';
+            document.getElementById('game-attempts').textContent = '';
+        }
+        
+        // Quiz
+        function checkAnswer(element, isCorrect) {
+            const options = element.parentElement.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+            });
+            
+            if (isCorrect) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('incorrect');
+                // Show correct answer
+                options.forEach(opt => {
+                    if (opt.textContent === '0, 2') {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+        }
+        
+        // Enter key support for inputs
+        document.getElementById('guess-input')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkGuess();
+        });
+        
+        document.getElementById('color-input')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') testSwitch();
+        });
+    </script>
 </body>
 </html>

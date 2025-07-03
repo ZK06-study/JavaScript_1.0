@@ -1,0 +1,364 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+    --bg-dark: #121212;
+    --bg-card: #1E1E1E;
+    --bg-code: #282c34;
+    --text-primary: #E0E0E0;
+    --text-secondary: #B0B0B0;
+    --accent-blue: #2979FF;
+    --accent-green: #00E676;
+    --accent-red: #FF5252;
+    --accent-yellow: #FFD600;
+    --border-color: #333333;
+    --font-main: 'Noto Sans KR', sans-serif;
+    --font-code: 'JetBrains Mono', monospace;
+    --transition-speed: 400ms;
+    --transition-timing: ease-in-out;
+}
+
+/* --- Global Styles & Resets --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    font-size: 18px;
+}
+
+/* --- Presentation Container --- */
+#presentation-container {
+    width: 100%;
+    max-width: 1200px;
+    height: 100%;
+    max-height: 750px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: var(--bg-dark);
+}
+
+/* --- Slide Styles --- */
+.slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity var(--transition-speed) var(--transition-timing),
+                transform var(--transition-speed) var(--transition-timing);
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slide.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    z-index: 1;
+}
+
+.slide-content {
+    width: 90%;
+    max-width: 900px;
+    text-align: center;
+}
+
+/* --- Typography --- */
+h1, h2 {
+    color: var(--text-primary);
+    margin-bottom: 24px;
+    font-weight: 700;
+}
+h1 { font-size: 3rem; }
+h2 { font-size: 2.2rem; }
+h3 { font-size: 1.5rem; margin-bottom: 12px; }
+h4 { font-size: 1.2rem; margin-bottom: 8px; color: var(--accent-blue); }
+
+p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+
+p.subtitle {
+    font-size: 1.3rem;
+    color: var(--text-primary);
+}
+
+i.fa-solid {
+    margin-right: 12px;
+    color: var(--accent-blue);
+}
+
+/* --- Code Blocks --- */
+pre {
+    background-color: var(--bg-code);
+    color: var(--text-primary);
+    font-family: var(--font-code);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: left;
+    margin: 20px 0;
+    overflow-x: auto;
+    font-size: 0.95rem;
+    border: 1px solid var(--border-color);
+}
+
+code {
+    font-family: var(--font-code);
+    background-color: rgba(41, 121, 255, 0.1);
+    color: var(--accent-blue);
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+    color: inherit;
+}
+
+/* --- Reusable Components --- */
+.keywords {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 40px;
+}
+
+.keywords span {
+    background-color: var(--bg-card);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    border: 1px solid var(--border-color);
+}
+
+.highlight {
+    background-color: rgba(41, 121, 255, 0.1);
+    border-left: 4px solid var(--accent-blue);
+    padding: 16px;
+    border-radius: 4px;
+    margin-top: 20px;
+    color: var(--text-primary);
+}
+
+.note {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    background-color: var(--bg-card);
+    padding: 12px;
+    border-radius: 8px;
+}
+.note i { color: var(--text-secondary); }
+
+.comparison-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    margin-top: 20px;
+}
+.code-block {
+    flex: 1;
+}
+.code-block h4 { text-align: center; }
+
+.good pre { border-left: 4px solid var(--accent-green); }
+.bad pre { border-left: 4px solid var(--accent-red); }
+.good h4 i { color: var(--accent-green); }
+.bad h4 i { color: var(--accent-red); }
+
+/* --- Interactive Demos --- */
+.interactive-demo-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.output-area {
+    background-color: var(--bg-code);
+    border-radius: 8px;
+    padding: 20px;
+    font-family: var(--font-code);
+    text-align: center;
+    border: 1px solid var(--border-color);
+    min-height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    transition: background-color 0.3s ease;
+}
+.output-area .truthy { color: var(--accent-green); }
+.output-area .falsy { color: var(--accent-red); }
+.output-area .value-str { color: var(--accent-yellow); font-weight: bold; }
+
+.demo-btn {
+    background-color: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--font-main);
+    font-weight: 500;
+    transition: background-color 200ms ease;
+}
+.demo-btn:hover {
+    background-color: #1a66e0;
+}
+
+/* Falsy List */
+.falsy-values {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 24px 0;
+}
+.falsy-item {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--accent-red);
+    font-family: var(--font-code);
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+/* Truthy Checker Demo */
+#truthy-checker .input-area {
+    display: flex;
+    gap: 10px;
+}
+#truthy-input {
+    flex-grow: 1;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-family: var(--font-code);
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+#truthy-checker .preset-area {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+.preset-btn {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: var(--font-code);
+    transition: all 0.2s ease;
+}
+.preset-btn:hover {
+    background-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+/* Short Circuit Demo */
+#sc-demo .sc-expressions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+#sc-output {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+}
+.sc-box, .sc-op, .sc-result {
+    padding: 20px;
+    border-radius: 8px;
+    transition: all 0.4s ease;
+    font-size: 1.5rem;
+}
+.sc-box {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    min-width: 150px;
+}
+.sc-op {
+    font-size: 2rem;
+    color: var(--accent-yellow);
+}
+.sc-result {
+    background-color: var(--bg-dark);
+    font-weight: bold;
+}
+.sc-box.evaluated { border-color: var(--accent-blue); transform: scale(1.05); }
+.sc-box.skipped { opacity: 0.5; }
+.sc-result.truthy { color: var(--accent-green); }
+.sc-result.falsy { color: var(--accent-red); }
+
+/* --- Navigation & Progress Bar --- */
+.navigation {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--bg-card);
+    padding: 10px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    z-index: 100;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+.navigation button {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 200ms ease;
+}
+.navigation button:hover {
+    background-color: var(--border-color);
+}
+#slide-counter {
+    font-size: 1rem;
+    font-family: var(--font-code);
+    min-width: 60px;
+    text-align: center;
+}
+
+.progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    background-color: var(--accent-blue);
+    width: 0%;
+    z-index: 101;
+    transition: width var(--transition-speed) ease-out;
+} 

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[13장] 함수 심층 탐구</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="progress-bar"></div>
+
+    <main id="presentation-container">
+        <!-- Slide 1: Title -->
+        <section class="slide active" data-slide-id="0">
+            <div class="slide-content">
+                <h1><i class="fa-solid fa-rocket"></i> 13장. 함수 심층 탐구</h1>
+                <p class="subtitle">자바스크립트의 심장, 함수의 모든 것을 알아봅니다.</p>
+                <div class="keywords">
+                    <span>#일급_객체</span>
+                    <span>#호이스팅</span>
+                    <span>#클로저</span>
+                    <span>#콜백</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2: First-class object -->
+        <section class="slide" data-slide-id="1">
+            <div class="slide-content">
+                <h2><i class="fa-solid fa-award"></i> 함수는 특별한 '일급 객체'</h2>
+                <p>자바스크립트에서 함수는 단순한 코드 묶음이 아닙니다. 객체처럼 다룰 수 있는 특별한 존재입니다.</p>
+                <div class="cards-container">
+                    <div class="card">
+                        <h3><i class="fa-solid fa-pen-to-square"></i> 변수에 할당</h3>
+                        <pre><code>const sayHello = function() {
+  console.log('Hello!');
+};</code></pre>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fa-solid fa-right-left"></i> 인자로 전달</h3>
+                        <pre><code>function greet(callback) {
+  callback();
+}
+greet(sayHello);</code></pre>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fa-solid fa-arrow-turn-down"></i> 결과로 반환</h3>
+                        <pre><code>function getGreeter() {
+  return sayHello;
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: Function Properties -->
+        <section class="slide" data-slide-id="2">
+            <div class="slide-content">
+                <h2><i class="fa-solid fa-boxes-stacked"></i> 함수도 재산이 있다! (속성)</h2>
+                <p>함수가 객체라는 증거! 바로 속성을 가질 수 있다는 점입니다. 몇 가지 유용한 내장 속성을 알아봅시다.</p>
+                <pre><code>function add(x, y) {
+  return x + y;
+}
+
+// 개발자 도구 콘솔에 다음을 입력해보세요!
+console.log(add.name);
+console.log(add.length);
+console.log(add.toString());</code></pre>
+                <div class="cards-container two-cols">
+                    <div class="card">
+                        <h4><i class="fa-solid fa-signature"></i> <code>.name</code></h4>
+                        <p>함수의 이름을 문자열로 반환합니다. (예: "add")</p>
+                    </div>
+                    <div class="card">
+                        <h4><i class="fa-solid fa-arrow-down-1-9"></i> <code>.length</code></h4>
+                        <p>함수가 기대하는 매개변수의 개수를 반환합니다. (예: 2)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: Declaration vs Expression -->
+        <section class="slide" data-slide-id="3">
+            <div class="slide-content">
+                <h2><i class="fa-solid fa-code-compare"></i> 함수를 만드는 두 가지 방법</h2>
+                <p>비슷해 보이지만, 결정적인 차이를 가진 함수 선언문과 함수 표현식입니다.</p>
+                <div class="comparison-container">
+                    <div class="code-block">
+                        <h4>함수 선언문</h4>
+                        <pre><code>// function keyword로 시작
+function sayHi() {
+  return 'Hi!';
+}</code></pre>
+                    </div>
+                    <div class="code-block">
+                        <h4>함수 표현식</h4>
+                        <pre><code>// 변수에 함수를 할당
+const sayHello = function() {
+  return 'Hello!';
+};</code></pre>
+                    </div>
+                </div>
+                <p class="highlight">가장 큰 차이점은 '호이스팅' 방식에 있습니다.</p>
+            </div>
+        </section>
+
+        <!-- Slide 5: Hoisting Demo -->
+        <section class="slide" data-slide-id="4">
+            <div class="slide-content">
+                <h2><i class="fa-solid fa-wand-magic-sparkles"></i> 인터랙티브: 호이스팅의 마법</h2>
+                <p>버튼을 눌러 각 코드가 어떻게 실행되는지 직접 확인해보세요.</p>
+                <div id="hoisting-demo" class="interactive-demo">
+                    <div class="code-area">
+                        <button class="demo-btn" data-type="declaration">선언문 예제 실행</button>
+                        <pre><code id="code-declaration">sayHi(); // ?
+
+function sayHi() {
+  console.log("Hi! 선언문은 호이스팅돼요.");
+}</code></pre>
+                    </div>
+                    <div class="code-area">
+                        <button class="demo-btn" data-type="expression">표현식 예제 실행</button>
+                        <pre><code id="code-expression">sayBye(); // ?
+
+const sayBye = function() {
+  console.log("Bye! 표현식은 안돼요.");
+};</code></pre>
+                    </div>
+                </div>
+                <div id="hoisting-output" class="output-area">
+                    <p>실행 결과가 여기에 표시됩니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Arguments -->
+        <section class="slide" data-slide-id="5">
+            <div class="slide-content">
+                <h2><i class="fa-solid fa-box-open"></i> 숨겨진 손님, <code>arguments</code></h2>
+                <p>함수 내부에서 `arguments` 객체를 통해 전달된 모든 인수에 접근할 수 있습니다.</p>
+                <pre><code>function sum() {
+  let total = 0;
+  // arguments는 배열처럼 보이지만 실제 배열은 아님 (유사 배열 객체)
+  for (let i = 0; i < arguments.length; i++) {
+    total += arguments[i];
+  }
+  return total;
+}
+
+sum(1, 2, 3);       // 결과: 6
+sum(10, 20, 30, 40); // 결과: 100</code></pre>
+                <p class="note"><i class="fa-solid fa-circle-info"></i> 화살표 함수는 `arguments` 객체를 가지지 않으며, 대신 나머지 매개변수(`...args`)를 사용합니다.</p>
+            </div>
+        </section>
+
+        <!-- Slide 7: Pass by Reference -->
+        <section class="slide" data-slide-id="6">
+            <div class="slide-content">
+                <h2><i class="fa-solid fa-people-arrows"></i> 값 전달의 비밀: 참조에 의한 전달</h2>
+                <p>객체를 인자로 넘기면 값 자체가 아닌, 객체의 '메모리 주소'가 전달됩니다.</p>
+                <div id="reference-demo" class="interactive-demo">
+                    <div class="code-area">
+                        <pre><code id="reference-code-block">let person = { name: 'Kim' };
+
+function changeName(p) {
+  // 함수 내부에서 객체를 수정하면...
+  <span id="line-p-name">p.name = 'Lee';</span>
+}
+
+console.log('함수 호출 전:', person.name); // ?
+<span id="line-change-name">changeName(person);</span>
+console.log('함수 호출 후:', person.name); // ?
+</code></pre>
+                    </div>
+                    <div class="visualization-area">
+                        <svg id="reference-svg" class="reference-svg"></svg>
+                        <div class="memory-box" id="variable-box">
+                            <span class="var-name">person</span>
+                        </div>
+                        <div class="memory-box" id="object-box">
+                            <span class="mem-addr">0x123</span>
+                            <pre><code>{ name: 'Kim' }</code></pre>
+                        </div>
+                        <div id="param-box" class="memory-box">
+                            <span class="var-name">p</span>
+                        </div>
+                    </div>
+                </div>
+                 <button class="demo-btn" id="reference-btn">애니메이션 실행</button>
+            </div>
+        </section>
+        
+        <!-- Slide 8: IIFE -->
+        <section class="slide" data-slide-id="7">
+            <div class="slide-content">
+                <h2><i class="fa-solid fa-bolt"></i> 딱 한 번만! 즉시 실행 함수 (IIFE)</h2>
+                <p>정의되자마자 즉시 실행되는 함수로, '스코프 격리'에 유용합니다.</p>
+                <pre><code>(function() {
+  // 이 안의 변수는 외부에서 접근 불가
+  var privateVar = "이건 비밀이야!";
+  console.log("IIFE가 실행되었습니다.");
+})();
+
+// console.log(privateVar); // Error: privateVar is not defined</code></pre>
+                <p class="highlight">전역 스코프를 오염시키지 않고 독립적인 코드 블록을 만들고 싶을 때 사용합니다.</p>
+            </div>
+        </section>
+
+        <!-- Slide 9: Closure -->
+        <section class="slide" data-slide-id="8">
+            <div class="slide-content">
+                <h2><i class="fa-solid fa-box-archive"></i> 사라지지 않는 기억, 클로저</h2>
+                <p>외부 함수가 종료된 후에도, 내부 함수는 외부 함수의 변수에 계속 접근할 수 있습니다.</p>
+                <pre><code>function makeCounter() {
+  let count = 0; // 자유 변수
+
+  // 클로저 함수
+  return function() {
+    count++;
+    return count;
+  };
+}
+
+const counter1 = makeCounter();
+console.log(counter1()); // 1
+console.log(counter1()); // 2
+
+const counter2 = makeCounter();
+console.log(counter2()); // 1 (새로운 count 변수)</code></pre>
+                <p class="note"><i class="fa-solid fa-circle-info"></i> 클로저는 상태를 은닉하고, 특정 함수에 종속적인 데이터를 관리하는 데 매우 강력한 도구입니다.</p>
+            </div>
+        </section>
+
+        <!-- Slide 10: Callback -->
+        <section class="slide" data-slide-id="9">
+            <div class="slide-content">
+                <h2><i class="fa-solid fa-phone-volume"></i> 제어권을 넘겨줄게, 콜백 함수</h2>
+                <p>특정 작업이 끝난 후에 실행되도록, 다른 함수의 인자로 전달되는 함수입니다.</p>
+                <pre><code>// 1. 'workDone' 함수를 정의 (이것이 콜백)
+function workDone(result) {
+  console.log(`작업 완료! 결과: ${result}`);
+}
+
+// 2. 'doSomething'은 콜백 함수를 인자로 받음
+function doSomething(callback) {
+  console.log("작업을 시작합니다...");
+  // 3초 뒤에 작업이 끝났다고 가정
+  setTimeout(function() {
+    callback("성공"); // 3. 작업이 끝나면 콜백 실행
+  }, 3000);
+}
+
+// 4. 함수 실행
+doSomething(workDone);</code></pre>
+                <p class="highlight">비동기 처리, 이벤트 핸들링 등 자바스크립트 곳곳에서 사용되는 핵심 패턴입니다.</p>
+            </div>
+        </section>
+
+        <!-- Slide 11: Pure Function -->
+        <section class="slide" data-slide-id="10">
+            <div class="slide-content">
+                <h2><i class="fa-solid fa-vial-circle-check"></i> 예측 가능한 코드, 순수 함수</h2>
+                <p>언제, 어디서 실행하든 동일한 결과를 보장하는 '착한 함수'입니다.</p>
+                <div class="comparison-container">
+                    <div class="code-block good">
+                        <h4><i class="fa-solid fa-circle-check"></i> 순수 함수 (Pure)</h4>
+                        <pre><code>// 동일한 입력 -> 동일한 출력
+// 부수 효과(Side Effect) 없음
+function add(a, b) {
+  return a + b;
+}</code></pre>
+                    </div>
+                    <div class="code-block bad">
+                        <h4><i class="fa-solid fa-circle-xmark"></i> 비순수 함수 (Impure)</h4>
+                        <pre><code>let total = 0;
+// 외부 상태에 의존, 외부 상태를 변경
+function addToTotal(n) {
+  total += n; // 부수 효과!
+  return total;
+}</code></pre>
+                    </div>
+                </div>
+                <p class="highlight">순수 함수는 코드의 예측 가능성을 높여 버그를 줄이고 테스트를 용이하게 만듭니다.</p>
+            </div>
+        </section>
+
+        <!-- Slide 12: Summary -->
+        <section class="slide" data-slide-id="11">
+            <div class="slide-content">
+                <h2><i class="fa-solid fa-clipboard-check"></i> 핵심 정리</h2>
+                <ul class="summary-list">
+                    <li><i class="fa-solid fa-star"></i> <strong>일급 객체:</strong> 함수는 값처럼 자유롭게 다룰 수 있다.</li>
+                    <li><i class="fa-solid fa-code-compare"></i> <strong>선언문 vs 표현식:</strong> 가장 큰 차이는 '호이스팅'이다.</li>
+                    <li><i class="fa-solid fa-people-arrows"></i> <strong>값 전달:</strong> 원시값은 복사, 객체는 '주소(참조)'가 전달된다.</li>
+                    <li><i class="fa-solid fa-box-archive"></i> <strong>클로저:</strong> 상태를 기억하고 캡슐화하는 강력한 도구.</li>
+                    <li><i class="fa-solid fa-phone-volume"></i> <strong>콜백 함수:</strong> 비동기 처리의 핵심 패턴.</li>
+                    <li><i class="fa-solid fa-vial-circle-check"></i> <strong>순수 함수:</strong> 예측 가능하고 안정적인 코드를 위해 지향해야 한다.</li>
+                </ul>
+                <p class="final-message">이제 여러분은 함수를 훨씬 더 깊이 있게 다룰 수 있습니다!</p>
+            </div>
+        </section>
+
+    </main>
+
+    <div class="navigation">
+        <button id="prev-btn" title="이전 슬라이드 (←)"><i class="fas fa-arrow-left"></i></button>
+        <span id="slide-counter">1 / 12</span>
+        <button id="next-btn" title="다음 슬라이드 (→)"><i class="fas fa-arrow-right"></i></button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
