@@ -838,6 +838,20 @@ class JavaScriptMidtermTest {
                 const userAnswer = this.userAnswers[index]?.trim().toLowerCase();
                 const correctAnswer = question.answer.trim().toLowerCase();
                 return userAnswer !== correctAnswer;
+            } else if (question.type === 'coding') {
+                // 코딩 문제: 테스트 케이스 통과율이 100%가 아니면 오답
+                const userAnswer = this.userAnswers[index];
+                if (!userAnswer || userAnswer === question.starterCode) {
+                    return true; // 답안 없음
+                }
+                
+                try {
+                    const results = this.runTestCases(question, userAnswer);
+                    const passedTests = results.filter(r => r.passed).length;
+                    return passedTests < results.length; // 모든 테스트 통과하지 못하면 오답
+                } catch (error) {
+                    return true; // 실행 오류 시 오답
+                }
             }
         });
         
@@ -845,34 +859,83 @@ class JavaScriptMidtermTest {
             const questionIndex = this.questions.findIndex(q => q.id === question.id);
             const userAnswer = this.userAnswers[questionIndex];
             
-            return `
-                <div class="review-item">
-                    <div class="review-question">
-                        <h4>문제 ${question.id}: ${question.title}</h4>
-                        <p>${question.text}</p>
-                        ${question.code ? `<pre><code class="language-javascript">${question.code}</code></pre>` : ''}
+            if (question.type === 'coding') {
+                // 코딩 문제 전용 리뷰 표시
+                let testResults = '';
+                if (userAnswer && userAnswer !== question.starterCode) {
+                    try {
+                        const results = this.runTestCases(question, userAnswer);
+                        const passedTests = results.filter(r => r.passed).length;
+                        testResults = `
+                            <div class="test-summary">
+                                <strong>테스트 결과:</strong> ${passedTests}/${results.length} 통과
+                            </div>
+                            <div class="failed-tests">
+                                ${results.filter(r => !r.passed).map((result, i) => `
+                                    <div class="failed-test">
+                                        <strong>실패한 테스트:</strong> ${result.error || `예상: ${JSON.stringify(result.expected)}, 실제: ${JSON.stringify(result.actual)}`}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+                    } catch (error) {
+                        testResults = `<div class="error">실행 오류: ${error.message}</div>`;
+                    }
+                }
+                
+                return `
+                    <div class="review-item">
+                        <div class="review-question">
+                            <h4>문제 ${question.id}: ${question.title}</h4>
+                            <p>${question.text}</p>
+                            <p><em>${question.description}</em></p>
+                        </div>
+                        <div class="review-answer">
+                            <div class="user-code">
+                                <strong>당신의 코드:</strong>
+                                <pre><code class="language-javascript">${userAnswer || '답하지 않음'}</code></pre>
+                            </div>
+                            ${testResults}
+                            <div class="hints">
+                                <strong>힌트:</strong>
+                                <ul>
+                                    ${question.hints.map(hint => `<li>${hint}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <div class="review-answer">
-                        <div class="user-answer">
-                            <strong>당신의 답:</strong> 
-                            ${question.type === 'multiple' ? 
-                                (userAnswer !== null ? question.options[userAnswer] : '답하지 않음') : 
-                                (userAnswer || '답하지 않음')
-                            }
+                `;
+            } else {
+                // 기존 객관식/단답형 문제 표시
+                return `
+                    <div class="review-item">
+                        <div class="review-question">
+                            <h4>문제 ${question.id}: ${question.title}</h4>
+                            <p>${question.text}</p>
+                            ${question.code ? `<pre><code class="language-javascript">${question.code}</code></pre>` : ''}
                         </div>
-                        <div class="correct-answer">
-                            <strong>정답:</strong> 
-                            ${question.type === 'multiple' ? 
-                                question.options[question.correct] : 
-                                question.answer
-                            }
-                        </div>
-                        <div class="explanation">
-                            <strong>해설:</strong> ${question.explanation}
+                        <div class="review-answer">
+                            <div class="user-answer">
+                                <strong>당신의 답:</strong> 
+                                ${question.type === 'multiple' ? 
+                                    (userAnswer !== null ? question.options[userAnswer] : '답하지 않음') : 
+                                    (userAnswer || '답하지 않음')
+                                }
+                            </div>
+                            <div class="correct-answer">
+                                <strong>정답:</strong> 
+                                ${question.type === 'multiple' ? 
+                                    question.options[question.correct] : 
+                                    question.answer
+                                }
+                            </div>
+                            <div class="explanation">
+                                <strong>해설:</strong> ${question.explanation}
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
+            }
         }).join('');
         
         if (incorrectQuestions.length === 0) {
